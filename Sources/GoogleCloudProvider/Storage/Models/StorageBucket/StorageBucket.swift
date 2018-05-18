@@ -19,9 +19,9 @@ public struct GoogleStorageBucket: GoogleCloudModel {
     /// The name of the bucket.
     public var name: String
     /// The creation time of the bucket in RFC 3339 format.
-    public var timeCreated: Date
+    public var timeCreated: String
     /// The modification time of the bucket in RFC 3339 format.
-    public var updated: Date
+    public var updated: String
     /// The metadata generation of this bucket.
     public var metageneration: String
     /// Access controls on the bucket, containing one or more bucketAccessControls Resources.
@@ -163,7 +163,7 @@ public struct Condition: GoogleCloudModel {
     /// Age of an object (in days). This condition is satisfied when an object reaches the specified age.
     public var age: Int
     /// A date in RFC 3339 format with only the date part (for instance, "2013-01-15"). This condition is satisfied when an object is created before midnight of the specified date in UTC.
-    public var createdBefore: Date
+    public var createdBefore: String
     /// Relevant only for versioned objects. If the value is true, this condition matches live objects; if the value is false, it matches archived objects.
     public var isLive: Bool
     /// Objects having any of the storage classes specified by this condition will be matched. Values include MULTI_REGIONAL, REGIONAL, NEARLINE, COLDLINE, STANDARD, and DURABLE_REDUCED_AVAILABILITY.
