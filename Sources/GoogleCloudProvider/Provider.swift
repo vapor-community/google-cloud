@@ -10,6 +10,11 @@ import Vapor
 public struct GoogleCloudProviderConfig: Service {
     public let project: String
     public let privateKey: String
+    
+    public init(projectId: String, rsaPrivateKey: String) {
+        project = projectId
+        privateKey = rsaPrivateKey
+    }
 }
 
 
