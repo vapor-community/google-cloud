@@ -15,7 +15,7 @@ public struct GoogleStorageBucket: GoogleCloudModel {
     /// The URI of this bucket.
     public var selfLink: String
     /// The project number of the project the bucket belongs to.
-    public var projectNumber: Int
+    public var projectNumber: String
     /// The name of the bucket.
     public var name: String
     /// The creation time of the bucket in RFC 3339 format.
@@ -23,7 +23,7 @@ public struct GoogleStorageBucket: GoogleCloudModel {
     /// The modification time of the bucket in RFC 3339 format.
     public var updated: Date
     /// The metadata generation of this bucket.
-    public var metageneration: Int
+    public var metageneration: String
     /// Access controls on the bucket, containing one or more bucketAccessControls Resources.
     public var acl: [BucketAccessControls]
     /// Default access controls to apply to new objects when no ACL is provided.
