@@ -9,27 +9,27 @@ import Vapor
 
 public struct IAMPolicy: GoogleCloudModel {
     /// The kind of item this is. For policies, this is always storage#policy. This field is ignored on input.
-    public var kind: String
+    public var kind: String?
     /// The ID of the resource to which this policy belongs.
-    public var resourceId: String
+    public var resourceId: String?
     /// An association between a role, which comes with a set of permissions, and members who may assume that role.
-    public var bindings: [Binding]
+    public var bindings: [Binding]?
     /// HTTP 1.1 Entity tag for the policy.
-    public var etag: String
+    public var etag: String?
 }
 
 public struct Binding: GoogleCloudModel {
     /// The role to which members belong.
-    public var role: String
+    public var role: String?
     /// A collection of identifiers for members who may assume the provided role.
-    public var members: [String]
+    public var members: [String]?
     /// Any value
-    public var condition: String
+    public var condition: String?
 }
 
 public struct Permission: GoogleCloudModel {
     /// The kind of item this is.
-    public var kind: String
+    public var kind: String?
     /// The permissions held by the caller. 
-    public var permissions: [String]
+    public var permissions: [String]?
 }

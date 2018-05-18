@@ -8,7 +8,7 @@
 import Vapor
 
 public struct GoogleStorageBucketList: GoogleCloudModel {
-    public var kind: String
-    public var nextPageToken: String
-    public var items: [GoogleStorageBucket]
+    public var kind: String?
+    public var nextPageToken: String?
+    public var items: [GoogleStorageBucket]?
 }
