@@ -35,7 +35,7 @@ public class GoogleCloudStorageRequest {
     }
     
     private func _send<GCM: GoogleCloudModel>(method: HTTPMethod, path: String, query: String, body: String, accessToken: String) throws -> Future<GCM> {
-        return httpClient.send(method, headers: [HTTPHeaderName.authorization.description: "Bearer \(accessToken)"], to: "\(path)?\(query)", beforeSend: { $0.http.body = HTTPBody(string: body) }).flatMap({ (response)  in
+        return httpClient.send(method, headers: [HTTPHeaderName.authorization.description: "Bearer \(accessToken)", HTTPHeaderName.contentType.description: MediaType.json.description], to: "\(path)?\(query)", beforeSend: { $0.http.body = HTTPBody(string: body) }).flatMap({ (response)  in
             guard response.http.status == .ok else {
                 // TODO: Throw proper error
                 throw Abort(.internalServerError)
