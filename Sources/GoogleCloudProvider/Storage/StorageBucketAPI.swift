@@ -41,6 +41,11 @@ public class GoogleCloudStorageRequest {
                 throw Abort(.internalServerError)
             }
             
+            let decoder = JSONDecoder()
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+            decoder.dateDecodingStrategy = .formatted(formatter)
+            
             return try JSONDecoder().decode(GCM.self, from: response.http, maxSize: 65_536, on: response)
         })
     }

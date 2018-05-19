@@ -19,9 +19,9 @@ public struct GoogleStorageBucket: GoogleCloudModel {
     /// The name of the bucket.
     public var name: String?
     /// The creation time of the bucket in RFC 3339 format.
-    public var timeCreated: String?
+    public var timeCreated: Date?
     /// The modification time of the bucket in RFC 3339 format.
-    public var updated: String?
+    public var updated: Date?
     /// The metadata generation of this bucket.
     public var metageneration: String?
     /// Access controls on the bucket, containing one or more bucketAccessControls Resources.
