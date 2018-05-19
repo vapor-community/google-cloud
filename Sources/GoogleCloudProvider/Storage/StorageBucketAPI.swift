@@ -111,7 +111,7 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
                         storageClass: StorageClass? = nil,
                         versioning: Versioning? = nil,
                         website: Website? = nil) throws -> Future<GoogleStorageBucket> {
-        var body: [String: String] = ["name": name]
+        var body: [String: Any] = ["name": name]
         var query = ""
         
         if var queryParameters = queryParameters {
@@ -123,31 +123,31 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
         }
         
         if let acl = acl {
-            body["acl"] = try JSONEncoder().encode(acl).convert(to: String.self)
+            body["acl"] = try acl.map { try $0.toEncodedDictionary() }
         }
         
         if let billing = billing {
-            body["billing"] = try billing.toEncodedBody()
+            body["billing"] = try billing.toEncodedDictionary()
         }
         
         if let cors = cors {
-            body["cors"] = try JSONEncoder().encode(cors).convert(to: String.self)
+            body["cors"] = try cors.map { try $0.toEncodedDictionary() }
         }
         
         if let defaultObjectAcl = defaultObjectAcl {
-            body["defaultObjectAcl"] = try JSONEncoder().encode(defaultObjectAcl).convert(to: String.self)
+            body["defaultObjectAcl"] = try defaultObjectAcl.map { try $0.toEncodedDictionary() }
         }
         
         if let encryption = encryption {
-            body["encryption"] = try encryption.toEncodedBody()
+            body["encryption"] = try encryption.toEncodedDictionary()
         }
         
         if let labels = labels {
-            body["labels"] = try JSONEncoder().encode(labels).convert(to: String.self)
+            body["labels"] = labels
         }
         
         if let lifecycle = lifecycle {
-            body["lifecycle"] = try lifecycle.toEncodedBody()
+            body["lifecycle"] = try lifecycle.toEncodedDictionary()
         }
         
         if let location = location {
@@ -155,7 +155,7 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
         }
         
         if let logging = logging {
-            body["logging"] = try logging.toEncodedBody()
+            body["logging"] = try logging.toEncodedDictionary()
         }
         
         if let storageClass = storageClass {
@@ -163,14 +163,14 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
         }
         
         if let versioning = versioning {
-            body["versioning"] = try versioning.toEncodedBody()
+            body["versioning"] = try versioning.toEncodedDictionary()
         }
         
         if let website = website {
-            body["website"] = try website.toEncodedBody()
+            body["website"] = try website.toEncodedDictionary()
         }
         
-        let requestBody = try JSONEncoder().encode(body).convert(to: String.self)
+        let requestBody = try JSONSerialization.data(withJSONObject: body).convert(to: String.self)
         
         return try request.send(method: .POST, path: endpoint, query: query, body: requestBody)
     }
@@ -203,7 +203,7 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
                       logging: Logging? = nil,
                       versioning: Versioning? = nil,
                       website: Website? = nil) throws -> Future<GoogleStorageBucket> {
-        var body: [String: String] = [:]
+        var body: [String: Any] = [:]
         var query = ""
         
         if let queryParameters = queryParameters {
@@ -211,46 +211,46 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
         }
         
         if let acl = acl {
-            body["acl"] = try JSONEncoder().encode(acl).convert(to: String.self)
+            body["acl"] = try acl.map { try $0.toEncodedDictionary() }
         }
         
         if let billing = billing {
-            body["billing"] = try billing.toEncodedBody()
+            body["billing"] = try billing.toEncodedDictionary()
         }
         
         if let cors = cors {
-            body["cors"] = try JSONEncoder().encode(cors).convert(to: String.self)
+            body["cors"] = try cors.map { try $0.toEncodedDictionary() }
         }
         
         if let defaultObjectAcl = defaultObjectAcl {
-            body["defaultObjectAcl]"] = try JSONEncoder().encode(defaultObjectAcl).convert(to: String.self)
+            body["defaultObjectAcl"] = try defaultObjectAcl.map { try $0.toEncodedDictionary() }
         }
         
         if let encryption = encryption {
-            body["encryption"] = try encryption.toEncodedBody()
+            body["encryption"] = try encryption.toEncodedDictionary()
         }
         
         if let labels = labels {
-            body["labels"] = try JSONEncoder().encode(labels).convert(to: String.self)
+            body["labels"] = labels
         }
         
         if let lifecycle = lifecycle {
-            body["lifecycle"] = try lifecycle.toEncodedBody()
+            body["lifecycle"] = try lifecycle.toEncodedDictionary()
         }
         
         if let logging = logging {
-            body["logging"] = try logging.toEncodedBody()
+            body["logging"] = try logging.toEncodedDictionary()
         }
         
         if let versioning = versioning {
-            body["versioning"] = try versioning.toEncodedBody()
+            body["versioning"] = try versioning.toEncodedDictionary()
         }
         
         if let website = website {
-            body["website"] = try website.toEncodedBody()
+            body["website"] = try website.toEncodedDictionary()
         }
         
-        let requestBody = try JSONEncoder().encode(body).convert(to: String.self)
+        let requestBody = try JSONSerialization.data(withJSONObject: body).convert(to: String.self)
         
         return try request.send(method: .PATCH, path: endpoint, query: query, body: requestBody)
     }
@@ -265,7 +265,7 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
             query = queryParameters.queryParameters
         }
 
-        let requestBody = try iamPolicy.toEncodedBody()
+        let requestBody = try JSONSerialization.data(withJSONObject: try iamPolicy.toEncodedDictionary()).convert(to: String.self)
         
         return try request.send(method: .PUT, path: "\(endpoint)/\(bucket)/iam", query: query, body: requestBody)
     }
@@ -305,10 +305,10 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
                        storageClass: StorageClass? = nil,
                        versioning: Versioning? = nil,
                        website: Website? = nil) throws -> Future<GoogleStorageBucket> {
-        var body: [String: String] = [:]
+        var body: [String: Any] = [:]
         var query = ""
         
-        body["acl"] = try JSONEncoder().encode(acl).convert(to: String.self)
+        body["acl"] = try acl.map { try $0.toEncodedDictionary() }
         
         if let queryParameters = queryParameters {
             query = queryParameters.queryParameters
@@ -316,31 +316,31 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
         
         
         if let billing = billing {
-            body["billing"] = try billing.toEncodedBody()
+            body["billing"] = try billing.toEncodedDictionary()
         }
         
         if let cors = cors {
-            body["cors"] = try JSONEncoder().encode(cors).convert(to: String.self)
+            body["cors"] = try cors.map { try $0.toEncodedDictionary() }
         }
         
         if let defaultObjectAcl = defaultObjectAcl {
-            body["defaultObjectAcl"] = try JSONEncoder().encode(defaultObjectAcl).convert(to: String.self)
+            body["defaultObjectAcl"] = try defaultObjectAcl.map { try $0.toEncodedDictionary() }
         }
         
         if let encryption = encryption {
-            body["encryption"] = try encryption.toEncodedBody()
+            body["encryption"] = try encryption.toEncodedDictionary()
         }
         
         if let labels = labels {
-            body["labels"] = try JSONEncoder().encode(labels).convert(to: String.self)
+            body["labels"] = labels
         }
         
         if let lifecycle = lifecycle {
-            body["lifecycle"] = try lifecycle.toEncodedBody()
+            body["lifecycle"] = try lifecycle.toEncodedDictionary()
         }
         
         if let logging = logging {
-            body["logging"] = try logging.toEncodedBody()
+            body["logging"] = try logging.toEncodedDictionary()
         }
         
         if let storageClass = storageClass {
@@ -348,14 +348,14 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
         }
         
         if let versioning = versioning {
-            body["versioning"] = try versioning.toEncodedBody()
+            body["versioning"] = try versioning.toEncodedDictionary()
         }
         
         if let website = website {
-            body["website"] = try website.toEncodedBody()
+            body["website"] = try website.toEncodedDictionary()
         }
         
-        let requestBody = try JSONEncoder().encode(body).convert(to: String.self)
+        let requestBody = try JSONSerialization.data(withJSONObject: body).convert(to: String.self)
         
         return try request.send(method: .PUT, path: "\(endpoint)/\(bucket)", query: query, body: requestBody)
     }

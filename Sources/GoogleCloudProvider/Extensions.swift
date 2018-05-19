@@ -8,12 +8,14 @@
 import Vapor
 
 public protocol GoogleCloudModel: Content {
-    func toEncodedBody() throws -> String
+    func toEncodedDictionary() throws -> [String: Any]
 }
 
 extension GoogleCloudModel {
-    public func toEncodedBody() throws -> String {
-        return try JSONEncoder().encode(self).convert(to: String.self)
+    public func toEncodedDictionary() throws -> [String: Any] {
+        let encoded = try JSONEncoder().encode(self)
+        
+        return try JSONDecoder().decode(AnyDecodable.self, from: encoded).value as? [String: Any] ?? [:]
     }
 }
 
