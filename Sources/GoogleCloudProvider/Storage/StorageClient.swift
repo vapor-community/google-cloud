@@ -8,7 +8,7 @@
 import Vapor
 
 public struct GoogleCloudStorageClient: ServiceType {
-    public var buckets: StorageBucketAPI
+    public var buckets: GoogleStorageBucketAPI
     
     init(providerconfig: GoogleCloudProviderConfig, storageconfig: GoogleCloudStorageConfig, client: Client) {
         

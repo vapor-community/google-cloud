@@ -177,4 +177,9 @@ public struct Billing: GoogleCloudModel {
     public var requesterPays: Bool?
 }
 
+public struct Encryption: GoogleCloudModel {
+    /// When set to true, bucket is requester pays.
+    public var defaultKmsKeyName: String?
+}
+
 public struct EmptyStorageBucketResponse: GoogleCloudModel {}
