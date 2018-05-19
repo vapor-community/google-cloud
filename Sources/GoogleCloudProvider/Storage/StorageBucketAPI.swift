@@ -7,7 +7,7 @@
 
 import Vapor
 
-public class GoogleCloudStorageBucketRequest {
+public class GoogleCloudStorageRequest {
     var authtoken: OAuthResponse?
     var tokenCreatedTime: Date?
     let oauthRequester: GoogleOAuth
@@ -60,9 +60,9 @@ public protocol StorageBucketAPI {
 
 public class GoogleStorageBucketAPI: StorageBucketAPI {
     let endpoint = "https://www.googleapis.com/storage/v1/b"
-    let request: GoogleCloudStorageBucketRequest
+    let request: GoogleCloudStorageRequest
     
-    init(request: GoogleCloudStorageBucketRequest) {
+    init(request: GoogleCloudStorageRequest) {
         self.request = request
     }
 
@@ -123,9 +123,7 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
         }
         
         if let acl = acl {
-            for i in 0..<acl.count {
-                body["acl[\(i)]"] = try acl[i].toEncodedBody()
-            }
+            body["acl"] = try JSONEncoder().encode(acl).convert(to: String.self)
         }
         
         if let billing = billing {
@@ -133,15 +131,11 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
         }
         
         if let cors = cors {
-            for i in 0..<cors.count {
-                body["cors[\(i)]"] = try cors[i].toEncodedBody()
-            }
+            body["cors"] = try JSONEncoder().encode(cors).convert(to: String.self)
         }
         
         if let defaultObjectAcl = defaultObjectAcl {
-            for i in 0..<defaultObjectAcl.count {
-                body["defaultObjectAcl[\(i)]"] = try defaultObjectAcl[i].toEncodedBody()
-            }
+            body["defaultObjectAcl"] = try JSONEncoder().encode(defaultObjectAcl).convert(to: String.self)
         }
         
         if let encryption = encryption {
@@ -149,7 +143,7 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
         }
         
         if let labels = labels {
-            labels.forEach { body["labels[\($0)]"] = $1 }
+            body["labels"] = try JSONEncoder().encode(labels).convert(to: String.self)
         }
         
         if let lifecycle = lifecycle {
@@ -217,9 +211,7 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
         }
         
         if let acl = acl {
-            for i in 0..<acl.count {
-                body["acl[\(i)]"] = try acl[i].toEncodedBody()
-            }
+            body["acl"] = try JSONEncoder().encode(acl).convert(to: String.self)
         }
         
         if let billing = billing {
@@ -227,15 +219,11 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
         }
         
         if let cors = cors {
-            for i in 0..<cors.count {
-                body["cors[\(i)]"] = try cors[i].toEncodedBody()
-            }
+            body["cors"] = try JSONEncoder().encode(cors).convert(to: String.self)
         }
         
         if let defaultObjectAcl = defaultObjectAcl {
-            for i in 0..<defaultObjectAcl.count {
-                body["defaultObjectAcl[\(i)]"] = try defaultObjectAcl[i].toEncodedBody()
-            }
+            body["defaultObjectAcl]"] = try JSONEncoder().encode(defaultObjectAcl).convert(to: String.self)
         }
         
         if let encryption = encryption {
@@ -243,7 +231,7 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
         }
         
         if let labels = labels {
-            labels.forEach { body["labels[\($0)]"] = $1 }
+            body["labels"] = try JSONEncoder().encode(labels).convert(to: String.self)
         }
         
         if let lifecycle = lifecycle {
@@ -270,7 +258,7 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
     /// Updates an IAM policy for the specified bucket.
     public func setIAMPolicy(bucket: String,
                              iamPolicy: IAMPolicy,
-                             queryParameters: [String : String]? = nil) throws -> EventLoopFuture<IAMPolicy> {
+                             queryParameters: [String : String]? = nil) throws -> Future<IAMPolicy> {
         var query = ""
         
         if let queryParameters = queryParameters {
@@ -320,9 +308,7 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
         var body: [String: String] = [:]
         var query = ""
         
-        for i in 0..<acl.count {
-            body["acl[\(i)]"] = try acl[i].toEncodedBody()
-        }
+        body["acl"] = try JSONEncoder().encode(acl).convert(to: String.self)
         
         if let queryParameters = queryParameters {
             query = queryParameters.queryParameters
@@ -334,15 +320,11 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
         }
         
         if let cors = cors {
-            for i in 0..<cors.count {
-                body["cors[\(i)]"] = try cors[i].toEncodedBody()
-            }
+            body["cors"] = try JSONEncoder().encode(cors).convert(to: String.self)
         }
         
         if let defaultObjectAcl = defaultObjectAcl {
-            for i in 0..<defaultObjectAcl.count {
-                body["defaultObjectAcl[\(i)]"] = try defaultObjectAcl[i].toEncodedBody()
-            }
+            body["defaultObjectAcl"] = try JSONEncoder().encode(defaultObjectAcl).convert(to: String.self)
         }
         
         if let encryption = encryption {
@@ -350,7 +332,7 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
         }
         
         if let labels = labels {
-            labels.forEach { body["labels[\($0)]"] = $1 }
+            body["labels"] = try JSONEncoder().encode(labels).convert(to: String.self)
         }
         
         if let lifecycle = lifecycle {
@@ -378,5 +360,3 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
         return try request.send(method: .PUT, path: "\(endpoint)/\(bucket)", query: query, body: requestBody)
     }
 }
-
-

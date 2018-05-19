@@ -62,6 +62,7 @@ public struct AnyDecodable: Decodable {
 }
 
 extension Dictionary {
+    
     var queryParameters: String {
         guard let me = self as? [String: Any] else
         { return "" }

@@ -16,6 +16,16 @@ public struct IAMPolicy: GoogleCloudModel {
     public var bindings: [Binding]?
     /// HTTP 1.1 Entity tag for the policy.
     public var etag: String?
+    
+    public init(kind: String? = nil,
+                resourceId: String? = nil,
+                bindings: [Binding]? = nil,
+                etag: String? = nil) {
+        self.kind = kind
+        self.resourceId = resourceId
+        self.bindings = bindings
+        self.etag = etag
+    }
 }
 
 public struct Binding: GoogleCloudModel {
@@ -25,6 +35,14 @@ public struct Binding: GoogleCloudModel {
     public var members: [String]?
     /// Any value
     public var condition: String?
+    
+    public init(role: String? = nil,
+                members: [String]? = nil,
+                condition: String? = nil) {
+        self.role = role
+        self.members = members
+        self.condition = condition
+    }
 }
 
 public struct Permission: GoogleCloudModel {

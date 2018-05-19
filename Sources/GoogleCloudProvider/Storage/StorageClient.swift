@@ -11,11 +11,10 @@ public struct GoogleCloudStorageClient: ServiceType {
     public var buckets: GoogleStorageBucketAPI
     
     init(providerconfig: GoogleCloudProviderConfig, storageconfig: GoogleCloudStorageConfig, client: Client) {
-        
         let oauthRequester = GoogleOAuth(serviceEmail: storageconfig.email, scopes: storageconfig.scope, privateKey: providerconfig.privateKey, httpClient: client)
+        let storageRequest = GoogleCloudStorageRequest(httpClient: client, oauth: oauthRequester, project: providerconfig.project)
         
-        let bucketRequest = GoogleCloudStorageBucketRequest(httpClient: client, oauth: oauthRequester, project: providerconfig.project)
-        buckets = GoogleStorageBucketAPI(request: bucketRequest)
+        buckets = GoogleStorageBucketAPI(request: storageRequest)
     }
     
     public static func makeService(for worker: Container) throws -> GoogleCloudStorageClient {
