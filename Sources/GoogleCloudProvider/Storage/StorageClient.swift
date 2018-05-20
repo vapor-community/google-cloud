@@ -8,17 +8,19 @@
 import Vapor
 
 public struct GoogleCloudStorageClient: ServiceType {
-    public var buckets: GoogleStorageBucketAPI
     public var bucketAccessControl: GoogleBucketAccessControlAPI
+    public var buckets: GoogleStorageBucketAPI
     public var channels: GoogleChannelsAPI
+    public var defaultObjectAccessControl: GoogleDefaultObjectACLAPI
     
     init(providerconfig: GoogleCloudProviderConfig, storageconfig: GoogleCloudStorageConfig, client: Client) {
         let oauthRequester = GoogleOAuth(serviceEmail: storageconfig.email, scopes: storageconfig.scope, privateKey: providerconfig.privateKey, httpClient: client)
         let storageRequest = GoogleCloudStorageRequest(httpClient: client, oauth: oauthRequester, project: providerconfig.project)
         
-        buckets = GoogleStorageBucketAPI(request: storageRequest)
         bucketAccessControl = GoogleBucketAccessControlAPI(request: storageRequest)
+        buckets = GoogleStorageBucketAPI(request: storageRequest)
         channels = GoogleChannelsAPI(request: storageRequest)
+        defaultObjectAccessControl = GoogleDefaultObjectACLAPI(request: storageRequest)
     }
     
     public static func makeService(for worker: Container) throws -> GoogleCloudStorageClient {
