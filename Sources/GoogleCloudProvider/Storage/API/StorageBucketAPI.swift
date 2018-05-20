@@ -8,7 +8,7 @@
 import Vapor
 
 public protocol StorageBucketAPI {
-    func delete(bucket: String, queryParameters: [String: String]?) throws -> Future<EmptyStorageBucketResponse>
+    func delete(bucket: String, queryParameters: [String: String]?) throws -> Future<EmptyResponse>
     func get(bucket: String, queryParameters: [String: String]?) throws -> Future<GoogleStorageBucket>
     func getIAMPolicy(bucket: String, queryParameters: [String: String]?) throws -> Future<IAMPolicy>
     func create(queryParameters: [String: String]?, name: String, acl: [BucketAccessControls]?, billing: Billing?, cors: [Cors]?, defaultObjectAcl: [DefaultObjectACL]?, encryption: Encryption?, labels: [String: String]?, lifecycle: Lifecycle?, location: String?, logging: Logging?, storageClass: StorageClass?, versioning: Versioning?, website: Website?) throws -> Future<GoogleStorageBucket>
@@ -28,7 +28,7 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
     }
 
     /// Permanently deletes an empty bucket.
-    public func delete(bucket: String, queryParameters: [String : String]? = nil) throws -> Future<EmptyStorageBucketResponse> {
+    public func delete(bucket: String, queryParameters: [String : String]? = nil) throws -> Future<EmptyResponse> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters

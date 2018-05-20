@@ -318,4 +318,4 @@ public struct Encryption: GoogleCloudModel {
     }
 }
 
-public struct EmptyStorageBucketResponse: GoogleCloudModel {}
+public struct EmptyResponse: GoogleCloudModel {}

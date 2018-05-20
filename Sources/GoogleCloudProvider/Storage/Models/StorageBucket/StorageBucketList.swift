@@ -12,3 +12,9 @@ public struct GoogleStorageBucketList: GoogleCloudModel {
     public var nextPageToken: String?
     public var items: [GoogleStorageBucket]?
 }
+
+public struct BucketAccessControlList: GoogleCloudModel {
+    public var kind: String?
+    public var nextPageToken: String?
+    public var items: [BucketAccessControls]?
+}
