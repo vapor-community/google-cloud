@@ -101,6 +101,47 @@ public struct BucketAccessControls: GoogleCloudModel {
     }
 }
 
+public struct StorageNotification: GoogleCloudModel {
+    /// The kind of item this is. For notifications, this is always storage#notification.
+    public var kind: String?
+    /// The ID of the notification.
+    public var id: String?
+    /// The canonical URL of this notification.
+    public var selfLink: String?
+    /// The Cloud PubSub topic to which this subscription publishes. Formatted as: '//pubsub.googleapis.com/projects/{project-identifier}/topics/{my-topic}'
+    public var topic: String?
+    /// If present, only send notifications about listed event types. If empty, sent notifications for all event types.
+    public var eventTypes: [String]?
+    /// An optional list of additional attributes to attach to each Cloud PubSub message published for this notification subscription.
+    public var customAttributes: [String: String]?
+    /// The desired content of the Payload. Acceptable values are: "JSON_API_V1" and "NONE".
+    public var payloadFormat: String?
+    /// If present, only apply this notification configuration to object names that begin with this prefix.
+    public var objectNamePrefix: String?
+    /// HTTP 1.1 Entity tag for this subscription notification.
+    public var etag: String?
+    
+    public init(kind: String? = nil,
+                id: String? = nil,
+                selfLink: String? = nil,
+                topic: String? = nil,
+                eventTypes: [String]? = nil,
+                customAttributes: [String: String]? = nil,
+                payloadFormat: String? = nil,
+                objectNamePrefix: String? = nil,
+                etag: String? = nil) {
+        self.kind = kind
+        self.id = id
+        self.selfLink = selfLink
+        self.topic = topic
+        self.eventTypes = eventTypes
+        self.customAttributes = customAttributes
+        self.payloadFormat = payloadFormat
+        self.objectNamePrefix = objectNamePrefix
+        self.etag = etag
+    }
+}
+
 public struct ObjectAccessControls: GoogleCloudModel {
     /// The kind of item this is. For object access control entries, this is always storage#objectAccessControl.
     public var kind: String?

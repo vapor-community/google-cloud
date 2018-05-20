@@ -29,3 +29,10 @@ public struct ObjectAccessControlsList: GoogleCloudModel {
     /// The list of items.
     public var items: [ObjectAccessControls]?
 }
+
+public struct StorageNotificationsList: GoogleCloudModel {
+    /// The kind of item this is. For lists of notifications, this is always storage#notifications.
+    public var kind: String?
+    /// The list of items.
+    public var items: [StorageNotification]?
+}
