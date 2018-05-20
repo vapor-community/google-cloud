@@ -27,7 +27,7 @@ public struct GoogleStorageBucket: GoogleCloudModel {
     /// Access controls on the bucket, containing one or more bucketAccessControls Resources.
     public var acl: [BucketAccessControls]?
     /// Default access controls to apply to new objects when no ACL is provided.
-    public var defaultObjectAcl: [DefaultObjectACL]?
+    public var defaultObjectAcl: [ObjectAccessControls]?
     /// The owner of the bucket. This is always the project team's owner group.
     public var owner: Owner?
     /// The location of the bucket. Object data for objects in the bucket resides in physical storage within this region. Defaults to US.
@@ -101,7 +101,7 @@ public struct BucketAccessControls: GoogleCloudModel {
     }
 }
 
-public struct DefaultObjectACL: GoogleCloudModel {
+public struct ObjectAccessControls: GoogleCloudModel {
     /// The kind of item this is. For object access control entries, this is always storage#objectAccessControl.
     public var kind: String?
     /// The ID of the access-control entry.

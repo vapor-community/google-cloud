@@ -12,6 +12,7 @@ public struct GoogleCloudStorageClient: ServiceType {
     public var buckets: GoogleStorageBucketAPI
     public var channels: GoogleChannelsAPI
     public var defaultObjectAccessControl: GoogleDefaultObjectACLAPI
+    public var objectAccessControl: GoogleObjectAccessControlsAPI
     
     init(providerconfig: GoogleCloudProviderConfig, storageconfig: GoogleCloudStorageConfig, client: Client) {
         let oauthRequester = GoogleOAuth(serviceEmail: storageconfig.email, scopes: storageconfig.scope, privateKey: providerconfig.privateKey, httpClient: client)
@@ -21,6 +22,7 @@ public struct GoogleCloudStorageClient: ServiceType {
         buckets = GoogleStorageBucketAPI(request: storageRequest)
         channels = GoogleChannelsAPI(request: storageRequest)
         defaultObjectAccessControl = GoogleDefaultObjectACLAPI(request: storageRequest)
+        objectAccessControl = GoogleObjectAccessControlsAPI(request: storageRequest)
     }
     
     public static func makeService(for worker: Container) throws -> GoogleCloudStorageClient {

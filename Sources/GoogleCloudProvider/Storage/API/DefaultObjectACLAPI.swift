@@ -9,11 +9,11 @@ import Vapor
 
 public protocol DefaultObjectACLAPI {
     func delete(bucket: String, entity: String, queryParameters: [String: String]?) throws -> Future<EmptyResponse>
-    func get(bucket: String, entity: String, queryParameters: [String: String]?) throws -> Future<DefaultObjectACL>
-    func create(bucket: String, entity: String, role: String, queryParameters: [String: String]?) throws -> Future<DefaultObjectACL>
-    func list(bucket: String, queryParameters: [String: String]?) throws -> Future<DefaultObjectACLList>
-    func patch(bucket: String, entity: String, queryParameters: [String: String]?) throws -> Future<DefaultObjectACL>
-    func update(bucket: String, entity: String, defaultAccessControl: DefaultObjectACL?, queryParameters: [String: String]?) throws -> Future<DefaultObjectACL>
+    func get(bucket: String, entity: String, queryParameters: [String: String]?) throws -> Future<ObjectAccessControls>
+    func create(bucket: String, entity: String, role: String, queryParameters: [String: String]?) throws -> Future<ObjectAccessControls>
+    func list(bucket: String, queryParameters: [String: String]?) throws -> Future<ObjectAccessControlsList>
+    func patch(bucket: String, entity: String, queryParameters: [String: String]?) throws -> Future<ObjectAccessControls>
+    func update(bucket: String, entity: String, defaultAccessControl: ObjectAccessControls?, queryParameters: [String: String]?) throws -> Future<ObjectAccessControls>
 }
 
 public class GoogleDefaultObjectACLAPI: DefaultObjectACLAPI {
@@ -35,7 +35,7 @@ public class GoogleDefaultObjectACLAPI: DefaultObjectACLAPI {
     }
     
     /// Returns the default object ACL entry for the specified entity on the specified bucket.
-    public func get(bucket: String, entity: String, queryParameters: [String: String]? = nil) throws -> Future<DefaultObjectACL> {
+    public func get(bucket: String, entity: String, queryParameters: [String: String]? = nil) throws -> Future<ObjectAccessControls> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
@@ -45,7 +45,7 @@ public class GoogleDefaultObjectACLAPI: DefaultObjectACLAPI {
     }
     
     /// Creates a new default object ACL entry on the specified bucket.
-    public func create(bucket: String, entity: String, role: String, queryParameters: [String: String]? = nil) throws -> Future<DefaultObjectACL> {
+    public func create(bucket: String, entity: String, role: String, queryParameters: [String: String]? = nil) throws -> Future<ObjectAccessControls> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
@@ -57,7 +57,7 @@ public class GoogleDefaultObjectACLAPI: DefaultObjectACLAPI {
     }
     
     /// Retrieves default object ACL entries on the specified bucket.
-    public func list(bucket: String, queryParameters: [String: String]? = nil) throws -> Future<DefaultObjectACLList> {
+    public func list(bucket: String, queryParameters: [String: String]? = nil) throws -> Future<ObjectAccessControlsList> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
@@ -67,7 +67,7 @@ public class GoogleDefaultObjectACLAPI: DefaultObjectACLAPI {
     }
 
     /// Updates a default object ACL entry on the specified bucket. This method supports patch semantics.
-    public func patch(bucket: String, entity: String, queryParameters: [String: String]? = nil) throws -> Future<DefaultObjectACL> {
+    public func patch(bucket: String, entity: String, queryParameters: [String: String]? = nil) throws -> Future<ObjectAccessControls> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
@@ -79,8 +79,8 @@ public class GoogleDefaultObjectACLAPI: DefaultObjectACLAPI {
     /// Updates a default object ACL entry on the specified bucket.
     public func update(bucket: String,
                        entity: String,
-                       defaultAccessControl: DefaultObjectACL? = nil,
-                       queryParameters: [String: String]? = nil) throws -> Future<DefaultObjectACL> {
+                       defaultAccessControl: ObjectAccessControls? = nil,
+                       queryParameters: [String: String]? = nil) throws -> Future<ObjectAccessControls> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters

@@ -23,9 +23,9 @@ public struct BucketAccessControlList: GoogleCloudModel {
     public var items: [BucketAccessControls]?
 }
 
-public struct DefaultObjectACLList: GoogleCloudModel {
+public struct ObjectAccessControlsList: GoogleCloudModel {
     /// The kind of item this is. For lists of object access control entries, this is always storage#objectAccessControls
     public var kind: String?
     /// The list of items.
-    public var items: [DefaultObjectACL]?
+    public var items: [ObjectAccessControls]?
 }

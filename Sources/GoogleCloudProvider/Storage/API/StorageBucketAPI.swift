@@ -11,12 +11,12 @@ public protocol StorageBucketAPI {
     func delete(bucket: String, queryParameters: [String: String]?) throws -> Future<EmptyResponse>
     func get(bucket: String, queryParameters: [String: String]?) throws -> Future<GoogleStorageBucket>
     func getIAMPolicy(bucket: String, queryParameters: [String: String]?) throws -> Future<IAMPolicy>
-    func create(queryParameters: [String: String]?, name: String, acl: [BucketAccessControls]?, billing: Billing?, cors: [Cors]?, defaultObjectAcl: [DefaultObjectACL]?, encryption: Encryption?, labels: [String: String]?, lifecycle: Lifecycle?, location: String?, logging: Logging?, storageClass: StorageClass?, versioning: Versioning?, website: Website?) throws -> Future<GoogleStorageBucket>
+    func create(queryParameters: [String: String]?, name: String, acl: [BucketAccessControls]?, billing: Billing?, cors: [Cors]?, defaultObjectAcl: [ObjectAccessControls]?, encryption: Encryption?, labels: [String: String]?, lifecycle: Lifecycle?, location: String?, logging: Logging?, storageClass: StorageClass?, versioning: Versioning?, website: Website?) throws -> Future<GoogleStorageBucket>
     func list(queryParameters: [String: String]?) throws -> Future<GoogleStorageBucketList>
-    func patch(bucket: String, queryParameters: [String: String]?, acl: [BucketAccessControls]?, billing: Billing?, cors: [Cors]?, defaultObjectAcl: [DefaultObjectACL]?, encryption: Encryption?, labels: [String: String]?, lifecycle: Lifecycle?, logging: Logging?, versioning: Versioning?, website: Website?) throws -> Future<GoogleStorageBucket>
+    func patch(bucket: String, queryParameters: [String: String]?, acl: [BucketAccessControls]?, billing: Billing?, cors: [Cors]?, defaultObjectAcl: [ObjectAccessControls]?, encryption: Encryption?, labels: [String: String]?, lifecycle: Lifecycle?, logging: Logging?, versioning: Versioning?, website: Website?) throws -> Future<GoogleStorageBucket>
     func setIAMPolicy(bucket: String, iamPolicy: IAMPolicy, queryParameters: [String : String]?) throws -> Future<IAMPolicy>
     func testIAMPermissions(bucket: String, permissions: [String], queryParameters: [String : String]?) throws -> Future<Permission>
-    func update(bucket: String, acl: [BucketAccessControls], queryParameters: [String: String]?, billing: Billing?, cors: [Cors]?, defaultObjectAcl: [DefaultObjectACL]?, encryption: Encryption?, labels: [String: String]?, lifecycle: Lifecycle?, logging: Logging?, storageClass: StorageClass?, versioning: Versioning?, website: Website?) throws -> Future<GoogleStorageBucket>
+    func update(bucket: String, acl: [BucketAccessControls], queryParameters: [String: String]?, billing: Billing?, cors: [Cors]?, defaultObjectAcl: [ObjectAccessControls]?, encryption: Encryption?, labels: [String: String]?, lifecycle: Lifecycle?, logging: Logging?, storageClass: StorageClass?, versioning: Versioning?, website: Website?) throws -> Future<GoogleStorageBucket>
 }
 
 public class GoogleStorageBucketAPI: StorageBucketAPI {
@@ -63,7 +63,7 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
                         acl: [BucketAccessControls]? = nil,
                         billing: Billing? = nil,
                         cors: [Cors]? = nil,
-                        defaultObjectAcl: [DefaultObjectACL]? = nil,
+                        defaultObjectAcl: [ObjectAccessControls]? = nil,
                         encryption: Encryption? = nil,
                         labels: [String : String]? = nil,
                         lifecycle: Lifecycle? = nil,
@@ -157,7 +157,7 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
                       acl: [BucketAccessControls]? = nil,
                       billing: Billing? = nil,
                       cors: [Cors]? = nil,
-                      defaultObjectAcl: [DefaultObjectACL]? = nil,
+                      defaultObjectAcl: [ObjectAccessControls]? = nil,
                       encryption: Encryption? = nil,
                       labels: [String : String]? = nil,
                       lifecycle: Lifecycle? = nil,
@@ -258,7 +258,7 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
                        queryParameters: [String : String]? = nil,
                        billing: Billing? = nil,
                        cors: [Cors]? = nil,
-                       defaultObjectAcl: [DefaultObjectACL]? = nil,
+                       defaultObjectAcl: [ObjectAccessControls]? = nil,
                        encryption: Encryption? = nil,
                        labels: [String : String]? = nil,
                        lifecycle: Lifecycle? = nil,
