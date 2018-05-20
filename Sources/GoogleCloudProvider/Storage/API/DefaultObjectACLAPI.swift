@@ -53,7 +53,7 @@ public class GoogleDefaultObjectACLAPI: DefaultObjectACLAPI {
         
         let body = try JSONEncoder().encode(["entity": entity, "role": role]).convert(to: String.self)
         
-        return try request.send(method: .POST, path: "\(endpoint)/\(bucket)/defaultObjectAcl/", query: queryParams, body: body)
+        return try request.send(method: .POST, path: "\(endpoint)/\(bucket)/defaultObjectAcl", query: queryParams, body: body)
     }
     
     /// Retrieves default object ACL entries on the specified bucket.
@@ -63,7 +63,7 @@ public class GoogleDefaultObjectACLAPI: DefaultObjectACLAPI {
             queryParams = queryParameters.queryParameters
         }
         
-        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/defaultObjectAcl/", query: queryParams, body: "")
+        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/defaultObjectAcl", query: queryParams, body: "")
     }
 
     /// Updates a default object ACL entry on the specified bucket. This method supports patch semantics.

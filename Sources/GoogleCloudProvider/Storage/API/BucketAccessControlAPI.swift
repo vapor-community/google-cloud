@@ -53,7 +53,7 @@ public class GoogleBucketAccessControlAPI: BucketAccessControlAPI {
         
         let body = try JSONEncoder().encode(["entity": entity, "role": role]).convert(to: String.self)
         
-        return try request.send(method: .POST, path: "\(endpoint)/\(bucket)/acl/", query: queryParams, body: body)
+        return try request.send(method: .POST, path: "\(endpoint)/\(bucket)/acl", query: queryParams, body: body)
     }
     
     /// Retrieves ACL entries on a specified bucket.
@@ -63,7 +63,7 @@ public class GoogleBucketAccessControlAPI: BucketAccessControlAPI {
             queryParams = queryParameters.queryParameters
         }
         
-        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/acl/", query: queryParams, body: "")
+        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/acl", query: queryParams, body: "")
     }
     
     /// Updates an ACL entry on the specified bucket. This method supports patch semantics.

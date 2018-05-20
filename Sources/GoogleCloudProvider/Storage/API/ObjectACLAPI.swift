@@ -53,7 +53,7 @@ public class GoogleObjectAccessControlsAPI: ObjectAccessControlsAPI {
         
         let body = try JSONEncoder().encode(["entity": entity, "role": role]).convert(to: String.self)
         
-        return try request.send(method: .POST, path: "\(endpoint)/\(bucket)/o/\(object)/acl/", query: queryParams, body: body)
+        return try request.send(method: .POST, path: "\(endpoint)/\(bucket)/o/\(object)/acl", query: queryParams, body: body)
     }
     
     /// Retrieves ACL entries on the specified object.
@@ -63,7 +63,7 @@ public class GoogleObjectAccessControlsAPI: ObjectAccessControlsAPI {
             queryParams = queryParameters.queryParameters
         }
         
-        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/o/\(object)/acl/", query: queryParams, body: "")
+        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/o/\(object)/acl", query: queryParams, body: "")
     }
     
     /// Updates an ACL entry on the specified object. This method supports patch semantics.
