@@ -140,6 +140,18 @@ public struct StorageNotification: GoogleCloudModel {
         self.objectNamePrefix = objectNamePrefix
         self.etag = etag
     }
+    
+    public enum CodingKeys: String, CodingKey {
+        case kind
+        case id
+        case selfLink
+        case topic
+        case eventTypes = "event_types"
+        case customAttributes = "custom_attributes"
+        case payloadFormat = "payload_format"
+        case objectNamePrefix = "object_name_prefix"
+        case etag
+    }
 }
 
 public struct ObjectAccessControls: GoogleCloudModel {
