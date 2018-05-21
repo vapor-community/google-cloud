@@ -136,3 +136,46 @@ public struct CustomerEncryption: GoogleCloudModel {
         self.keySha256 = keySha256
     }
 }
+
+public struct StorageComposeRequest: GoogleCloudModel {
+    /// The kind of item this is.
+    public var kind: String? = "storage#composeRequest"
+    /// The list of source objects that will be concatenated into a single object.
+    public var sourceObjects: [StorageSourcObject]?
+    /// Properties of the resulting object.
+    public var destination: GoogleStorageObject?
+    
+    public init(kind: String? = nil,
+                sourceObjects: [StorageSourcObject]? = nil,
+                destination: GoogleStorageObject? = nil) {
+        self.kind = kind
+        self.sourceObjects = sourceObjects
+        self.destination = destination
+    }
+}
+
+public struct StorageSourcObject: GoogleCloudModel {
+    /// The source object's name. The source object's bucket is implicitly the destination bucket.
+    public var name: String?
+    /// The generation of this object to use as the source.
+    public var generation: String?
+    /// Conditions that must be met for this operation to execute.
+    public var objectPreconditions: StorageObjectPreconditions?
+    
+    public init(name: String? = nil,
+                generation: String? = nil,
+                objectPreconditions: StorageObjectPreconditions? = nil) {
+        self.name = name
+        self.generation = generation
+        self.objectPreconditions = objectPreconditions
+    }
+}
+
+public struct StorageObjectPreconditions: GoogleCloudModel {
+    /// Only perform the composition if the generation of the source object that would be used matches this value. If this value and a generation are both specified, they must be the same value or the call will fail.
+    public var ifGenerationMatch: String?
+    
+    public init(ifGenerationMatch: String? = nil) {
+        self.ifGenerationMatch = ifGenerationMatch
+    }
+}

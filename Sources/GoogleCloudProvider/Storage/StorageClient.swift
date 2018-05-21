@@ -14,6 +14,7 @@ public struct GoogleCloudStorageClient: ServiceType {
     public var defaultObjectAccessControl: GoogleDefaultObjectACLAPI
     public var objectAccessControl: GoogleObjectAccessControlsAPI
     public var notifications: GoogleStorageNotificationsAPI
+    public var object: GoogleStorageObjectAPI
     
     init(providerconfig: GoogleCloudProviderConfig, storageconfig: GoogleCloudStorageConfig, client: Client) {
         let oauthRequester = GoogleOAuth(serviceEmail: storageconfig.email, scopes: storageconfig.scope, privateKey: providerconfig.privateKey, httpClient: client)
@@ -25,6 +26,7 @@ public struct GoogleCloudStorageClient: ServiceType {
         defaultObjectAccessControl = GoogleDefaultObjectACLAPI(request: storageRequest)
         objectAccessControl = GoogleObjectAccessControlsAPI(request: storageRequest)
         notifications = GoogleStorageNotificationsAPI(request: storageRequest)
+        object = GoogleStorageObjectAPI(request: storageRequest)
     }
     
     public static func makeService(for worker: Container) throws -> GoogleCloudStorageClient {
