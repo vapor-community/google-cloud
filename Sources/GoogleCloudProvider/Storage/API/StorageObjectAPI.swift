@@ -12,6 +12,7 @@ public protocol StorageObjectAPI {
     func copy(destinationBucket: String, destinationObject: String, sourceBucket: String, sourceObject: String, object: GoogleStorageObject, queryParameters: [String: String]?) throws -> Future<GoogleStorageObject>
     func delete(bucket: String, object: String, queryParameters: [String: String]?) throws -> Future<EmptyResponse>
     func get(bucket: String, object: String, queryParameters: [String: String]?) throws -> Future<GoogleStorageObject>
+    func createSimpleUpload(bucket: String, data: Data, name: String, queryParameters: [String: String]?, object: GoogleStorageBucket?) throws -> Future<GoogleStorageBucket>
 }
 
 public class GoogleStorageObjectAPI: StorageObjectAPI {
@@ -74,5 +75,26 @@ public class GoogleStorageObjectAPI: StorageObjectAPI {
         }
         
         return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/o/\(object)", query: queryParams, body: "")
+    }
+    
+    /// Stores a new object and metadata. Upload the media only, without any metadata.
+    public func createSimpleUpload(bucket: String,
+                                   data: Data,
+                                   name: String,
+                                   queryParameters: [String: String]? = nil,
+                                   object: GoogleStorageBucket? = nil) throws -> Future<GoogleStorageBucket> {
+        var queryParams = ""
+        if var queryParameters = queryParameters {
+            queryParameters["name"] = name
+            queryParameters["uploadType"] = "media"
+            queryParams = queryParameters.queryParameters
+        }
+        else {
+            queryParams = "uploadType=media&name=\(name)"
+        }
+        
+        let body = data.convert(to: String.self)
+        
+        return try request.send(method: .POST, path: "https://www.googleapis.com/upload/storage/v1/b/\(bucket)/o", query: queryParams, body: body)
     }
 }
