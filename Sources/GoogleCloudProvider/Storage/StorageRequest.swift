@@ -7,6 +7,15 @@
 
 import Vapor
 
+extension HTTPHeaders {
+    public static var gcsDefault: HTTPHeaders {
+        var headers: HTTPHeaders = [:]
+        headers.replaceOrAdd(name: .contentType, value: MediaType.json.description)
+        return headers
+    }
+}
+
+
 public class GoogleCloudStorageRequest {
     var authtoken: OAuthResponse?
     var tokenCreatedTime: Date?
@@ -20,22 +29,26 @@ public class GoogleCloudStorageRequest {
         self.project = project
     }
     
-    func send<GCM: GoogleCloudModel>(method: HTTPMethod, path: String, query: String, body: String) throws -> Future<GCM> {
+    func send<GCM: GoogleCloudModel>(method: HTTPMethod, headers: HTTPHeaders = [:], path: String, query: String, body: String) throws -> Future<GCM> {
         // if oauth token is not expired continue as normal
         if let oauth = authtoken, let createdTime = tokenCreatedTime, Int(Date().timeIntervalSince1970) < Int(createdTime.timeIntervalSince1970) + oauth.expiresIn {
-            return try _send(method: method, path: path, query: query, body: body, accessToken: oauth.accessToken)
+            return try _send(method: method, headers: headers, path: path, query: query, body: body, accessToken: oauth.accessToken)
         }
         else {
             return try oauthRequester.requestOauthToken().flatMap({ (oauth) in
                 self.authtoken = oauth
                 self.tokenCreatedTime = Date()
-                return try self._send(method: method, path: path, query: query, body: body, accessToken: oauth.accessToken)
+                return try self._send(method: method, headers: headers, path: path, query: query, body: body, accessToken: oauth.accessToken)
             })
         }
     }
     
-    private func _send<GCM: GoogleCloudModel>(method: HTTPMethod, path: String, query: String, body: String, accessToken: String) throws -> Future<GCM> {
-        return httpClient.send(method, headers: [HTTPHeaderName.authorization.description: "Bearer \(accessToken)", HTTPHeaderName.contentType.description: MediaType.json.description], to: "\(path)?\(query)", beforeSend: { $0.http.body = HTTPBody(string: body) }).flatMap({ (response)  in
+    private func _send<GCM: GoogleCloudModel>(method: HTTPMethod, headers: HTTPHeaders, path: String, query: String, body: String, accessToken: String) throws -> Future<GCM> {
+        var finalHeaders: HTTPHeaders = HTTPHeaders.gcsDefault
+        finalHeaders.add(name: .authorization, value: "Bearer \(accessToken)")
+        headers.forEach { finalHeaders.replaceOrAdd(name: $0.name, value: $0.value) }
+        
+        return httpClient.send(method, headers: finalHeaders, to: "\(path)?\(query)", beforeSend: { $0.http.body = HTTPBody(string: body) }).flatMap({ (response)  in
             guard response.http.status == .ok else {
                 // TODO: Throw proper error
                 throw Abort(.internalServerError)

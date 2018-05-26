@@ -12,7 +12,7 @@ public protocol StorageObjectAPI {
     func copy(destinationBucket: String, destinationObject: String, sourceBucket: String, sourceObject: String, object: GoogleStorageObject, queryParameters: [String: String]?) throws -> Future<GoogleStorageObject>
     func delete(bucket: String, object: String, queryParameters: [String: String]?) throws -> Future<EmptyResponse>
     func get(bucket: String, object: String, queryParameters: [String: String]?) throws -> Future<GoogleStorageObject>
-    func createSimpleUpload(bucket: String, data: Data, name: String, queryParameters: [String: String]?, object: GoogleStorageBucket?) throws -> Future<GoogleStorageBucket>
+    func createSimpleUpload(bucket: String, data: Data, name: String, mediaType: MediaType, queryParameters: [String: String]?, object: GoogleStorageBucket?) throws -> Future<GoogleStorageBucket>
 }
 
 public class GoogleStorageObjectAPI: StorageObjectAPI {
@@ -81,6 +81,7 @@ public class GoogleStorageObjectAPI: StorageObjectAPI {
     public func createSimpleUpload(bucket: String,
                                    data: Data,
                                    name: String,
+                                   mediaType: MediaType,
                                    queryParameters: [String: String]? = nil,
                                    object: GoogleStorageBucket? = nil) throws -> Future<GoogleStorageBucket> {
         var queryParams = ""
@@ -95,6 +96,8 @@ public class GoogleStorageObjectAPI: StorageObjectAPI {
         
         let body = data.convert(to: String.self)
         
-        return try request.send(method: .POST, path: "https://www.googleapis.com/upload/storage/v1/b/\(bucket)/o", query: queryParams, body: body)
+        let headers: HTTPHeaders = [HTTPHeaderName.contentType.description: mediaType.description]
+        
+        return try request.send(method: .POST, headers: headers, path: "https://www.googleapis.com/upload/storage/v1/b/\(bucket)/o", query: queryParams, body: body)
     }
 }
