@@ -12,7 +12,7 @@ public protocol StorageObjectAPI {
     func copy(destinationBucket: String, destinationObject: String, sourceBucket: String, sourceObject: String, object: GoogleStorageObject, queryParameters: [String: String]?) throws -> Future<GoogleStorageObject>
     func delete(bucket: String, object: String, queryParameters: [String: String]?) throws -> Future<EmptyResponse>
     func get(bucket: String, object: String, queryParameters: [String: String]?) throws -> Future<GoogleStorageObject>
-    func createSimpleUpload(bucket: String, data: Data, name: String, mediaType: MediaType, queryParameters: [String: String]?, object: GoogleStorageBucket?) throws -> Future<GoogleStorageBucket>
+    func createSimpleUpload(bucket: String, data: Data, name: String, mediaType: MediaType, queryParameters: [String: String]?, object: GoogleStorageBucket?) throws -> Future<GoogleStorageObject>
 }
 
 public class GoogleStorageObjectAPI: StorageObjectAPI {
@@ -83,7 +83,7 @@ public class GoogleStorageObjectAPI: StorageObjectAPI {
                                    name: String,
                                    mediaType: MediaType,
                                    queryParameters: [String: String]? = nil,
-                                   object: GoogleStorageBucket? = nil) throws -> Future<GoogleStorageBucket> {
+                                   object: GoogleStorageBucket? = nil) throws -> Future<GoogleStorageObject> {
         var queryParams = ""
         if var queryParameters = queryParameters {
             queryParameters["name"] = name
