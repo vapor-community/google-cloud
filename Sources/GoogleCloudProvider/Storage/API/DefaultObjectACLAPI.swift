@@ -25,27 +25,34 @@ public class GoogleDefaultObjectACLAPI: DefaultObjectACLAPI {
     }
     
     /// Permanently deletes the default object ACL entry for the specified entity on the specified bucket.
-    public func delete(bucket: String, entity: String, queryParameters: [String: String]? = nil) throws -> Future<EmptyResponse> {
+    public func delete(bucket: String,
+                       entity: String,
+                       queryParameters: [String: String]? = nil) throws -> Future<EmptyResponse> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
         }
         
-        return try request.send(method: .DELETE, path: "\(endpoint)/\(bucket)/defaultObjectAcl/\(entity)", query: queryParams, body: HTTPBody())
+        return try request.send(method: .DELETE, path: "\(endpoint)/\(bucket)/defaultObjectAcl/\(entity)", query: queryParams)
     }
     
     /// Returns the default object ACL entry for the specified entity on the specified bucket.
-    public func get(bucket: String, entity: String, queryParameters: [String: String]? = nil) throws -> Future<ObjectAccessControls> {
+    public func get(bucket: String,
+                    entity: String,
+                    queryParameters: [String: String]? = nil) throws -> Future<ObjectAccessControls> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
         }
         
-        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/defaultObjectAcl/\(entity)", query: queryParams, body: HTTPBody())
+        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/defaultObjectAcl/\(entity)", query: queryParams)
     }
     
     /// Creates a new default object ACL entry on the specified bucket.
-    public func create(bucket: String, entity: String, role: String, queryParameters: [String: String]? = nil) throws -> Future<ObjectAccessControls> {
+    public func create(bucket: String,
+                       entity: String,
+                       role: String,
+                       queryParameters: [String: String]? = nil) throws -> Future<ObjectAccessControls> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
@@ -57,23 +64,26 @@ public class GoogleDefaultObjectACLAPI: DefaultObjectACLAPI {
     }
     
     /// Retrieves default object ACL entries on the specified bucket.
-    public func list(bucket: String, queryParameters: [String: String]? = nil) throws -> Future<ObjectAccessControlsList> {
+    public func list(bucket: String,
+                     queryParameters: [String: String]? = nil) throws -> Future<ObjectAccessControlsList> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
         }
         
-        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/defaultObjectAcl", query: queryParams, body: HTTPBody())
+        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/defaultObjectAcl", query: queryParams)
     }
 
     /// Updates a default object ACL entry on the specified bucket. This method supports patch semantics.
-    public func patch(bucket: String, entity: String, queryParameters: [String: String]? = nil) throws -> Future<ObjectAccessControls> {
+    public func patch(bucket: String,
+                      entity: String,
+                      queryParameters: [String: String]? = nil) throws -> Future<ObjectAccessControls> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
         }
         
-        return try request.send(method: .PATCH, path: "\(endpoint)/\(bucket)/defaultObjectAcl/\(entity)", query: queryParams, body: HTTPBody())
+        return try request.send(method: .PATCH, path: "\(endpoint)/\(bucket)/defaultObjectAcl/\(entity)", query: queryParams)
     }
     
     /// Updates a default object ACL entry on the specified bucket.

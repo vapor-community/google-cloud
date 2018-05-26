@@ -28,33 +28,36 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
     }
 
     /// Permanently deletes an empty bucket.
-    public func delete(bucket: String, queryParameters: [String : String]? = nil) throws -> Future<EmptyResponse> {
+    public func delete(bucket: String,
+                       queryParameters: [String: String]? = nil) throws -> Future<EmptyResponse> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
         }
         
-        return try request.send(method: .DELETE, path: "\(endpoint)/\(bucket)", query: queryParams, body: HTTPBody())
+        return try request.send(method: .DELETE, path: "\(endpoint)/\(bucket)", query: queryParams)
     }
 
     /// Returns metadata for the specified bucket.
-    public func get(bucket: String, queryParameters: [String : String]? = nil) throws -> Future<GoogleStorageBucket> {
+    public func get(bucket: String,
+                    queryParameters: [String: String]? = nil) throws -> Future<GoogleStorageBucket> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
         }
         
-        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)", query: queryParams, body: HTTPBody())
+        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)", query: queryParams)
     }
 
     /// Returns an IAM policy for the specified bucket.
-    public func getIAMPolicy(bucket: String, queryParameters: [String: String]? = nil) throws -> Future<IAMPolicy> {
+    public func getIAMPolicy(bucket: String,
+                             queryParameters: [String: String]? = nil) throws -> Future<IAMPolicy> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
         }
         
-        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/iam", query: queryParams, body: HTTPBody())
+        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/iam", query: queryParams)
     }
 
     /// Creates a new bucket.
@@ -65,7 +68,7 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
                         cors: [Cors]? = nil,
                         defaultObjectAcl: [ObjectAccessControls]? = nil,
                         encryption: Encryption? = nil,
-                        labels: [String : String]? = nil,
+                        labels: [String: String]? = nil,
                         lifecycle: Lifecycle? = nil,
                         location: String? = nil,
                         logging: Logging? = nil,
@@ -137,7 +140,7 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
     }
 
     /// Retrieves a list of buckets for a given project.
-    public func list(queryParameters: [String : String]? = nil) throws -> Future<GoogleStorageBucketList> {
+    public func list(queryParameters: [String: String]? = nil) throws -> Future<GoogleStorageBucketList> {
         var query = ""
         
         if var queryParameters = queryParameters {
@@ -148,12 +151,12 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
             query = "project=\(request.project)"
         }
         
-        return try request.send(method: .GET, path: endpoint, query: query, body: HTTPBody())
+        return try request.send(method: .GET, path: endpoint, query: query)
     }
 
     /// Updates a bucket. Changes to the bucket will be readable immediately after writing, but configuration changes may take time to propagate.
     public func patch(bucket: String,
-                      queryParameters: [String : String]? = nil,
+                      queryParameters: [String: String]? = nil,
                       acl: [BucketAccessControls]? = nil,
                       billing: Billing? = nil,
                       cors: [Cors]? = nil,
@@ -219,7 +222,7 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
     /// Updates an IAM policy for the specified bucket.
     public func setIAMPolicy(bucket: String,
                              iamPolicy: IAMPolicy,
-                             queryParameters: [String : String]? = nil) throws -> Future<IAMPolicy> {
+                             queryParameters: [String: String]? = nil) throws -> Future<IAMPolicy> {
         var query = ""
         
         if let queryParameters = queryParameters {
@@ -234,7 +237,7 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
     /// Tests a set of permissions on the given bucket to see which, if any, are held by the caller.
     public func testIAMPermissions(bucket: String,
                                    permissions: [String],
-                                   queryParameters: [String : String]? = nil) throws -> Future<Permission> {
+                                   queryParameters: [String: String]? = nil) throws -> Future<Permission> {
         var query = ""
         
         if let queryParameters = queryParameters {
@@ -249,7 +252,7 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
         
         query.append(perms)
         
-        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/iam/testPermissions", query: query, body: HTTPBody())
+        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/iam/testPermissions", query: query)
     }
 
     /// Updates a bucket. Changes to the bucket will be readable immediately after writing, but configuration changes may take time to propagate. This method sets the complete metadata of a bucket. If you want to change some of a bucket's metadata while leaving other parts unaffected, use the PATCH function instead.
@@ -260,7 +263,7 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
                        cors: [Cors]? = nil,
                        defaultObjectAcl: [ObjectAccessControls]? = nil,
                        encryption: Encryption? = nil,
-                       labels: [String : String]? = nil,
+                       labels: [String: String]? = nil,
                        lifecycle: Lifecycle? = nil,
                        logging: Logging? = nil,
                        storageClass: StorageClass? = nil,

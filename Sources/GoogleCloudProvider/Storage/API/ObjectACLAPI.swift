@@ -25,27 +25,37 @@ public class GoogleObjectAccessControlsAPI: ObjectAccessControlsAPI {
     }
     
     /// Permanently deletes the ACL entry for the specified entity on the specified object.
-    public func delete(bucket: String, entity: String, object: String, queryParameters: [String: String]? = nil) throws -> Future<EmptyResponse> {
+    public func delete(bucket: String,
+                       entity: String,
+                       object: String,
+                       queryParameters: [String: String]? = nil) throws -> Future<EmptyResponse> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
         }
         
-        return try request.send(method: .DELETE, path: "\(endpoint)/\(bucket)/o/\(object)/acl/\(entity)", query: queryParams, body: HTTPBody())
+        return try request.send(method: .DELETE, path: "\(endpoint)/\(bucket)/o/\(object)/acl/\(entity)", query: queryParams)
     }
     
     /// Returns the ACL entry for the specified entity on the specified object.
-    public func get(bucket: String, entity: String, object: String, queryParameters: [String: String]? = nil) throws -> Future<ObjectAccessControls> {
+    public func get(bucket: String,
+                    entity: String,
+                    object: String,
+                    queryParameters: [String: String]? = nil) throws -> Future<ObjectAccessControls> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
         }
         
-        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/o/\(object)acl/\(entity)", query: queryParams, body: HTTPBody())
+        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/o/\(object)acl/\(entity)", query: queryParams)
     }
     
     /// Creates a new ACL entry on the specified object.
-    public func create(bucket: String, object: String, entity: String, role: String, queryParameters: [String: String]? = nil) throws -> Future<ObjectAccessControls> {
+    public func create(bucket: String,
+                       object: String,
+                       entity: String,
+                       role: String,
+                       queryParameters: [String: String]? = nil) throws -> Future<ObjectAccessControls> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
@@ -57,23 +67,28 @@ public class GoogleObjectAccessControlsAPI: ObjectAccessControlsAPI {
     }
     
     /// Retrieves ACL entries on the specified object.
-    public func list(bucket: String, object: String, queryParameters: [String: String]? = nil) throws -> Future<ObjectAccessControlsList> {
+    public func list(bucket: String,
+                     object: String,
+                     queryParameters: [String: String]? = nil) throws -> Future<ObjectAccessControlsList> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
         }
         
-        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/o/\(object)/acl", query: queryParams, body: HTTPBody())
+        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/o/\(object)/acl", query: queryParams)
     }
     
     /// Updates an ACL entry on the specified object. This method supports patch semantics.
-    public func patch(bucket: String, object: String, entity: String, queryParameters: [String: String]? = nil) throws -> Future<ObjectAccessControls> {
+    public func patch(bucket: String,
+                      object: String,
+                      entity: String,
+                      queryParameters: [String: String]? = nil) throws -> Future<ObjectAccessControls> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
         }
         
-        return try request.send(method: .PATCH, path: "\(endpoint)/\(bucket)/o/\(object)/acl/\(entity)", query: queryParams, body: HTTPBody())
+        return try request.send(method: .PATCH, path: "\(endpoint)/\(bucket)/o/\(object)/acl/\(entity)", query: queryParams)
     }
     
     /// Updates an ACL entry on the specified object.

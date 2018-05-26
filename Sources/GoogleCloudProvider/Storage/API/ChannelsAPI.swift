@@ -20,7 +20,9 @@ public class GoogleChannelsAPI: ChannelsAPI {
     }
     
     /// Stop receiving object change notifications through this channel.
-    public func stop(channelId: String, resourceId: String, queryParameters: [String: String]? = nil) throws -> Future<EmptyResponse> {
+    public func stop(channelId: String,
+                     resourceId: String,
+                     queryParameters: [String: String]? = nil) throws -> Future<EmptyResponse> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters

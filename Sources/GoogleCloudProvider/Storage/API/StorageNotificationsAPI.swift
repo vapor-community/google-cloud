@@ -23,27 +23,33 @@ public class GoogleStorageNotificationsAPI: StorageNotificationsAPI {
     }
     
     /// Permanently deletes a notification subscription.
-    public func delete(bucket: String, notification: String, queryParameters: [String: String]? = nil) throws -> Future<EmptyResponse> {
+    public func delete(bucket: String,
+                       notification: String,
+                       queryParameters: [String: String]? = nil) throws -> Future<EmptyResponse> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
         }
         
-        return try request.send(method: .DELETE, path: "\(endpoint)/\(bucket)/notificationConfigs/\(notification)", query: queryParams, body: HTTPBody())
+        return try request.send(method: .DELETE, path: "\(endpoint)/\(bucket)/notificationConfigs/\(notification)", query: queryParams)
     }
     
     /// View a notification configuration.
-    public func get(bucket: String, notification: String, queryParameters: [String: String]? = nil) throws -> Future<StorageNotification> {
+    public func get(bucket: String,
+                    notification: String,
+                    queryParameters: [String: String]? = nil) throws -> Future<StorageNotification> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
         }
         
-        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/notificationConfigs/\(notification)", query: queryParams, body: HTTPBody())
+        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/notificationConfigs/\(notification)", query: queryParams)
     }
     
     /// Creates a notification subscription for a given bucket.
-    public func create(bucket: String, notification: StorageNotification, queryParameters: [String: String]? = nil) throws -> Future<StorageNotification> {
+    public func create(bucket: String,
+                       notification: StorageNotification,
+                       queryParameters: [String: String]? = nil) throws -> Future<StorageNotification> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
@@ -55,12 +61,13 @@ public class GoogleStorageNotificationsAPI: StorageNotificationsAPI {
     }
     
     /// Retrieves a list of notification subscriptions for a given bucket.
-    public func list(bucket: String, queryParameters: [String: String]? = nil) throws -> Future<StorageNotificationsList> {
+    public func list(bucket: String,
+                     queryParameters: [String: String]? = nil) throws -> Future<StorageNotificationsList> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
         }
         
-        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/notificationConfigs", query: queryParams, body: HTTPBody())
+        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/notificationConfigs", query: queryParams)
     }
 }

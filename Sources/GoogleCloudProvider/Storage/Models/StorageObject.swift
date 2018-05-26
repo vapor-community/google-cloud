@@ -179,3 +179,91 @@ public struct StorageObjectPreconditions: GoogleCloudModel {
         self.ifGenerationMatch = ifGenerationMatch
     }
 }
+
+public struct StorageRewriteObject: GoogleCloudModel {
+    /// The kind of item this is.
+    public var kind: String?
+    
+    ///The total bytes written so far, which can be used to provide a waiting user with a progress indicator. This property is always present in the response.
+    public var totalBytesRewritten: String?
+    
+    /// The total size of the object being copied in bytes. This property is always present in the response.
+    public var objectSize: String?
+    
+    /// true if the copy is finished; otherwise, false if the copy is in progress. This property is always present in the response.
+    public var done: Bool?
+    
+    /// A token to use in subsequent requests to continue copying data. This token is present in the response only when there is more data to copy.
+    public var rewriteToken: String?
+    
+    /// A resource containing the metadata for the copied-to object. This property is present in the response only when copying completes.
+    public var resource: GoogleStorageObject?
+    
+    public init(kind: String? = nil,
+                totalBytesRewritten: String? = nil,
+                objectSize: String? = nil,
+                done: Bool? = nil,
+                rewriteToken: String? = nil,
+                resource: GoogleStorageObject? = nil) {
+        self.kind = kind
+        self.totalBytesRewritten = totalBytesRewritten
+        self.objectSize = objectSize
+        self.done = done
+        self.rewriteToken = rewriteToken
+        self.resource = resource
+    }
+}
+
+public struct StorageNotificationChannel: GoogleCloudModel {
+    /// Identifies this as a notification channel used to watch for changes to a resource. Value: the fixed string "api#channel".
+    public var kind: String?
+    
+    /// A UUID or similar unique string that identifies this channel.
+    public var id: String?
+    
+    /// An opaque ID that identifies the resource being watched on this channel. Stable across different API versions.
+    public var resourceId: String?
+    
+    /// A version-specific identifier for the watched resource.
+    public var resourceUri: String?
+    
+    /// An arbitrary string delivered to the target address with each notification delivered over this channel. Optional.
+    public var token: String?
+    
+    /// Date and time of notification channel expiration, expressed as a Unix timestamp, in milliseconds. Optional.
+    public var expiration: String?
+    
+    /// The type of delivery mechanism used for this channel. Value: the fixed string "WEBHOOK".
+    public var type: String?
+    
+    /// The address where notifications are delivered for this channel.
+    public var address: String?
+    
+    /// Additional parameters controlling delivery channel behavior. Optional.
+    public var params: [String: String]?
+    
+    /// A Boolean value to indicate whether payload is wanted. Optional.
+    public var payload: Bool?
+    
+    public init(kind: String? = nil,
+                id: String? = nil,
+                resourceId: String? = nil,
+                resourceUri: String? = nil,
+                token: String? = nil,
+                expiration: String? = nil,
+                type: String? = nil,
+                address: String? = nil,
+                params: [String: String]? = nil,
+                payload: Bool? = nil) {
+        self.kind = kind
+        self.id = id
+        self.resourceId = resourceId
+        self.resourceUri = resourceUri
+        self.token = token
+        self.expiration = expiration
+        self.type = type
+        self.address = address
+        self.params = params
+        self.payload = payload
+    }
+}

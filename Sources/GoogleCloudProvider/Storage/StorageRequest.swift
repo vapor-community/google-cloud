@@ -29,7 +29,7 @@ public class GoogleCloudStorageRequest {
         self.project = project
     }
     
-    func send<GCM: GoogleCloudModel>(method: HTTPMethod, headers: HTTPHeaders = [:], path: String, query: String, body: HTTPBody) throws -> Future<GCM> {
+    func send<GCM: GoogleCloudModel>(method: HTTPMethod, headers: HTTPHeaders = [:], path: String, query: String, body: HTTPBody = HTTPBody()) throws -> Future<GCM> {
         // if oauth token is not expired continue as normal
         if let oauth = authtoken, let createdTime = tokenCreatedTime, Int(Date().timeIntervalSince1970) < Int(createdTime.timeIntervalSince1970) + oauth.expiresIn {
             return try _send(method: method, headers: headers, path: path, query: query, body: body, accessToken: oauth.accessToken)

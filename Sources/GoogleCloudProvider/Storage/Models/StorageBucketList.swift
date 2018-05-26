@@ -36,3 +36,16 @@ public struct StorageNotificationsList: GoogleCloudModel {
     /// The list of items.
     public var items: [StorageNotification]?
 }
+
+public struct StorageObjectList: GoogleCloudModel {
+    /// The kind of item this is. For lists of objects, this is always storage#objects.
+    public var kind: String?
+    /// The continuation token, used to page through large result sets. Provide this value in a subsequent request to return the next page of results.
+    public var nextPageToken: String?
+    
+    /// The list of prefixes of objects matching-but-not-listed up to and including the requested delimiter.
+    public var prefixes: [String]?
+    
+    /// The list of items.
+    public var items: [GoogleStorageObject]?
+}

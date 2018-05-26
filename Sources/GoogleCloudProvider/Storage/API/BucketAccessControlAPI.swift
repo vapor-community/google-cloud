@@ -25,27 +25,34 @@ public class GoogleBucketAccessControlAPI: BucketAccessControlAPI {
     }
     
     /// Permanently deletes the ACL entry for the specified entity on the specified bucket.
-    public func delete(bucket: String, entity: String, queryParameters: [String: String]? = nil) throws -> Future<EmptyResponse> {
+    public func delete(bucket: String,
+                       entity: String,
+                       queryParameters: [String: String]? = nil) throws -> Future<EmptyResponse> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
         }
         
-        return try request.send(method: .DELETE, path: "\(endpoint)/\(bucket)/acl/\(entity)", query: queryParams, body: HTTPBody())
+        return try request.send(method: .DELETE, path: "\(endpoint)/\(bucket)/acl/\(entity)", query: queryParams)
     }
     
     /// Returns the ACL entry for the specified entity on the specified bucket.
-    public func get(bucket: String, entity: String, queryParameters: [String: String]? = nil) throws -> Future<BucketAccessControls> {
+    public func get(bucket: String,
+                    entity: String,
+                    queryParameters: [String: String]? = nil) throws -> Future<BucketAccessControls> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
         }
         
-        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/acl/\(entity)", query: queryParams, body: HTTPBody())
+        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/acl/\(entity)", query: queryParams)
     }
     
     /// Creates a new ACL entry on the specified bucket.
-    public func create(bucket: String, entity: String, role: String, queryParameters: [String: String]? = nil) throws -> Future<BucketAccessControls> {
+    public func create(bucket: String,
+                       entity: String,
+                       role: String,
+                       queryParameters: [String: String]? = nil) throws -> Future<BucketAccessControls> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
@@ -57,23 +64,26 @@ public class GoogleBucketAccessControlAPI: BucketAccessControlAPI {
     }
     
     /// Retrieves ACL entries on a specified bucket.
-    public func list(bucket: String, queryParameters: [String : String]?) throws -> Future<BucketAccessControlList> {
+    public func list(bucket: String,
+                     queryParameters: [String: String]? = nil) throws -> Future<BucketAccessControlList> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
         }
         
-        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/acl", query: queryParams, body: HTTPBody())
+        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/acl", query: queryParams)
     }
     
     /// Updates an ACL entry on the specified bucket. This method supports patch semantics.
-    public func patch(bucket: String, entity: String, queryParameters: [String: String]? = nil) throws -> Future<BucketAccessControls> {
+    public func patch(bucket: String,
+                      entity: String,
+                      queryParameters: [String: String]? = nil) throws -> Future<BucketAccessControls> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
         }
         
-        return try request.send(method: .PATCH, path: "\(endpoint)/\(bucket)/acl/\(entity)", query: queryParams, body: HTTPBody())
+        return try request.send(method: .PATCH, path: "\(endpoint)/\(bucket)/acl/\(entity)", query: queryParams)
     }
     
     /// Updates an ACL entry on the specified bucket.
