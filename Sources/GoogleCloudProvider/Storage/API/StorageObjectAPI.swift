@@ -33,7 +33,7 @@ public class GoogleStorageObjectAPI: StorageObjectAPI {
             queryParams = queryParameters.queryParameters
         }
         
-        let body = try JSONSerialization.data(withJSONObject: try composeRequest.toEncodedDictionary()).convert(to: String.self)
+        let body = try JSONSerialization.data(withJSONObject: try composeRequest.toEncodedDictionary()).convertToHTTPBody()
         
         return try request.send(method: .POST, path: "\(endpoint)/\(destinationBucket)/o/\(destinationObject)/compose", query: queryParams, body: body)
     }
@@ -50,7 +50,7 @@ public class GoogleStorageObjectAPI: StorageObjectAPI {
             queryParams = queryParameters.queryParameters
         }
         
-        let body = try JSONSerialization.data(withJSONObject: try object.toEncodedDictionary()).convert(to: String.self)
+        let body = try JSONSerialization.data(withJSONObject: try object.toEncodedDictionary()).convertToHTTPBody()
         
         return try request.send(method: .POST, path: "\(endpoint)/\(sourceBucket)/o/\(sourceObject)/copyTo/b/\(destinationBucket)/o/\(destinationObject)", query: queryParams, body: body)
     }
@@ -64,7 +64,7 @@ public class GoogleStorageObjectAPI: StorageObjectAPI {
             queryParams = queryParameters.queryParameters
         }
         
-        return try request.send(method: .DELETE, path: "\(endpoint)/\(bucket)/o/\(object)", query: queryParams, body: "")
+        return try request.send(method: .DELETE, path: "\(endpoint)/\(bucket)/o/\(object)", query: queryParams, body: HTTPBody())
     }
     
     /// Retrieves an object or its metadata.
@@ -74,7 +74,7 @@ public class GoogleStorageObjectAPI: StorageObjectAPI {
             queryParams = queryParameters.queryParameters
         }
         
-        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/o/\(object)", query: queryParams, body: "")
+        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/o/\(object)", query: queryParams, body: HTTPBody())
     }
     
     /// Stores a new object and metadata. Upload the media only, without any metadata.
@@ -94,7 +94,7 @@ public class GoogleStorageObjectAPI: StorageObjectAPI {
             queryParams = "uploadType=media&name=\(name)"
         }
         
-        let body = data.convert(to: String.self)
+        let body = data.convertToHTTPBody()
         
         let headers: HTTPHeaders = [HTTPHeaderName.contentType.description: mediaType.description]
         

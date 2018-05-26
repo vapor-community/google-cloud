@@ -29,7 +29,7 @@ public class GoogleCloudStorageRequest {
         self.project = project
     }
     
-    func send<GCM: GoogleCloudModel>(method: HTTPMethod, headers: HTTPHeaders = [:], path: String, query: String, body: String) throws -> Future<GCM> {
+    func send<GCM: GoogleCloudModel>(method: HTTPMethod, headers: HTTPHeaders = [:], path: String, query: String, body: HTTPBody) throws -> Future<GCM> {
         // if oauth token is not expired continue as normal
         if let oauth = authtoken, let createdTime = tokenCreatedTime, Int(Date().timeIntervalSince1970) < Int(createdTime.timeIntervalSince1970) + oauth.expiresIn {
             return try _send(method: method, headers: headers, path: path, query: query, body: body, accessToken: oauth.accessToken)
@@ -43,12 +43,12 @@ public class GoogleCloudStorageRequest {
         }
     }
     
-    private func _send<GCM: GoogleCloudModel>(method: HTTPMethod, headers: HTTPHeaders, path: String, query: String, body: String, accessToken: String) throws -> Future<GCM> {
+    private func _send<GCM: GoogleCloudModel>(method: HTTPMethod, headers: HTTPHeaders, path: String, query: String, body: HTTPBody, accessToken: String) throws -> Future<GCM> {
         var finalHeaders: HTTPHeaders = HTTPHeaders.gcsDefault
         finalHeaders.add(name: .authorization, value: "Bearer \(accessToken)")
         headers.forEach { finalHeaders.replaceOrAdd(name: $0.name, value: $0.value) }
         
-        return httpClient.send(method, headers: finalHeaders, to: "\(path)?\(query)", beforeSend: { $0.http.body = HTTPBody(string: body) }).flatMap({ (response)  in
+        return httpClient.send(method, headers: finalHeaders, to: "\(path)?\(query)", beforeSend: { $0.http.body = body }).flatMap({ (response)  in
             guard response.http.status == .ok else {
                 // TODO: Throw proper error
                 throw Abort(.internalServerError)

@@ -29,7 +29,7 @@ public class GoogleStorageNotificationsAPI: StorageNotificationsAPI {
             queryParams = queryParameters.queryParameters
         }
         
-        return try request.send(method: .DELETE, path: "\(endpoint)/\(bucket)/notificationConfigs/\(notification)", query: queryParams, body: "")
+        return try request.send(method: .DELETE, path: "\(endpoint)/\(bucket)/notificationConfigs/\(notification)", query: queryParams, body: HTTPBody())
     }
     
     /// View a notification configuration.
@@ -39,7 +39,7 @@ public class GoogleStorageNotificationsAPI: StorageNotificationsAPI {
             queryParams = queryParameters.queryParameters
         }
         
-        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/notificationConfigs/\(notification)", query: queryParams, body: "")
+        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/notificationConfigs/\(notification)", query: queryParams, body: HTTPBody())
     }
     
     /// Creates a notification subscription for a given bucket.
@@ -49,7 +49,7 @@ public class GoogleStorageNotificationsAPI: StorageNotificationsAPI {
             queryParams = queryParameters.queryParameters
         }
         
-        let body = try JSONSerialization.data(withJSONObject: try notification.toEncodedDictionary()).convert(to: String.self)
+        let body = try JSONSerialization.data(withJSONObject: try notification.toEncodedDictionary()).convertToHTTPBody()
         
         return try request.send(method: .POST, path: "\(endpoint)/\(bucket)/notificationConfigs", query: queryParams, body: body)
     }
@@ -61,6 +61,6 @@ public class GoogleStorageNotificationsAPI: StorageNotificationsAPI {
             queryParams = queryParameters.queryParameters
         }
         
-        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/notificationConfigs", query: queryParams, body: "")
+        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/notificationConfigs", query: queryParams, body: HTTPBody())
     }
 }

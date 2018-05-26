@@ -34,7 +34,7 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
             queryParams = queryParameters.queryParameters
         }
         
-        return try request.send(method: .DELETE, path: "\(endpoint)/\(bucket)", query: queryParams, body: "")
+        return try request.send(method: .DELETE, path: "\(endpoint)/\(bucket)", query: queryParams, body: HTTPBody())
     }
 
     /// Returns metadata for the specified bucket.
@@ -44,7 +44,7 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
             queryParams = queryParameters.queryParameters
         }
         
-        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)", query: queryParams, body: "")
+        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)", query: queryParams, body: HTTPBody())
     }
 
     /// Returns an IAM policy for the specified bucket.
@@ -54,7 +54,7 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
             queryParams = queryParameters.queryParameters
         }
         
-        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/iam", query: queryParams, body: "")
+        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/iam", query: queryParams, body: HTTPBody())
     }
 
     /// Creates a new bucket.
@@ -131,7 +131,7 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
             body["website"] = try website.toEncodedDictionary()
         }
         
-        let requestBody = try JSONSerialization.data(withJSONObject: body).convert(to: String.self)
+        let requestBody = try JSONSerialization.data(withJSONObject: body).convertToHTTPBody()
         
         return try request.send(method: .POST, path: endpoint, query: query, body: requestBody)
     }
@@ -148,7 +148,7 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
             query = "project=\(request.project)"
         }
         
-        return try request.send(method: .GET, path: endpoint, query: query, body: "")
+        return try request.send(method: .GET, path: endpoint, query: query, body: HTTPBody())
     }
 
     /// Updates a bucket. Changes to the bucket will be readable immediately after writing, but configuration changes may take time to propagate.
@@ -211,7 +211,7 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
             body["website"] = try website.toEncodedDictionary()
         }
         
-        let requestBody = try JSONSerialization.data(withJSONObject: body).convert(to: String.self)
+        let requestBody = try JSONSerialization.data(withJSONObject: body).convertToHTTPBody()
         
         return try request.send(method: .PATCH, path: endpoint, query: query, body: requestBody)
     }
@@ -226,7 +226,7 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
             query = queryParameters.queryParameters
         }
 
-        let requestBody = try JSONSerialization.data(withJSONObject: try iamPolicy.toEncodedDictionary()).convert(to: String.self)
+        let requestBody = try JSONSerialization.data(withJSONObject: try iamPolicy.toEncodedDictionary()).convertToHTTPBody()
         
         return try request.send(method: .PUT, path: "\(endpoint)/\(bucket)/iam", query: query, body: requestBody)
     }
@@ -249,7 +249,7 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
         
         query.append(perms)
         
-        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/iam/testPermissions", query: query, body: "")
+        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/iam/testPermissions", query: query, body: HTTPBody())
     }
 
     /// Updates a bucket. Changes to the bucket will be readable immediately after writing, but configuration changes may take time to propagate. This method sets the complete metadata of a bucket. If you want to change some of a bucket's metadata while leaving other parts unaffected, use the PATCH function instead.
@@ -316,7 +316,7 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
             body["website"] = try website.toEncodedDictionary()
         }
         
-        let requestBody = try JSONSerialization.data(withJSONObject: body).convert(to: String.self)
+        let requestBody = try JSONSerialization.data(withJSONObject: body).convertToHTTPBody()
         
         return try request.send(method: .PUT, path: "\(endpoint)/\(bucket)", query: query, body: requestBody)
     }

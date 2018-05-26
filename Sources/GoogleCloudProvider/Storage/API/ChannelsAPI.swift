@@ -26,7 +26,7 @@ public class GoogleChannelsAPI: ChannelsAPI {
             queryParams = queryParameters.queryParameters
         }
         
-        let requestBody = try JSONEncoder().encode(["id": channelId, "resourceid": resourceId]).convert(to: String.self)
+        let requestBody = try JSONEncoder().encode(["id": channelId, "resourceid": resourceId]).convertToHTTPBody()
         
         return try request.send(method: .POST, path: "\(endpoint)/stop)", query: queryParams, body: requestBody)
     }
