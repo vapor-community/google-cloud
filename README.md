@@ -49,4 +49,4 @@ And In `Configure.swift` or wherever you setup your configuration in Vapor
 ```
 
 ### Currently the following API's are implemented and you can follow the setup guides for each specific API to integrate with your Vapor project.
-* [x] Cloud Storage [Setup guide](https://github.com/Andrewangeta/GoogleCloudProvider/Sources/GoogleCloudProvider/Storage/README.md)
+* [x] Cloud Storage [Setup guide](https://github.com/Andrewangeta/GoogleCloudProvider/tree/master/Sources/GoogleCloudProvider/Storage/README.md)
