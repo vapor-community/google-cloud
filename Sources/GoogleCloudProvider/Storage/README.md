@@ -64,5 +64,5 @@ This is just a basic example of creating a bucket and uploading an object.
 * [x] Notifications
 * [x] ObjectAccessControls
 * [x] Simple Object upload
-* [] Multipart Object upload
-* [] Resumable Object upload
+* [ ] Multipart Object upload
+* [ ] Resumable Object upload
