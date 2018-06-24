@@ -49,16 +49,15 @@ public class GoogleCloudStorageRequest {
         headers.forEach { finalHeaders.replaceOrAdd(name: $0.name, value: $0.value) }
         
         return httpClient.send(method, headers: finalHeaders, to: "\(path)?\(query)", beforeSend: { $0.http.body = body }).flatMap({ (response)  in
-            guard response.http.status == .ok else {
-                // TODO: Throw proper error
-                throw Abort(.internalServerError)
-            }
-            
             let decoder = JSONDecoder()
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
             decoder.dateDecodingStrategy = .formatted(formatter)
-            
+            guard response.http.status == .ok else {
+                return try decoder.decode(CloudStorageError.self, from: response.http, maxSize: 65_536, on: self.httpClient.container).map(to: GCM.self){ error in
+                    throw error
+                }
+            }
             return try decoder.decode(GCM.self, from: response.http, maxSize: 65_536, on: response)
         })
     }
