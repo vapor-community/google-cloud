@@ -19,13 +19,21 @@ public struct GoogleCloudStorageClient: ServiceType {
     init(providerconfig: GoogleCloudProviderConfig, client: Client) throws {
         let refreshableToken: OAuthRefreshable
 
-        if let credentialPath = providerconfig.serviceAccountCredentialPath {
-            let credentials = try GoogleServiceAccountCredentials(fromFile: credentialPath)
+        // Locate the ceredentials to use for this client. In order of priority:
+        // - Environment Variable Specified Credentials (GOOGLE_APPLICATION_CREDENTIALS)
+        // - GoogleCloudProviderConfig's serviceAccountCredentialPath (optionally configured)
+        // - Application Default Credentials, located in the constant
+        if let credentialPath = ProcessInfo.processInfo.environment["GOOGLE_APPLICATION_CREDENTIALS"] {
+            let credentials = try GoogleServiceAccountCredentials(contentsOfFile: credentialPath)
+
+            refreshableToken = OAuthServiceAccount(credentials: credentials, scopes: [StorageScope.fullControl], httpClient: client)
+        } else if let credentialPath = providerconfig.serviceAccountCredentialPath {
+            let credentials = try GoogleServiceAccountCredentials(contentsOfFile: credentialPath)
 
             refreshableToken = OAuthServiceAccount(credentials: credentials, scopes: [StorageScope.fullControl], httpClient: client)
         } else {
             let adcPath = NSString(string: "~/.config/gcloud/application_default_credentials.json").expandingTildeInPath
-            let credentials = try GoogleApplicationDefaultCredentials(fromFile: adcPath)
+            let credentials = try GoogleApplicationDefaultCredentials(contentsOfFile: adcPath)
             refreshableToken = OAuthApplicationDefault(credentials: credentials, httpClient: client)
         }
         

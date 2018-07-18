@@ -7,6 +7,10 @@
 
 import Vapor
 
+// Constants for OAuth URLs. PascalCase style from this suggestion: https://stackoverflow.com/a/31893982
+let GoogleOAuthTokenUrl = "https://www.googleapis.com/oauth2/v4/token"
+let GoogleOAuthTokenAudience = GoogleOAuthTokenUrl
+
 public protocol OAuthRefreshable {
     func isFresh(token: OAuthAccessToken, created: Date) -> Bool
     func refresh() throws -> Future<OAuthAccessToken>

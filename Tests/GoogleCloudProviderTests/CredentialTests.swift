@@ -14,9 +14,9 @@ final class CredentialTests: XCTestCase {
     func testLoadApplicationDefaultCredentials() throws {
         let expandedPath = NSString(string: "~/.config/gcloud/application_default_credentials.json").expandingTildeInPath
 
-        XCTAssertNoThrow(try ApplicationDefaultCredentials(fromFile: expandedPath))
+        XCTAssertNoThrow(try ApplicationDefaultCredentials(contentsOfFile: expandedPath))
 
-        let creds = try ApplicationDefaultCredentials(fromFile: expandedPath)
+        let creds = try ApplicationDefaultCredentials(contentsOfFile: expandedPath)
 
         XCTAssert(creds.type == "authorized_user")
     }
@@ -24,9 +24,9 @@ final class CredentialTests: XCTestCase {
     func testLoadServiceAccountCredentials() throws {
         let expandedPath = NSString(string: "~/Documents/misc/test-service-account.json").expandingTildeInPath
 
-        XCTAssertNoThrow(try ServiceAccountCredentials(fromFile: expandedPath))
+        XCTAssertNoThrow(try ServiceAccountCredentials(contentsOfFile: expandedPath))
 
-        let creds = try ServiceAccountCredentials(fromFile: expandedPath)
+        let creds = try ServiceAccountCredentials(contentsOfFile: expandedPath)
 
         XCTAssert(creds.type == "service_account")
     }

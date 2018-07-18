@@ -13,7 +13,6 @@ public class OAuthServiceAccount: OAuthRefreshable {
     let client: Client
     let credentials: GoogleServiceAccountCredentials
 
-    let audience: String = "https://www.googleapis.com/oauth2/v4/token"
     let scope: String
     
     init(credentials: GoogleServiceAccountCredentials, scopes: [String], httpClient: Client) {
@@ -26,9 +25,17 @@ public class OAuthServiceAccount: OAuthRefreshable {
     public func refresh() throws -> Future<OAuthAccessToken> {
         let headers: HTTPHeaders = ["Content-Type": MediaType.urlEncodedForm.description]
         let token = try generateJWT()
-        let body = "grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=\(token)"
 
-        return client.post(audience, headers: headers, beforeSend: { $0.http.body = HTTPBody(string: body) }).flatMap(to: OAuthAccessToken.self) { (response) in
+        let encoder = URLEncodedFormEncoder()
+
+        let bodyParts = [
+            "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+            "assertion": token
+        ]
+
+        let body = try encoder.encode(bodyParts)
+
+        return client.post(GoogleOAuthTokenUrl, headers: headers, beforeSend: { $0.http.body = HTTPBody(data: body) }).flatMap(to: OAuthAccessToken.self) { (response) in
                 if response.http.status == .ok {
                     return try JSONDecoder().decode(OAuthAccessToken.self, from: response.http, maxSize: 65_536, on: response)
                 }
@@ -39,7 +46,7 @@ public class OAuthServiceAccount: OAuthRefreshable {
     public func generateJWT() throws -> String {
         let payload = OAuthPayload(iss: IssuerClaim(value: credentials.clientEmail),
                                    scope: scope,
-                                   aud: AudienceClaim(value: audience),
+                                   aud: AudienceClaim(value: GoogleOAuthTokenAudience),
                                    iat: IssuedAtClaim(value: Date()),
                                    exp: ExpirationClaim(value: Date().addingTimeInterval(3600)))
 

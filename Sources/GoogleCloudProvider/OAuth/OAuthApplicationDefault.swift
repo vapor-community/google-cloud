@@ -13,8 +13,6 @@ public class OAuthApplicationDefault: OAuthRefreshable {
     let client: Client
     let credentials: GoogleApplicationDefaultCredentials
 
-    let audience: String = "https://www.googleapis.com/oauth2/v4/token"
-
     init(credentials: GoogleApplicationDefaultCredentials, httpClient: Client) {
         self.credentials = credentials
         self.client = httpClient
@@ -24,16 +22,18 @@ public class OAuthApplicationDefault: OAuthRefreshable {
     public func refresh() throws -> Future<OAuthAccessToken> {
         let headers: HTTPHeaders = ["Content-Type": MediaType.urlEncodedForm.description]
 
+        let encoder = URLEncodedFormEncoder()
+
         let bodyParts = [
-            "client_id=\(credentials.clientId)",
-            "client_secret=\(credentials.clientSecret)",
-            "refresh_token=\(credentials.refreshToken)",
-            "grant_type=refresh_token",
+            "client_id": credentials.clientId,
+            "client_secret": credentials.clientSecret,
+            "refresh_token": credentials.refreshToken,
+            "grant_type": "refresh_token",
         ]
 
-        let body = bodyParts.joined(separator: "&")
+        let body = try encoder.encode(bodyParts)
 
-        return client.post(audience, headers: headers, beforeSend: { $0.http.body = HTTPBody(string: body) }).flatMap(to: OAuthAccessToken.self) { (response) in
+        return client.post(GoogleOAuthTokenUrl, headers: headers, beforeSend: { $0.http.body = HTTPBody(data: body) }).flatMap(to: OAuthAccessToken.self) { (response) in
             if response.http.status == .ok {
                 return try JSONDecoder().decode(OAuthAccessToken.self, from: response.http, maxSize: 65_536, on: response)
             }
