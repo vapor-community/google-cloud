@@ -19,7 +19,7 @@ public protocol OAuthRefreshable {
 extension OAuthRefreshable {
     public func isFresh(token: OAuthAccessToken, created: Date) -> Bool {
         let now = Date()
-        let expiration = Date().addingTimeInterval(TimeInterval(token.expiresIn))
+        let expiration = created.addingTimeInterval(TimeInterval(token.expiresIn))
 
         return expiration > now
     }
