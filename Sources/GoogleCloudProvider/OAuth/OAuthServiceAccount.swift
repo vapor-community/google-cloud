@@ -1,5 +1,5 @@
 //
-//  OAuthTokenRequest.swift
+//  OAuthServiceAccount.swift
 //  GoogleCloudProvider
 //
 //  Created by Andrew Edwards on 4/15/18.
@@ -9,26 +9,21 @@ import Vapor
 import Crypto
 import JWT
 
-public protocol OAuthTokenRequest {
-    func requestOauthToken() throws -> Future<OAuthAccessToken>
-    func generateJWT() throws -> String
-}
-
-public class GoogleServiceAccountOAuth: OAuthTokenRequest {
-    let email: String
-    let scope: String
-    let audience = "https://www.googleapis.com/oauth2/v4/token"
-    let rsaPrivateKey: String
+public class OAuthServiceAccount: OAuthRefreshable {
     let client: Client
+    let credentials: GoogleServiceAccountCredentials
+
+    let audience: String = "https://www.googleapis.com/oauth2/v4/token"
+    let scope: String
     
-    init(serviceEmail: String, scopes: [String], privateKey: String, httpClient: Client) {
-        email = serviceEmail
-        scope = scopes.joined(separator: " ")
-        rsaPrivateKey = privateKey
-        client = httpClient
+    init(credentials: GoogleServiceAccountCredentials, scopes: [String], httpClient: Client) {
+        self.credentials = credentials
+        self.scope = scopes.joined(separator: " ")
+        self.client = httpClient
     }
 
-    public func requestOauthToken() throws -> Future<OAuthAccessToken> {
+    // Google Documentation for this approach: https://developers.google.com/identity/protocols/OAuth2ServiceAccount
+    public func refresh() throws -> Future<OAuthAccessToken> {
         let headers: HTTPHeaders = ["Content-Type": MediaType.urlEncodedForm.description]
         let token = try generateJWT()
         let body = "grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=\(token)"
@@ -42,13 +37,13 @@ public class GoogleServiceAccountOAuth: OAuthTokenRequest {
     }
 
     public func generateJWT() throws -> String {
-        let payload = OAuthPayload(iss: IssuerClaim(value: email),
+        let payload = OAuthPayload(iss: IssuerClaim(value: credentials.clientEmail),
                                    scope: scope,
                                    aud: AudienceClaim(value: audience),
                                    iat: IssuedAtClaim(value: Date()),
                                    exp: ExpirationClaim(value: Date().addingTimeInterval(3600)))
 
-        let pk = try RSAKey.private(pem: rsaPrivateKey)
+        let pk = try RSAKey.private(pem: credentials.privateKey)
         let signer = JWTSigner.rs256(key: pk)
         var jwt = JWT<OAuthPayload>(payload: payload)
         let jwtData = try jwt.sign(using: signer)

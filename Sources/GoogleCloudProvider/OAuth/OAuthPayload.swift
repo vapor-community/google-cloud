@@ -5,7 +5,6 @@
 //  Created by Andrew Edwards on 4/15/18.
 //
 
-import Vapor
 import JWT
 
 public struct OAuthPayload: JWTPayload {

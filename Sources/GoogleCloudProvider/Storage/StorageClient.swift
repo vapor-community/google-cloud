@@ -16,9 +16,20 @@ public struct GoogleCloudStorageClient: ServiceType {
     public var notifications: GoogleStorageNotificationsAPI
     public var object: GoogleStorageObjectAPI
     
-    init(providerconfig: GoogleCloudProviderConfig, storageconfig: GoogleCloudStorageConfig, client: Client) {
-        let oauthRequester = GoogleServiceAccountOAuth(serviceEmail: storageconfig.email, scopes: storageconfig.scope, privateKey: providerconfig.privateKey, httpClient: client)
-        let storageRequest = GoogleCloudStorageRequest(httpClient: client, oauth: oauthRequester, project: providerconfig.project)
+    init(providerconfig: GoogleCloudProviderConfig, client: Client) throws {
+        let refreshableToken: OAuthRefreshable
+
+        if let credentialPath = providerconfig.serviceAccountCredentialPath {
+            let credentials = try GoogleServiceAccountCredentials(fromFile: credentialPath)
+
+            refreshableToken = OAuthServiceAccount(credentials: credentials, scopes: [StorageScope.fullControl], httpClient: client)
+        } else {
+            let adcPath = NSString(string: "~/.config/gcloud/application_default_credentials.json").expandingTildeInPath
+            let credentials = try GoogleApplicationDefaultCredentials(fromFile: adcPath)
+            refreshableToken = OAuthApplicationDefault(credentials: credentials, httpClient: client)
+        }
+        
+        let storageRequest = GoogleCloudStorageRequest(httpClient: client, oauth: refreshableToken, project: providerconfig.project)
         
         bucketAccessControl = GoogleBucketAccessControlAPI(request: storageRequest)
         buckets = GoogleStorageBucketAPI(request: storageRequest)
@@ -32,8 +43,7 @@ public struct GoogleCloudStorageClient: ServiceType {
     public static func makeService(for worker: Container) throws -> GoogleCloudStorageClient {
         let client = try worker.make(Client.self)
         let providerConfig = try worker.make(GoogleCloudProviderConfig.self)
-        let storageConfig = try worker.make(GoogleCloudStorageConfig.self)
         
-        return GoogleCloudStorageClient(providerconfig: providerConfig, storageconfig: storageConfig, client: client)
+        return try GoogleCloudStorageClient(providerconfig: providerConfig, client: client)
     }
 }

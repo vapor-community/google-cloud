@@ -17,28 +17,29 @@ extension HTTPHeaders {
 
 
 public class GoogleCloudStorageRequest {
-    var authtoken: OAuthAccessToken?
-    var tokenCreatedTime: Date?
-    let oauthRequester: GoogleServiceAccountOAuth
-    let project: String
+    let refreshableToken: OAuthRefreshable
     let httpClient: Client
+    let project: String
+
+    var currentToken: OAuthAccessToken?
+    var tokenCreatedTime: Date?
     
-    init(httpClient: Client, oauth: GoogleServiceAccountOAuth, project: String) {
-        oauthRequester = oauth
+    init(httpClient: Client, oauth: OAuthRefreshable, project: String) {
+        self.refreshableToken = oauth
         self.httpClient = httpClient
         self.project = project
     }
     
     func send<GCM: GoogleCloudModel>(method: HTTPMethod, headers: HTTPHeaders = [:], path: String, query: String, body: HTTPBody = HTTPBody()) throws -> Future<GCM> {
         // if oauth token is not expired continue as normal
-        if let oauth = authtoken, let createdTime = tokenCreatedTime, Int(Date().timeIntervalSince1970) < Int(createdTime.timeIntervalSince1970) + oauth.expiresIn {
-            return try _send(method: method, headers: headers, path: path, query: query, body: body, accessToken: oauth.accessToken)
-        }
-        else {
-            return try oauthRequester.requestOauthToken().flatMap({ (oauth) in
-                self.authtoken = oauth
+
+        if let token = currentToken, let created = tokenCreatedTime, refreshableToken.isFresh(token: token, created: created) {
+            return try _send(method: method, headers: headers, path: path, query: query, body: body, accessToken: token.accessToken)
+        } else {
+            return try refreshableToken.refresh().flatMap({ (newToken) in
+                self.currentToken = newToken
                 self.tokenCreatedTime = Date()
-                return try self._send(method: method, headers: headers, path: path, query: query, body: body, accessToken: oauth.accessToken)
+                return try self._send(method: method, headers: headers, path: path, query: query, body: body, accessToken: newToken.accessToken)
             })
         }
     }

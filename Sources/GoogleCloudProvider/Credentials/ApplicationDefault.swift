@@ -17,7 +17,7 @@ import Foundation
 //        "type": "authorized_user"
 //    }
 
-struct ApplicationDefaultCredentials: Codable {
+struct GoogleApplicationDefaultCredentials: Codable {
     let clientId: String
     let clientSecret: String
     let refreshToken: String

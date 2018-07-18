@@ -8,11 +8,9 @@
 import Vapor
 
 public struct GoogleCloudStorageConfig: Service {
-    public let email: String
     public let scope: [String]
     
-    public init(serviceAccountEmail: String, scope: [String]) {
-        email = serviceAccountEmail
+    public init(scope: [String]) {
         self.scope = scope
     }
 }
