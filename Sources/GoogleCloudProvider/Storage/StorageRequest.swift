@@ -17,13 +17,13 @@ extension HTTPHeaders {
 
 
 public class GoogleCloudStorageRequest {
-    var authtoken: OAuthResponse?
+    var authtoken: OAuthAccessToken?
     var tokenCreatedTime: Date?
-    let oauthRequester: GoogleOAuth
+    let oauthRequester: GoogleServiceAccountOAuth
     let project: String
     let httpClient: Client
     
-    init(httpClient: Client, oauth: GoogleOAuth, project: String) {
+    init(httpClient: Client, oauth: GoogleServiceAccountOAuth, project: String) {
         oauthRequester = oauth
         self.httpClient = httpClient
         self.project = project

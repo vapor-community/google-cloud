@@ -17,7 +17,7 @@ public struct GoogleCloudStorageClient: ServiceType {
     public var object: GoogleStorageObjectAPI
     
     init(providerconfig: GoogleCloudProviderConfig, storageconfig: GoogleCloudStorageConfig, client: Client) {
-        let oauthRequester = GoogleOAuth(serviceEmail: storageconfig.email, scopes: storageconfig.scope, privateKey: providerconfig.privateKey, httpClient: client)
+        let oauthRequester = GoogleServiceAccountOAuth(serviceEmail: storageconfig.email, scopes: storageconfig.scope, privateKey: providerconfig.privateKey, httpClient: client)
         let storageRequest = GoogleCloudStorageRequest(httpClient: client, oauth: oauthRequester, project: providerconfig.project)
         
         bucketAccessControl = GoogleBucketAccessControlAPI(request: storageRequest)

@@ -1,5 +1,5 @@
 //
-//  OAuthRefreshRequest.swift
+//  OAuthTokenRequest.swift
 //  GoogleCloudProvider
 //
 //  Created by Andrew Edwards on 4/15/18.
@@ -9,12 +9,12 @@ import Vapor
 import Crypto
 import JWT
 
-public protocol OAuthRefreshRequest {
-    func requestOauthToken() throws -> Future<OAuthResponse>
+public protocol OAuthTokenRequest {
+    func requestOauthToken() throws -> Future<OAuthAccessToken>
     func generateJWT() throws -> String
 }
 
-public class GoogleOAuth: OAuthRefreshRequest {
+public class GoogleServiceAccountOAuth: OAuthTokenRequest {
     let email: String
     let scope: String
     let audience = "https://www.googleapis.com/oauth2/v4/token"
@@ -28,14 +28,14 @@ public class GoogleOAuth: OAuthRefreshRequest {
         client = httpClient
     }
 
-    public func requestOauthToken() throws -> Future<OAuthResponse> {
+    public func requestOauthToken() throws -> Future<OAuthAccessToken> {
         let headers: HTTPHeaders = ["Content-Type": MediaType.urlEncodedForm.description]
         let token = try generateJWT()
         let body = "grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=\(token)"
 
-        return client.post(audience, headers: headers, beforeSend: { $0.http.body = HTTPBody(string: body) }).flatMap(to: OAuthResponse.self) { (response) in
+        return client.post(audience, headers: headers, beforeSend: { $0.http.body = HTTPBody(string: body) }).flatMap(to: OAuthAccessToken.self) { (response) in
                 if response.http.status == .ok {
-                    return try JSONDecoder().decode(OAuthResponse.self, from: response.http, maxSize: 65_536, on: response)
+                    return try JSONDecoder().decode(OAuthAccessToken.self, from: response.http, maxSize: 65_536, on: response)
                 }
                 throw Abort(.internalServerError)
             }

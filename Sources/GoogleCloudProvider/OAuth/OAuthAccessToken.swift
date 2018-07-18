@@ -7,13 +7,15 @@
 
 import Vapor
 
-public struct OAuthResponse: Content {
+public struct OAuthAccessToken: Content {
     var accessToken: String
+    var refreshToken: String?
     var tokenType: String
     var expiresIn: Int
     
     public enum CodingKeys: String, CodingKey {
         case accessToken = "access_token"
+        case refreshToken = "refresh_token"
         case tokenType = "token_type"
         case expiresIn = "expires_in"
     }
