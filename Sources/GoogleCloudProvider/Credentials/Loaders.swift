@@ -12,10 +12,11 @@ enum CredentialLoadError: Error {
 }
 
 extension GoogleApplicationDefaultCredentials {
-    init(contentsOfFile: String) throws {
+    init(contentsOfFile path: String) throws {
         let decoder = JSONDecoder()
+        let filePath = NSString(string: path).expandingTildeInPath
 
-        if let contents = try String(contentsOfFile: contentsOfFile).data(using: .utf8) {
+        if let contents = try String(contentsOfFile: filePath).data(using: .utf8) {
             self = try decoder.decode(GoogleApplicationDefaultCredentials.self, from: contents)
         } else {
             throw CredentialLoadError.fileDecodeError
@@ -24,10 +25,11 @@ extension GoogleApplicationDefaultCredentials {
 }
 
 extension GoogleServiceAccountCredentials {
-    init(contentsOfFile: String) throws {
+    init(contentsOfFile path: String) throws {
         let decoder = JSONDecoder()
+        let filePath = NSString(string: path).expandingTildeInPath
 
-        if let contents = try String(contentsOfFile: contentsOfFile).data(using: .utf8) {
+        if let contents = try String(contentsOfFile: filePath).data(using: .utf8) {
             self = try decoder.decode(GoogleServiceAccountCredentials.self, from: contents)
         } else {
             throw CredentialLoadError.fileDecodeError

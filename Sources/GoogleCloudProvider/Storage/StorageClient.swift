@@ -32,8 +32,7 @@ public struct GoogleCloudStorageClient: ServiceType {
 
             refreshableToken = OAuthServiceAccount(credentials: credentials, scopes: [StorageScope.fullControl], httpClient: client)
         } else {
-            let adcPath = NSString(string: "~/.config/gcloud/application_default_credentials.json").expandingTildeInPath
-            let credentials = try GoogleApplicationDefaultCredentials(contentsOfFile: adcPath)
+            let credentials = try GoogleApplicationDefaultCredentials(contentsOfFile: "~/.config/gcloud/application_default_credentials.json")
             refreshableToken = OAuthApplicationDefault(credentials: credentials, httpClient: client)
         }
         

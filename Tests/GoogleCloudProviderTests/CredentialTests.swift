@@ -11,23 +11,34 @@ import XCTest
 @testable import GoogleCloudProvider
 
 final class CredentialTests: XCTestCase {
+    var checkoutPath: String {
+        if let path = ProcessInfo.processInfo.environment["PROJECT_PATH"] {
+            return path
+        }
+
+        XCTFail("PROJECT_PATH environment variable not set; cannot load fixtures")
+        return ""
+    }
+
     func testLoadApplicationDefaultCredentials() throws {
-        let expandedPath = NSString(string: "~/.config/gcloud/application_default_credentials.json").expandingTildeInPath
+        let credentialFile = checkoutPath + "/Tests/GoogleCloudProviderTests/Fixtures/ADC.json"
 
-        XCTAssertNoThrow(try ApplicationDefaultCredentials(contentsOfFile: expandedPath))
+        XCTAssertNoThrow(try GoogleApplicationDefaultCredentials(contentsOfFile: credentialFile))
 
-        let creds = try ApplicationDefaultCredentials(contentsOfFile: expandedPath)
+        let creds = try GoogleApplicationDefaultCredentials(contentsOfFile: credentialFile)
 
+        XCTAssert(creds.clientId == "IDSTRING.apps.googleusercontent.com")
         XCTAssert(creds.type == "authorized_user")
     }
 
     func testLoadServiceAccountCredentials() throws {
-        let expandedPath = NSString(string: "~/Documents/misc/test-service-account.json").expandingTildeInPath
+        let credentialFile = checkoutPath + "/Tests/GoogleCloudProviderTests/Fixtures/ServiceAccount.json"
 
-        XCTAssertNoThrow(try ServiceAccountCredentials(contentsOfFile: expandedPath))
+        XCTAssertNoThrow(try GoogleServiceAccountCredentials(contentsOfFile: credentialFile))
 
-        let creds = try ServiceAccountCredentials(contentsOfFile: expandedPath)
+        let creds = try GoogleServiceAccountCredentials(contentsOfFile: credentialFile)
 
+        XCTAssert(creds.clientId == "CLIENTID")
         XCTAssert(creds.type == "service_account")
     }
 
