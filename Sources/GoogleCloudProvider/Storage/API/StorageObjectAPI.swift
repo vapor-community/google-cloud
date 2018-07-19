@@ -12,6 +12,7 @@ public protocol StorageObjectAPI {
     func copy(destinationBucket: String, destinationObject: String, sourceBucket: String, sourceObject: String, object: GoogleStorageObject, queryParameters: [String: String]?) throws -> Future<GoogleStorageObject>
     func delete(bucket: String, objectName: String, queryParameters: [String: String]?) throws -> Future<EmptyResponse>
     func get(bucket: String, objectName: String, queryParameters: [String: String]?) throws -> Future<GoogleStorageObject>
+    func getMedia(bucket: String, objectName: String, queryParameters: [String: String]?) throws -> Future<Data>
     func createSimpleUpload(bucket: String, data: Data, name: String, mediaType: MediaType, queryParameters: [String: String]?) throws -> Future<GoogleStorageObject>
     func list(bucket: String, queryParameters: [String: String]?) throws -> Future<StorageObjectList>
     func patch(bucket: String, objectName: String, object: GoogleStorageObject?, queryParameters: [String: String]?) throws -> Future<GoogleStorageObject>
@@ -72,13 +73,24 @@ public class GoogleStorageObjectAPI: StorageObjectAPI {
         return try request.send(method: .DELETE, path: "\(endpoint)/\(bucket)/o/\(objectName)", query: queryParams)
     }
     
-    /// Retrieves an object or its metadata.
+    /// Retrieves an object's metadata.
     public func get(bucket: String, objectName: String, queryParameters: [String: String]? = nil) throws -> Future<GoogleStorageObject> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
         }
         
+        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/o/\(objectName)", query: queryParams)
+    }
+
+    /// Retrieves an object's contents.
+    public func getMedia(bucket: String, objectName: String, queryParameters: [String: String]? = nil) throws -> Future<Data> {
+        var queryParams = ["alt": "media"].queryParameters
+
+        if let queryParameters = queryParameters {
+            queryParams = queryParameters.queryParameters
+        }
+
         return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/o/\(objectName)", query: queryParams)
     }
     
