@@ -7,7 +7,7 @@
 
 import Vapor
 
-public struct OAuthResponse: Content {
+public struct OAuthAccessToken: Content {
     var accessToken: String
     var tokenType: String
     var expiresIn: Int
