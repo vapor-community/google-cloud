@@ -11,26 +11,25 @@
 
 ### Before you begin note that this package only supports using Service accounts to authenticate to the various Google Cloud Platform APIs using OAuth2.
 
-1.  Select or create a Cloud Platform project.
+1. Select or create a Cloud Platform project.
 
 [Go to the projects page][projects]
 
-2.  Enable billing for your project.
+2. Enable billing for your project.
 
 [Enable billing][billing]
 
-3.  Enable the Google Cloud Storage API.
+3. Enable the Google Cloud Storage API.
 
 [Enable the API][enable_api]
 
-4.  [Set up authentication with a service account][auth] so you can access the
+4. [Set up authentication with a service account][auth] so you can access the
 API from your local workstation.
 
 [projects]: https://console.cloud.google.com/project
 [billing]: https://support.google.com/cloud/answer/6293499#enable-billing
 [enable_api]: https://console.cloud.google.com/flows/enableapi?apiid=storage-api.googleapis.com
 [auth]: https://cloud.google.com/docs/authentication/getting-started
-
 
 ### To begin using GogleCloudProvider in your project you'll need to setup the initial configuration
 
@@ -43,9 +42,16 @@ In your `Package.swift` file, add the following
 And In `Configure.swift` or wherever you setup your configuration in Vapor
 
 ```swift
- let cloudConfig = GoogleCloudProviderConfig(projectId: "myprojectid-12345", rsaPrivateKey: "privatekey from your service account")
- services.register(cloudConfig) 
+ let cloudConfig = GoogleCloudProviderConfig(project: "myprojectid-12345", credentialFile: "path to your service account json")
+ services.register(cloudConfig)
  try services.register(GoogleCloudProvider())
+```
+
+Optionally, you can register an empty `GoogleCloudProviderConfig()` and configure the following environment variables:
+
+```shell
+export PROJECT_ID=myprojectid-12345
+export GOOGLE_APPLICATION_CREDENTIALS=/path/to/your/service-account.json
 ```
 
 ### Currently the following API's are implemented and you can follow the setup guides for each specific API to integrate with your Vapor project.
