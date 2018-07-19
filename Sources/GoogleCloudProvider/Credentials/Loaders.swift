@@ -8,7 +8,8 @@
 import Foundation
 
 enum CredentialLoadError: Error {
-    case fileDecodeError
+    case fileLoadError
+    case noValidFileError
 }
 
 extension GoogleApplicationDefaultCredentials {
@@ -19,7 +20,7 @@ extension GoogleApplicationDefaultCredentials {
         if let contents = try String(contentsOfFile: filePath).data(using: .utf8) {
             self = try decoder.decode(GoogleApplicationDefaultCredentials.self, from: contents)
         } else {
-            throw CredentialLoadError.fileDecodeError
+            throw CredentialLoadError.fileLoadError
         }
     }
 }
@@ -32,7 +33,7 @@ extension GoogleServiceAccountCredentials {
         if let contents = try String(contentsOfFile: filePath).data(using: .utf8) {
             self = try decoder.decode(GoogleServiceAccountCredentials.self, from: contents)
         } else {
-            throw CredentialLoadError.fileDecodeError
+            throw CredentialLoadError.fileLoadError
         }
     }
 }
