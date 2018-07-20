@@ -9,6 +9,7 @@ import Vapor
 
 enum GoogleCloudStorageClientError: Error {
     case projectIdMissing
+    case unknownError
 }
 
 public struct GoogleCloudStorageClient: ServiceType {
