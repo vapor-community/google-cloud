@@ -18,8 +18,11 @@ extension HTTPHeaders {
 
 public class GoogleCloudStorageRequest {
     let refreshableToken: OAuthRefreshable
-    let httpClient: Client
     let project: String
+
+    let httpClient: Client
+    let responseDecoder: JSONDecoder
+    let dateFormatter: DateFormatter
 
     var currentToken: OAuthAccessToken?
     var tokenCreatedTime: Date?
@@ -28,38 +31,57 @@ public class GoogleCloudStorageRequest {
         self.refreshableToken = oauth
         self.httpClient = httpClient
         self.project = project
+        self.responseDecoder = JSONDecoder()
+        self.dateFormatter = DateFormatter()
+
+        self.dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        self.responseDecoder.dateDecodingStrategy = .formatted(self.dateFormatter)
     }
     
     func send<GCM: GoogleCloudModel>(method: HTTPMethod, headers: HTTPHeaders = [:], path: String, query: String, body: HTTPBody = HTTPBody()) throws -> Future<GCM> {
-        // if oauth token is not expired continue as normal
+        return try withToken({ token in
+            return try self._send(method: method, headers: headers, path: path, query: query, body: body, accessToken: token.accessToken).flatMap({ response in
+                return try self.responseDecoder.decode(GCM.self, from: response.http, maxSize: 65_536, on: response)
+            })
+        })
+    }
 
-        if let token = currentToken, let created = tokenCreatedTime, refreshableToken.isFresh(token: token, created: created) {
-            return try _send(method: method, headers: headers, path: path, query: query, body: body, accessToken: token.accessToken)
-        } else {
-            return try refreshableToken.refresh().flatMap({ (newToken) in
+    func send(method: HTTPMethod = .GET, headers: HTTPHeaders = [:], path: String, query: String, body: HTTPBody = HTTPBody()) throws -> Future<Data> {
+        return try withToken({ token in
+            return try self._send(method: method, headers: headers, path: path, query: query, body: body, accessToken: token.accessToken).flatMap({ response in
+                return response.http.body.consumeData(on: response)
+            })
+        })
+    }
+
+    private func withToken<F>(_ closure: @escaping (OAuthAccessToken) throws -> Future<F>) throws -> Future<F>{
+        guard let token = currentToken, let created = tokenCreatedTime, refreshableToken.isFresh(token: token, created: created) else {
+            return try refreshableToken.refresh().flatMap({ newToken in
                 self.currentToken = newToken
                 self.tokenCreatedTime = Date()
-                return try self._send(method: method, headers: headers, path: path, query: query, body: body, accessToken: newToken.accessToken)
+
+                return try closure(newToken)
             })
         }
+
+        return try closure(token)
     }
-    
-    private func _send<GCM: GoogleCloudModel>(method: HTTPMethod, headers: HTTPHeaders, path: String, query: String, body: HTTPBody, accessToken: String) throws -> Future<GCM> {
+
+    private func _send(method: HTTPMethod, headers: HTTPHeaders, path: String, query: String, body: HTTPBody, accessToken: String) throws -> Future<Response> {
         var finalHeaders: HTTPHeaders = HTTPHeaders.gcsDefault
         finalHeaders.add(name: .authorization, value: "Bearer \(accessToken)")
         headers.forEach { finalHeaders.replaceOrAdd(name: $0.name, value: $0.value) }
-        
-        return httpClient.send(method, headers: finalHeaders, to: "\(path)?\(query)", beforeSend: { $0.http.body = body }).flatMap({ (response)  in
-            let decoder = JSONDecoder()
-            let formatter = DateFormatter()
-            formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-            decoder.dateDecodingStrategy = .formatted(formatter)
+
+        return httpClient.send(method, headers: finalHeaders, to: "\(path)?\(query)", beforeSend: { $0.http.body = body }).flatMap({ response in
             guard response.http.status == .ok else {
-                return try decoder.decode(CloudStorageError.self, from: response.http, maxSize: 65_536, on: self.httpClient.container).map(to: GCM.self){ error in
+                _ = try self.responseDecoder.decode(CloudStorageError.self, from: response.http, maxSize: 65_536, on: self.httpClient.container).map { error in
                     throw error
                 }
+
+                throw GoogleCloudStorageClientError.unknownError
             }
-            return try decoder.decode(GCM.self, from: response.http, maxSize: 65_536, on: response)
+
+            return response.future(response)
         })
     }
 }
