@@ -17,11 +17,11 @@ import Foundation
 //        "type": "authorized_user"
 //    }
 
-struct GoogleApplicationDefaultCredentials: Codable {
-    let clientId: String
-    let clientSecret: String
-    let refreshToken: String
-    let type: String
+public struct GoogleApplicationDefaultCredentials: Codable {
+    public let clientId: String
+    public let clientSecret: String
+    public let refreshToken: String
+    public let type: String
 
     enum CodingKeys: String, CodingKey {
         case clientId = "client_id"

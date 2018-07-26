@@ -8,10 +8,10 @@
 import Vapor
 
 public struct OAuthAccessToken: Content {
-    var accessToken: String
-    var tokenType: String
-    var expiresIn: Int
-    
+    public var accessToken: String
+    public var tokenType: String
+    public var expiresIn: Int
+
     public enum CodingKeys: String, CodingKey {
         case accessToken = "access_token"
         case tokenType = "token_type"

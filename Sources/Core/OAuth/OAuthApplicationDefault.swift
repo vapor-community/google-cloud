@@ -13,6 +13,9 @@ public class OAuthApplicationDefault: OAuthRefreshable {
     let client: Client
     let credentials: GoogleApplicationDefaultCredentials
 
+    public var currentToken: OAuthAccessToken?
+    public var currentTokenCreated: Date?
+
     init(credentials: GoogleApplicationDefaultCredentials, httpClient: Client) {
         self.credentials = credentials
         self.client = httpClient
@@ -39,5 +42,18 @@ public class OAuthApplicationDefault: OAuthRefreshable {
             }
             throw Abort(.internalServerError)
         }
+    }
+
+    public func withToken<F>(_ closure: @escaping (OAuthAccessToken) throws -> Future<F>) throws -> Future<F> {
+        guard let token = currentToken, self.isFresh() else {
+            return try self.refresh().flatMap({ newToken in
+                self.currentToken = newToken
+                self.currentTokenCreated = Date()
+
+                return try closure(newToken)
+            })
+        }
+
+        return try closure(token)
     }
 }

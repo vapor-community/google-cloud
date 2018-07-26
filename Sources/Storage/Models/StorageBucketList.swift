@@ -6,6 +6,7 @@
 //
 
 import Vapor
+import GoogleCloudProviderCore
 
 public struct GoogleStorageBucketList: GoogleCloudModel {
     /// The kind of item this is. For lists of buckets, this is always storage#buckets.

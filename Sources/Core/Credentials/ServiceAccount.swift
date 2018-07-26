@@ -24,18 +24,18 @@ import Foundation
 //        "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/SERVICEACCOUNTNAME%40PROJECTID.iam.gserviceaccount.com"
 //    }
 
-struct GoogleServiceAccountCredentials: Codable {
-    let type: String
-    let projectId: String
-    let privateKeyId: String
-    let privateKey: String
-    let clientEmail: String
-    let clientId: String
+public struct GoogleServiceAccountCredentials: Codable {
+    public let type: String
+    public let projectId: String
+    public let privateKeyId: String
+    public let privateKey: String
+    public let clientEmail: String
+    public let clientId: String
 
-    let authUri: URL
-    let tokenUri: URL
-    let authProviderX509CertUrl: URL
-    let clientX509CertUrl: URL
+    public let authUri: URL
+    public let tokenUri: URL
+    public let authProviderX509CertUrl: URL
+    public let clientX509CertUrl: URL
 
     enum CodingKeys: String, CodingKey {
         case type

@@ -6,17 +6,18 @@
 //
 
 import Vapor
+import GoogleCloudProviderCore
 
 // https://cloud.google.com/storage/docs/json_api/v1/status-codes
 public struct CloudStorageError: GoogleCloudModel, Error, Debuggable {
     public var identifier: String {
         return "\(self.error.code)-\(self.error.message)"
     }
-    
+
     public var reason: String {
         return self.error.message
     }
-    
+
     public var error: CloudStorageErrorBody
 }
 

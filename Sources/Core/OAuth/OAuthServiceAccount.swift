@@ -13,8 +13,11 @@ public class OAuthServiceAccount: OAuthRefreshable {
     let client: Client
     let credentials: GoogleServiceAccountCredentials
 
+    public var currentToken: OAuthAccessToken?
+    public var currentTokenCreated: Date?
+
     let scope: String
-    
+
     init(credentials: GoogleServiceAccountCredentials, scopes: [String], httpClient: Client) {
         self.credentials = credentials
         self.scope = scopes.joined(separator: " ")
@@ -55,5 +58,18 @@ public class OAuthServiceAccount: OAuthRefreshable {
         var jwt = JWT<OAuthPayload>(payload: payload)
         let jwtData = try jwt.sign(using: signer)
         return String(data: jwtData, encoding: .utf8)!
+    }
+
+    public func withToken<F>(_ closure: @escaping (OAuthAccessToken) throws -> Future<F>) throws -> Future<F> {
+        guard let token = currentToken, self.isFresh() else {
+            return try self.refresh().flatMap({ newToken in
+                self.currentToken = newToken
+                self.currentTokenCreated = Date()
+
+                return try closure(newToken)
+            })
+        }
+
+        return try closure(token)
     }
 }

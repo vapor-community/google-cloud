@@ -132,7 +132,7 @@ extension StorageBucketAPI {
 public final class GoogleStorageBucketAPI: StorageBucketAPI {
     let endpoint = "https://www.googleapis.com/storage/v1/b"
     let request: GoogleCloudStorageRequest
-    
+
     init(request: GoogleCloudStorageRequest) {
         self.request = request
     }
@@ -143,7 +143,7 @@ public final class GoogleStorageBucketAPI: StorageBucketAPI {
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
         }
-        
+
         return try request.send(method: .DELETE, path: "\(endpoint)/\(bucket)", query: queryParams)
     }
 
@@ -153,7 +153,7 @@ public final class GoogleStorageBucketAPI: StorageBucketAPI {
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
         }
-        
+
         return try request.send(method: .GET, path: "\(endpoint)/\(bucket)", query: queryParams)
     }
 
@@ -163,7 +163,7 @@ public final class GoogleStorageBucketAPI: StorageBucketAPI {
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
         }
-        
+
         return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/iam", query: queryParams)
     }
 
@@ -184,7 +184,7 @@ public final class GoogleStorageBucketAPI: StorageBucketAPI {
                        website: Website?) throws -> Future<GoogleStorageBucket> {
         var body: [String: Any] = ["name": name]
         var query = ""
-        
+
         if var queryParameters = queryParameters {
             queryParameters["project"] = request.project
             query = queryParameters.queryParameters
@@ -192,64 +192,64 @@ public final class GoogleStorageBucketAPI: StorageBucketAPI {
         else {
             query = "project=\(request.project)"
         }
-        
+
         if let acl = acl {
             body["acl"] = try acl.map { try $0.toEncodedDictionary() }
         }
-        
+
         if let billing = billing {
             body["billing"] = try billing.toEncodedDictionary()
         }
-        
+
         if let cors = cors {
             body["cors"] = try cors.map { try $0.toEncodedDictionary() }
         }
-        
+
         if let defaultObjectAcl = defaultObjectAcl {
             body["defaultObjectAcl"] = try defaultObjectAcl.map { try $0.toEncodedDictionary() }
         }
-        
+
         if let encryption = encryption {
             body["encryption"] = try encryption.toEncodedDictionary()
         }
-        
+
         if let labels = labels {
             body["labels"] = labels
         }
-        
+
         if let lifecycle = lifecycle {
             body["lifecycle"] = try lifecycle.toEncodedDictionary()
         }
-        
+
         if let location = location {
             body["location"] = location
         }
-        
+
         if let logging = logging {
             body["logging"] = try logging.toEncodedDictionary()
         }
-        
+
         if let storageClass = storageClass {
             body["storageClass"] = storageClass.rawValue
         }
-        
+
         if let versioning = versioning {
             body["versioning"] = try versioning.toEncodedDictionary()
         }
-        
+
         if let website = website {
             body["website"] = try website.toEncodedDictionary()
         }
-        
+
         let requestBody = try JSONSerialization.data(withJSONObject: body).convertToHTTPBody()
-        
+
         return try request.send(method: .POST, path: endpoint, query: query, body: requestBody)
     }
 
     /// Retrieves a list of buckets for a given project.
     public func list(queryParameters: [String: String]?) throws -> Future<GoogleStorageBucketList> {
         var query = ""
-        
+
         if var queryParameters = queryParameters {
             queryParameters["project"] = request.project
             query = queryParameters.queryParameters
@@ -257,7 +257,7 @@ public final class GoogleStorageBucketAPI: StorageBucketAPI {
         else {
             query = "project=\(request.project)"
         }
-        
+
         return try request.send(method: .GET, path: endpoint, query: query)
     }
 
@@ -276,73 +276,73 @@ public final class GoogleStorageBucketAPI: StorageBucketAPI {
                       website: Website?) throws -> Future<GoogleStorageBucket> {
         var body: [String: Any] = [:]
         var query = ""
-        
+
         if let queryParameters = queryParameters {
             query = queryParameters.queryParameters
         }
-        
+
         if let acl = acl {
             body["acl"] = try acl.map { try $0.toEncodedDictionary() }
         }
-        
+
         if let billing = billing {
             body["billing"] = try billing.toEncodedDictionary()
         }
-        
+
         if let cors = cors {
             body["cors"] = try cors.map { try $0.toEncodedDictionary() }
         }
-        
+
         if let defaultObjectAcl = defaultObjectAcl {
             body["defaultObjectAcl"] = try defaultObjectAcl.map { try $0.toEncodedDictionary() }
         }
-        
+
         if let encryption = encryption {
             body["encryption"] = try encryption.toEncodedDictionary()
         }
-        
+
         if let labels = labels {
             body["labels"] = labels
         }
-        
+
         if let lifecycle = lifecycle {
             body["lifecycle"] = try lifecycle.toEncodedDictionary()
         }
-        
+
         if let logging = logging {
             body["logging"] = try logging.toEncodedDictionary()
         }
-        
+
         if let versioning = versioning {
             body["versioning"] = try versioning.toEncodedDictionary()
         }
-        
+
         if let website = website {
             body["website"] = try website.toEncodedDictionary()
         }
-        
+
         let requestBody = try JSONSerialization.data(withJSONObject: body).convertToHTTPBody()
-        
+
         return try request.send(method: .PATCH, path: endpoint, query: query, body: requestBody)
     }
 
     /// Updates an IAM policy for the specified bucket.
     public func setIAMPolicy(bucket: String, iamPolicy: IAMPolicy, queryParameters: [String: String]?) throws -> Future<IAMPolicy> {
         var query = ""
-        
+
         if let queryParameters = queryParameters {
             query = queryParameters.queryParameters
         }
 
         let requestBody = try JSONSerialization.data(withJSONObject: try iamPolicy.toEncodedDictionary()).convertToHTTPBody()
-        
+
         return try request.send(method: .PUT, path: "\(endpoint)/\(bucket)/iam", query: query, body: requestBody)
     }
 
     /// Tests a set of permissions on the given bucket to see which, if any, are held by the caller.
     public func testIAMPermissions(bucket: String, permissions: [String], queryParameters: [String: String]?) throws -> Future<Permission> {
         var query = ""
-        
+
         if let queryParameters = queryParameters {
             query = queryParameters.queryParameters
             // if there are any permissions it's safe to add an ampersand to the end of the query we currently have.
@@ -350,11 +350,11 @@ public final class GoogleStorageBucketAPI: StorageBucketAPI {
                 query.append("&")
             }
         }
-        
+
         let perms = permissions.map({ "permissions=\($0)" }).joined(separator: "&")
-        
+
         query.append(perms)
-        
+
         return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/iam/testPermissions", query: query)
     }
 
@@ -374,56 +374,56 @@ public final class GoogleStorageBucketAPI: StorageBucketAPI {
                        website: Website?) throws -> Future<GoogleStorageBucket> {
         var body: [String: Any] = [:]
         var query = ""
-        
+
         body["acl"] = try acl.map { try $0.toEncodedDictionary() }
-        
+
         if let queryParameters = queryParameters {
             query = queryParameters.queryParameters
         }
-        
-        
+
+
         if let billing = billing {
             body["billing"] = try billing.toEncodedDictionary()
         }
-        
+
         if let cors = cors {
             body["cors"] = try cors.map { try $0.toEncodedDictionary() }
         }
-        
+
         if let defaultObjectAcl = defaultObjectAcl {
             body["defaultObjectAcl"] = try defaultObjectAcl.map { try $0.toEncodedDictionary() }
         }
-        
+
         if let encryption = encryption {
             body["encryption"] = try encryption.toEncodedDictionary()
         }
-        
+
         if let labels = labels {
             body["labels"] = labels
         }
-        
+
         if let lifecycle = lifecycle {
             body["lifecycle"] = try lifecycle.toEncodedDictionary()
         }
-        
+
         if let logging = logging {
             body["logging"] = try logging.toEncodedDictionary()
         }
-        
+
         if let storageClass = storageClass {
             body["storageClass"] = storageClass.rawValue
         }
-        
+
         if let versioning = versioning {
             body["versioning"] = try versioning.toEncodedDictionary()
         }
-        
+
         if let website = website {
             body["website"] = try website.toEncodedDictionary()
         }
-        
+
         let requestBody = try JSONSerialization.data(withJSONObject: body).convertToHTTPBody()
-        
+
         return try request.send(method: .PUT, path: "\(endpoint)/\(bucket)", query: query, body: requestBody)
     }
 }

@@ -6,6 +6,7 @@
 //
 
 import Vapor
+import GoogleCloudProviderCore
 
 public struct IAMPolicy: GoogleCloudModel {
     /// The kind of item this is. For policies, this is always storage#policy. This field is ignored on input.
@@ -16,7 +17,7 @@ public struct IAMPolicy: GoogleCloudModel {
     public var bindings: [Binding]?
     /// HTTP 1.1 Entity tag for the policy.
     public var etag: String?
-    
+
     public init(kind: String? = nil,
                 resourceId: String? = nil,
                 bindings: [Binding]? = nil,
@@ -35,7 +36,7 @@ public struct Binding: GoogleCloudModel {
     public var members: [String]?
     /// Any value
     public var condition: String?
-    
+
     public init(role: String? = nil,
                 members: [String]? = nil,
                 condition: String? = nil) {
@@ -48,6 +49,6 @@ public struct Binding: GoogleCloudModel {
 public struct Permission: GoogleCloudModel {
     /// The kind of item this is.
     public var kind: String?
-    /// The permissions held by the caller. 
+    /// The permissions held by the caller.
     public var permissions: [String]?
 }

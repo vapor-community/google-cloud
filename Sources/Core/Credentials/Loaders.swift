@@ -7,8 +7,9 @@
 
 import Foundation
 
-enum CredentialLoadError: Error {
+public enum CredentialLoadError: Error {
     case fileLoadError
+    case noScopesDefined
     case noValidFileError
 }
 

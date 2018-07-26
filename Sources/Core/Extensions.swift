@@ -65,13 +65,13 @@ public struct AnyDecodable: Decodable {
 
 extension Dictionary {
     
-    var queryParameters: String {
+    public var queryParameters: String {
         guard let me = self as? [String: Any] else
         { return "" }
         return query(parameters: me)
     }
     
-    func query(parameters: [String: Any]) -> String {
+    public func query(parameters: [String: Any]) -> String {
         var components: [(String, String)] = []
         
         for key in parameters.keys {

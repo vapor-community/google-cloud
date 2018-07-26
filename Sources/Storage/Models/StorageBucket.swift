@@ -6,6 +6,8 @@
 //
 
 import Vapor
+import GoogleCloudProviderCore
+
 /// The Buckets resource represents a bucket in Google Cloud Storage. There is a single global namespace shared by all buckets. For more information, see Bucket Name Requirements.
 public struct GoogleStorageBucket: GoogleCloudModel {
     /// The kind of item this is. For buckets, this is always storage#bucket.
