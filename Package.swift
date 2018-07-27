@@ -5,7 +5,19 @@ import PackageDescription
 
 let package = Package(
     name: "GoogleCloud",
+
+    // Export each main target (Storage, PubSub, KMS, etc) as a separate library,
+    // which allows end-users of this library to only depend on and compile the targets
+    // they prefer to use.
     products: [
+        // Exports OAuth, Credentials, and the main provider class. Generally not
+        // useful except for use as a migration step from other libraries into this
+        // provider.
+        .library(
+            name: "GoogleCloudCore",
+            targets: ["GoogleCloudCore"]),
+
+        // Exports Storage, a Google Cloud Storage API wrapper.
         .library(
             name: "GoogleCloudStorage",
             targets: ["GoogleCloudStorage"])
