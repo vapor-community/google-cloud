@@ -1,12 +1,12 @@
 //
 //  StorageClient.swift
-//  GoogleCloudProvider
+//  GoogleCloud
 //
 //  Created by Andrew Edwards on 4/16/18.
 //
 
 import Vapor
-import GoogleCloudProviderCore
+import GoogleCloudCore
 
 public final class GoogleCloudStorageClient: ServiceType {
     public var bucketAccessControl: BucketAccessControlAPI
@@ -17,14 +17,14 @@ public final class GoogleCloudStorageClient: ServiceType {
     public var notifications: StorageNotificationsAPI
     public var object: StorageObjectAPI
 
-    init(providerconfig: GoogleCloudProviderConfig, client: Client) throws {
+    init(providerconfig: GoogleCloudConfig, client: Client) throws {
         let env = ProcessInfo.processInfo.environment
 
         // Set the projectId to use for this client. In order of priority:
         // - Environment Variable (PROJECT_ID)
-        // - GoogleCloudProviderConfig's .project (optionally configured)
+        // - GoogleCloudConfig's .project (optionally configured)
         guard let projectId = env["PROJECT_ID"] ?? providerconfig.project else {
-            throw GoogleCloudProviderError.projectIdMissing
+            throw GoogleCloudError.projectIdMissing
         }
 
         let refreshableToken = try OAuthCredentialLoader(config: providerconfig, scopes: [StorageScope.fullControl], client: client).getRefreshableToken()
@@ -41,7 +41,7 @@ public final class GoogleCloudStorageClient: ServiceType {
 
     public static func makeService(for worker: Container) throws -> GoogleCloudStorageClient {
         let client = try worker.make(Client.self)
-        let providerConfig = try worker.make(GoogleCloudProviderConfig.self)
+        let providerConfig = try worker.make(GoogleCloudConfig.self)
 
         return try GoogleCloudStorageClient(providerconfig: providerConfig, client: client)
     }

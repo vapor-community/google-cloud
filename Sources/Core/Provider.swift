@@ -1,18 +1,18 @@
 //
 //  StorageBucket.swift
-//  GoogleCloudProvider
+//  GoogleCloud
 //
 //  Created by Andrew Edwards on 4/17/18.
 //
 
 import Vapor
 
-public enum GoogleCloudProviderError: Error {
+public enum GoogleCloudError: Error {
     case projectIdMissing
     case unknownError
 }
 
-public struct GoogleCloudProviderConfig: Service {
+public struct GoogleCloudConfig: Service {
     public let project: String?
     public let serviceAccountCredentialPath: String?
 

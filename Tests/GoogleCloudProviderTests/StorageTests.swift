@@ -1,6 +1,6 @@
 //
 //  StorageTests.swift
-//  GoogleCloudProvider
+//  GoogleCloud
 //
 //  Created by Brian Hatfield on 7/18/18.
 //
@@ -10,7 +10,7 @@ import XCTest
 
 import Vapor
 
-@testable import GoogleCloudProvider
+@testable import GoogleCloud
 
 final class StorageTests: XCTestCase {
     var GCSProject: String?
@@ -46,7 +46,7 @@ final class StorageTests: XCTestCase {
         let req = Request(using: app)
         let client = try req.client()
 
-        let providerConfig = GoogleCloudProviderConfig(project: GCSProject!)
+        let providerConfig = GoogleCloudConfig(project: GCSProject!)
 
         let storageClient = try GoogleCloudStorageClient(providerconfig: providerConfig, client: client)
 
@@ -67,7 +67,7 @@ final class StorageTests: XCTestCase {
         let req = Request(using: app)
         let client = try req.client()
 
-        let providerConfig = GoogleCloudProviderConfig(project: GCSProject!, credentialFile: CredentialFile!)
+        let providerConfig = GoogleCloudConfig(project: GCSProject!, credentialFile: CredentialFile!)
 
         let storageClient = try GoogleCloudStorageClient(providerconfig: providerConfig, client: client)
 

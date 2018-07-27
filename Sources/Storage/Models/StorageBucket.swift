@@ -1,12 +1,12 @@
 //
 //  StorageBucket.swift
-//  GoogleCloudProvider
+//  GoogleCloud
 //
 //  Created by Andrew Edwards on 4/17/18.
 //
 
 import Vapor
-import GoogleCloudProviderCore
+import GoogleCloudCore
 
 /// The Buckets resource represents a bucket in Google Cloud Storage. There is a single global namespace shared by all buckets. For more information, see Bucket Name Requirements.
 public struct GoogleStorageBucket: GoogleCloudModel {
@@ -77,7 +77,7 @@ public struct BucketAccessControls: GoogleCloudModel {
     public var projectTeam: ProjectTeam?
     /// HTTP 1.1 Entity tag for the access-control entry.
     public var etag: String?
-    
+
     public init(kind: String? = nil,
                 id: String? = nil,
                 selfLink: String? = nil,
@@ -122,7 +122,7 @@ public struct StorageNotification: GoogleCloudModel {
     public var objectNamePrefix: String?
     /// HTTP 1.1 Entity tag for this subscription notification.
     public var etag: String?
-    
+
     public init(kind: String? = nil,
                 id: String? = nil,
                 selfLink: String? = nil,
@@ -142,7 +142,7 @@ public struct StorageNotification: GoogleCloudModel {
         self.objectNamePrefix = objectNamePrefix
         self.etag = etag
     }
-    
+
     public enum CodingKeys: String, CodingKey {
         case kind
         case id
@@ -183,7 +183,7 @@ public struct ObjectAccessControls: GoogleCloudModel {
     public var projectTeam: ProjectTeam?
     /// HTTP 1.1 Entity tag for the access-control entry.
     public var etag: String?
-    
+
     public init(kind: String? = nil,
                 id: String? = nil,
                 selfLink: String? = nil,
@@ -218,7 +218,7 @@ public struct ProjectTeam: GoogleCloudModel {
     public var projectNumber: String?
     /// The team. Acceptable values are: "editors", "owners", "viewers"
     public var team: String?
-    
+
     public init(projectNumber: String? = nil,
                 team: String? = nil) {
         self.projectNumber = projectNumber
@@ -231,7 +231,7 @@ public struct Owner: GoogleCloudModel {
     public var entity: String?
     /// The ID for the entity.
     public var entityId: String?
-    
+
     public init(entity: String? = nil,
                 entityId: String? = nil) {
         self.entity = entity
@@ -244,7 +244,7 @@ public struct Website: GoogleCloudModel {
     public var mainPageSuffix: String?
     /// If the requested object path is missing, and any mainPageSuffix object is missing, if applicable, the service will return the named object from this bucket as the content for a 404 Not Found result.
     public var notFoundPage: String?
-    
+
     public init(mainPageSuffix: String? = nil,
                 notFoundPage: String? = nil) {
         self.mainPageSuffix = mainPageSuffix
@@ -257,7 +257,7 @@ public struct Logging: GoogleCloudModel {
     public var logBucket: String?
     /// A prefix for log object names.
     public var logObjectPrefix: String?
-    
+
     public init(logBucket: String? = nil,
                 logObjectPrefix: String? = nil) {
         self.logBucket = logBucket
@@ -268,7 +268,7 @@ public struct Logging: GoogleCloudModel {
 public struct Versioning: GoogleCloudModel {
     /// While set to true, versioning is fully enabled for this bucket.
     public var enabled: Bool?
-    
+
     public init(enabled: Bool? = nil) {
         self.enabled = enabled
     }
@@ -283,7 +283,7 @@ public struct Cors: GoogleCloudModel {
     public var responseHeader: [String]?
     /// The value, in seconds, to return in the Access-Control-Max-Age header used in preflight responses.
     public var maxAgeSeconds: Int?
-    
+
     public init(origin: [String]? = nil,
                 method: [String]? = nil,
                 responseHeader: [String]? = nil,
@@ -298,7 +298,7 @@ public struct Cors: GoogleCloudModel {
 public struct Lifecycle: GoogleCloudModel {
     /// A lifecycle management rule, which is made of an action to take and the condition(s) under which the action will be taken.
     public var rule: [Rule]?
-    
+
     public init(rule: [Rule]? = nil) {
         self.rule = rule
     }
@@ -309,7 +309,7 @@ public struct Rule: GoogleCloudModel {
     public var action: Action?
     /// The condition(s) under which the action will be taken.
     public var condition: Condition?
-    
+
     public init(action: Action? = nil,
                 condition: Condition? = nil) {
         self.action = action
@@ -322,7 +322,7 @@ public struct Action: GoogleCloudModel {
     public var type: String?
     /// Target storage class. Required iff the type of the action is SetStorageClass.
     public var storageClass: String?
-    
+
     public init(type: String? = nil,
                 storageClass: String? = nil) {
         self.type = type
@@ -341,7 +341,7 @@ public struct Condition: GoogleCloudModel {
     public var matchesStorageClass: [String]?
     /// Relevant only for versioned objects. If the value is N, this condition is satisfied when there are at least N versions (including the live version) newer than this version of the object.
     public var numNewerVersions: Int?
-    
+
     public init(age: Int? = nil,
                 createdBefore: String? = nil,
                 isLive: Bool? = nil,
@@ -358,7 +358,7 @@ public struct Condition: GoogleCloudModel {
 public struct Billing: GoogleCloudModel {
     /// When set to true, bucket is requester pays.
     public var requesterPays: Bool?
-    
+
     public init(requesterPays: Bool? = nil) {
         self.requesterPays = requesterPays
     }
@@ -367,7 +367,7 @@ public struct Billing: GoogleCloudModel {
 public struct Encryption: GoogleCloudModel {
     /// When set to true, bucket is requester pays.
     public var defaultKmsKeyName: String?
-    
+
     public init(defaultKmsKeyName: String? = nil) {
         self.defaultKmsKeyName = defaultKmsKeyName
     }

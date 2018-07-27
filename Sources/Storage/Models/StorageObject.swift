@@ -1,12 +1,12 @@
 //
 //  StorageObject.swift
-//  GoogleCloudProvider
+//  GoogleCloud
 //
 //  Created by Andrew Edwards on 5/20/18.
 //
 
 import Vapor
-import GoogleCloudProviderCore
+import GoogleCloudCore
 
 public struct GoogleStorageObject: GoogleCloudModel {
     /// The kind of item this is. For objects, this is always storage#object.

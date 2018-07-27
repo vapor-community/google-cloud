@@ -1,6 +1,6 @@
 //
 //  OAuthCredentialLoader.swift
-//  GoogleCloudProvider
+//  GoogleCloud
 //
 //  Created by Brian Hatfield on 7/19/18.
 //
@@ -28,12 +28,12 @@ public class OAuthCredentialLoader {
         throw CredentialLoadError.noValidFileError
     }
 
-    public init(config providerConfig: GoogleCloudProviderConfig, scopes: [String]?, client: Client) {
+    public init(config providerConfig: GoogleCloudConfig, scopes: [String]?, client: Client) {
         let env = ProcessInfo.processInfo.environment
 
         // Locate the credentials to use for this client. In order of priority:
         // - Environment Variable Specified Credentials (GOOGLE_APPLICATION_CREDENTIALS)
-        // - GoogleCloudProviderConfig's .serviceAccountCredentialPath (optionally configured)
+        // - GoogleCloudConfig's .serviceAccountCredentialPath (optionally configured)
         // - Application Default Credentials, located in the constant
         self.credentialPath = env["GOOGLE_APPLICATION_CREDENTIALS"] ??
             providerConfig.serviceAccountCredentialPath ??

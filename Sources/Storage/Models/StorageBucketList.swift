@@ -1,12 +1,12 @@
 //
 //  StorageBucketList.swift
-//  GoogleCloudProvider
+//  GoogleCloud
 //
 //  Created by Andrew Edwards on 4/18/18.
 //
 
 import Vapor
-import GoogleCloudProviderCore
+import GoogleCloudCore
 
 public struct GoogleStorageBucketList: GoogleCloudModel {
     /// The kind of item this is. For lists of buckets, this is always storage#buckets.
@@ -43,10 +43,10 @@ public struct StorageObjectList: GoogleCloudModel {
     public var kind: String?
     /// The continuation token, used to page through large result sets. Provide this value in a subsequent request to return the next page of results.
     public var nextPageToken: String?
-    
+
     /// The list of prefixes of objects matching-but-not-listed up to and including the requested delimiter.
     public var prefixes: [String]?
-    
+
     /// The list of items.
     public var items: [GoogleStorageObject]?
 }

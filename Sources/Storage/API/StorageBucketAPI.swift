@@ -1,6 +1,6 @@
 //
 //  StorageBucket.swift
-//  GoogleCloudProvider
+//  GoogleCloud
 //
 //  Created by Andrew Edwards on 4/17/18.
 //

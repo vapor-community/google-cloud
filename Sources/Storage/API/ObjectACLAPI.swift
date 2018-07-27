@@ -1,6 +1,6 @@
 //
 //  ObjectACLAPI.swift
-//  GoogleCloudProvider
+//  GoogleCloud
 //
 //  Created by Andrew Edwards on 5/20/18.
 //
@@ -45,63 +45,63 @@ extension ObjectAccessControlsAPI {
 public final class GoogleObjectAccessControlsAPI: ObjectAccessControlsAPI {
     let endpoint = "https://www.googleapis.com/storage/v1/b"
     let request: GoogleCloudStorageRequest
-    
+
     init(request: GoogleCloudStorageRequest) {
         self.request = request
     }
-    
+
     /// Permanently deletes the ACL entry for the specified entity on the specified object.
     public func delete(bucket: String, entity: String, object: String, queryParameters: [String: String]?) throws -> Future<EmptyResponse> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
         }
-        
+
         return try request.send(method: .DELETE, path: "\(endpoint)/\(bucket)/o/\(object)/acl/\(entity)", query: queryParams)
     }
-    
+
     /// Returns the ACL entry for the specified entity on the specified object.
     public func get(bucket: String, entity: String, object: String, queryParameters: [String: String]?) throws -> Future<ObjectAccessControls> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
         }
-        
+
         return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/o/\(object)acl/\(entity)", query: queryParams)
     }
-    
+
     /// Creates a new ACL entry on the specified object.
     public func create(bucket: String, object: String, entity: String, role: String, queryParameters: [String: String]?) throws -> Future<ObjectAccessControls> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
         }
-        
+
         let body = try JSONEncoder().encode(["entity": entity, "role": role]).convertToHTTPBody()
-        
+
         return try request.send(method: .POST, path: "\(endpoint)/\(bucket)/o/\(object)/acl", query: queryParams, body: body)
     }
-    
+
     /// Retrieves ACL entries on the specified object.
     public func list(bucket: String, object: String, queryParameters: [String: String]?) throws -> Future<ObjectAccessControlsList> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
         }
-        
+
         return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/o/\(object)/acl", query: queryParams)
     }
-    
+
     /// Updates an ACL entry on the specified object. This method supports patch semantics.
     public func patch(bucket: String, object: String, entity: String, queryParameters: [String: String]?) throws -> Future<ObjectAccessControls> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
         }
-        
+
         return try request.send(method: .PATCH, path: "\(endpoint)/\(bucket)/o/\(object)/acl/\(entity)", query: queryParams)
     }
-    
+
     /// Updates an ACL entry on the specified object.
     public func update(bucket: String, object: String, entity: String, defaultAccessControl: ObjectAccessControls?, queryParameters: [String: String]?) throws -> Future<ObjectAccessControls> {
         var queryParams = ""
@@ -109,11 +109,11 @@ public final class GoogleObjectAccessControlsAPI: ObjectAccessControlsAPI {
             queryParams = queryParameters.queryParameters
         }
         var body = ""
-        
+
         if let defaultAccessControl = defaultAccessControl {
             body = try JSONSerialization.data(withJSONObject: try defaultAccessControl.toEncodedDictionary()).convert(to: String.self)
         }
-        
+
         return try request.send(method: .POST, path: "\(endpoint)/\(bucket)/o/\(object)/acl/\(entity)", query: queryParams, body: body.convertToHTTPBody())
     }
 }

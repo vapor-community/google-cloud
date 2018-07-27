@@ -4,7 +4,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "GoogleCloudProvider",
+    name: "GoogleCloud",
     products: [
         .library(
             name: "GoogleCloudStorage",
@@ -18,12 +18,12 @@ let package = Package(
     targets: [
         .target(
             name: "GoogleCloudStorage",
-            dependencies: ["GoogleCloudProviderCore"],
+            dependencies: ["GoogleCloudCore"],
             path: "Sources/Storage"
         ),
 
         .target(
-            name: "GoogleCloudProviderCore",
+            name: "GoogleCloudCore",
             dependencies: ["Vapor", "JWT"],
             path: "Sources/Core"
         ),

@@ -1,12 +1,12 @@
 //
 //  GoogleCloudStorageProvider.swift
-//  GoogleCloudProvider
+//  GoogleCloud
 //
 //  Created by Brian Hatfield on 7/26/18.
 //
 
 import Vapor
-import GoogleCloudProviderCore
+import GoogleCloudCore
 
 public final class GoogleCloudStorageProvider: Provider {
 

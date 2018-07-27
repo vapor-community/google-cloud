@@ -1,6 +1,6 @@
 //
 //  Extensions.swift
-//  GoogleCloudProvider
+//  GoogleCloud
 //
 //  Created by Andrew Edwards on 4/21/18.
 //
@@ -14,14 +14,14 @@ public protocol GoogleCloudModel: Content {
 extension GoogleCloudModel {
     public func toEncodedDictionary() throws -> [String: Any] {
         let encoded = try JSONEncoder().encode(self)
-        
+
         return try JSONDecoder().decode(AnyDecodable.self, from: encoded).value as? [String: Any] ?? [:]
     }
 }
 
 public struct AnyDecodable: Decodable {
     public var value: Any
-    
+
     private struct CodingKeys: CodingKey {
         var stringValue: String
         var intValue: Int?
@@ -31,7 +31,7 @@ public struct AnyDecodable: Decodable {
         }
         init?(stringValue: String) { self.stringValue = stringValue }
     }
-    
+
     public init(from decoder: Decoder) throws {
         if let container = try? decoder.container(keyedBy: CodingKeys.self) {
             var result = [String: Any]()
@@ -64,26 +64,26 @@ public struct AnyDecodable: Decodable {
 }
 
 extension Dictionary {
-    
+
     public var queryParameters: String {
         guard let me = self as? [String: Any] else
         { return "" }
         return query(parameters: me)
     }
-    
+
     public func query(parameters: [String: Any]) -> String {
         var components: [(String, String)] = []
-        
+
         for key in parameters.keys {
             let value = parameters[key]!
             components += queryComponents(key: key, value)
         }
         return (components.map { "\($0)=\($1)" } as [String]).joined(separator: "&")
     }
-    
+
     public func queryComponents(key: String, _ value: Any) -> [(String, String)] {
         var components: [(String, String)] = []
-        
+
         if let dictionary = value as? [String: Any] {
             for (nestedKey, value) in dictionary {
                 components += queryComponents(key: "\(key)[\(nestedKey)]", value)
@@ -95,7 +95,7 @@ extension Dictionary {
         } else {
             components.append((key, "\(value)"))
         }
-        
+
         return components
     }
 }

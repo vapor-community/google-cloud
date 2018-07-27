@@ -1,6 +1,6 @@
 //
 //  DefaultObjectACLAPI.swift
-//  GoogleCloudProvider
+//  GoogleCloud
 //
 //  Created by Andrew Edwards on 5/20/18.
 //
@@ -45,50 +45,50 @@ extension DefaultObjectACLAPI {
 public final class GoogleDefaultObjectACLAPI: DefaultObjectACLAPI {
     let endpoint = "https://www.googleapis.com/storage/v1/b"
     let request: GoogleCloudStorageRequest
-    
+
     init(request: GoogleCloudStorageRequest) {
         self.request = request
     }
-    
+
     /// Permanently deletes the default object ACL entry for the specified entity on the specified bucket.
     public func delete(bucket: String, entity: String, queryParameters: [String: String]?) throws -> Future<EmptyResponse> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
         }
-        
+
         return try request.send(method: .DELETE, path: "\(endpoint)/\(bucket)/defaultObjectAcl/\(entity)", query: queryParams)
     }
-    
+
     /// Returns the default object ACL entry for the specified entity on the specified bucket.
     public func get(bucket: String, entity: String, queryParameters: [String: String]?) throws -> Future<ObjectAccessControls> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
         }
-        
+
         return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/defaultObjectAcl/\(entity)", query: queryParams)
     }
-    
+
     /// Creates a new default object ACL entry on the specified bucket.
     public func create(bucket: String, entity: String, role: String, queryParameters: [String: String]?) throws -> Future<ObjectAccessControls> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
         }
-        
+
         let body = try JSONEncoder().encode(["entity": entity, "role": role]).convertToHTTPBody()
-        
+
         return try request.send(method: .POST, path: "\(endpoint)/\(bucket)/defaultObjectAcl", query: queryParams, body: body)
     }
-    
+
     /// Retrieves default object ACL entries on the specified bucket.
     public func list(bucket: String, queryParameters: [String: String]?) throws -> Future<ObjectAccessControlsList> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
         }
-        
+
         return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/defaultObjectAcl", query: queryParams)
     }
 
@@ -98,10 +98,10 @@ public final class GoogleDefaultObjectACLAPI: DefaultObjectACLAPI {
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
         }
-        
+
         return try request.send(method: .PATCH, path: "\(endpoint)/\(bucket)/defaultObjectAcl/\(entity)", query: queryParams)
     }
-    
+
     /// Updates a default object ACL entry on the specified bucket.
     public func update(bucket: String, entity: String, defaultAccessControl: ObjectAccessControls?, queryParameters: [String: String]?) throws -> Future<ObjectAccessControls> {
         var queryParams = ""
@@ -109,11 +109,11 @@ public final class GoogleDefaultObjectACLAPI: DefaultObjectACLAPI {
             queryParams = queryParameters.queryParameters
         }
         var body = ""
-        
+
         if let defaultAccessControl = defaultAccessControl {
             body = try JSONSerialization.data(withJSONObject: try defaultAccessControl.toEncodedDictionary()).convert(to: String.self)
         }
-        
+
         return try request.send(method: .POST, path: "\(endpoint)/\(bucket)/defaultObjectAcl/\(entity)", query: queryParams, body: body.convertToHTTPBody())
     }
 }

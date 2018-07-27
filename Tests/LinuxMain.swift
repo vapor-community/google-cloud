@@ -1,7 +1,7 @@
 import XCTest
 
-import GoogleCloudProviderTests
+import GoogleCloudTests
 
 var tests = [XCTestCaseEntry]()
-tests += GoogleCloudProviderTests.allTests()
+tests += GoogleCloudTests.allTests()
 XCTMain(tests)

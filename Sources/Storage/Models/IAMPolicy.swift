@@ -1,12 +1,12 @@
 //
 //  IAMPolicy.swift
-//  GoogleCloudProvider
+//  GoogleCloud
 //
 //  Created by Andrew Edwards on 4/20/18.
 //
 
 import Vapor
-import GoogleCloudProviderCore
+import GoogleCloudCore
 
 public struct IAMPolicy: GoogleCloudModel {
     /// The kind of item this is. For policies, this is always storage#policy. This field is ignored on input.

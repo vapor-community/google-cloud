@@ -1,12 +1,12 @@
 //
 //  CloudStorageError.swift
-//  GoogleCloudProvider
+//  GoogleCloud
 //
 //  Created by Andrew Edwards on 4/21/18.
 //
 
 import Vapor
-import GoogleCloudProviderCore
+import GoogleCloudCore
 
 // https://cloud.google.com/storage/docs/json_api/v1/status-codes
 public struct CloudStorageError: GoogleCloudModel, Error, Debuggable {

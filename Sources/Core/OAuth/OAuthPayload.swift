@@ -1,6 +1,6 @@
 //
 //  OAuthPayload.swift
-//  GoogleCloudProvider
+//  GoogleCloud
 //
 //  Created by Andrew Edwards on 4/15/18.
 //
@@ -13,7 +13,7 @@ public struct OAuthPayload: JWTPayload {
     var aud: AudienceClaim
     var iat: IssuedAtClaim
     var exp: ExpirationClaim
-    
+
     public func verify() throws {
         try exp.verify()
     }

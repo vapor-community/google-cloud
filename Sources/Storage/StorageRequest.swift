@@ -1,12 +1,12 @@
 //
 //  StorageRequest.swift
-//  GoogleCloudProvider
+//  GoogleCloud
 //
 //  Created by Andrew Edwards on 5/19/18.
 //
 
 import Vapor
-import GoogleCloudProviderCore
+import GoogleCloudCore
 
 extension HTTPHeaders {
     public static var gcsDefault: HTTPHeaders {
@@ -63,7 +63,7 @@ public final class GoogleCloudStorageRequest {
                     throw error
                 }
 
-                throw GoogleCloudProviderError.unknownError
+                throw GoogleCloudError.unknownError
             }
 
             return response.future(response)
