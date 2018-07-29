@@ -21,7 +21,53 @@ public protocol StorageObjectAPI {
     func watchAll(bucket: String, notificationChannel: StorageNotificationChannel, queryParameters: [String: String]?) throws -> Future<StorageNotificationChannel>
 }
 
-public class GoogleStorageObjectAPI: StorageObjectAPI {
+extension StorageObjectAPI {
+    public func compose(destinationBucket: String, destinationObject: String, composeRequest: StorageComposeRequest, queryParameters: [String: String]? = nil) throws -> Future<GoogleStorageObject> {
+        return try compose(destinationBucket: destinationBucket, destinationObject: destinationObject, composeRequest: composeRequest, queryParameters: queryParameters)
+    }
+    
+    public func copy(destinationBucket: String, destinationObject: String, sourceBucket: String, sourceObject: String, object: GoogleStorageObject, queryParameters: [String: String]? = nil) throws -> Future<GoogleStorageObject> {
+        return try copy(destinationBucket: destinationBucket, destinationObject: destinationObject, sourceBucket: sourceBucket, sourceObject: sourceObject, object: object, queryParameters: queryParameters)
+    }
+    
+    public func delete(bucket: String, objectName: String, queryParameters: [String: String]? = nil) throws -> Future<EmptyResponse> {
+        return try delete(bucket: bucket, objectName: objectName, queryParameters: queryParameters)
+    }
+    
+    public func get(bucket: String, objectName: String, queryParameters: [String: String]? = nil) throws -> Future<GoogleStorageObject> {
+        return try get(bucket: bucket, objectName: objectName, queryParameters: queryParameters)
+    }
+    
+    public func getMedia(bucket: String, objectName: String, queryParameters: [String: String]? = nil) throws -> Future<Data> {
+        return try getMedia(bucket: bucket, objectName: objectName, queryParameters: queryParameters)
+    }
+    
+    public func createSimpleUpload(bucket: String, data: Data, name: String, mediaType: MediaType, queryParameters: [String: String]? = nil) throws -> Future<GoogleStorageObject> {
+        return try createSimpleUpload(bucket: bucket, data: data, name: name, mediaType: mediaType, queryParameters: queryParameters)
+    }
+    
+    public func list(bucket: String, queryParameters: [String: String]? = nil) throws -> EventLoopFuture<StorageObjectList> {
+        return try list(bucket: bucket, queryParameters: queryParameters)
+    }
+    
+    public func patch(bucket: String, objectName: String, object: GoogleStorageObject? = nil, queryParameters: [String: String]? = nil) throws -> Future<GoogleStorageObject> {
+        return try patch(bucket: bucket, objectName: objectName, object: object, queryParameters: queryParameters)
+    }
+    
+    public func rewrite(destinationBucket: String, destinationObject: String, sourceBucket: String, sourceObject: String, object: GoogleStorageObject? = nil, queryParameters: [String: String]? = nil) throws -> Future<StorageRewriteObject> {
+        return try rewrite(destinationBucket: destinationBucket, destinationObject: destinationObject, sourceBucket: sourceBucket, sourceObject: sourceObject, object: object, queryParameters: queryParameters)
+    }
+    
+    public func update(bucket: String, objectName: String, object: GoogleStorageObject, queryParameters: [String: String]? = nil) throws -> Future<GoogleStorageObject> {
+        return try update(bucket: bucket, objectName: objectName, object: object, queryParameters: queryParameters)
+    }
+    
+    public func watchAll(bucket: String, notificationChannel: StorageNotificationChannel, queryParameters: [String: String]? = nil) throws -> Future<StorageNotificationChannel> {
+        return try watchAll(bucket: bucket, notificationChannel: notificationChannel, queryParameters: queryParameters)
+    }
+}
+
+public final class GoogleStorageObjectAPI: StorageObjectAPI {
     let endpoint = "https://www.googleapis.com/storage/v1/b"
     let request: GoogleCloudStorageRequest
     
@@ -30,10 +76,7 @@ public class GoogleStorageObjectAPI: StorageObjectAPI {
     }
 
     /// Concatenates a list of existing objects into a new object in the same bucket.
-    public func compose(destinationBucket: String,
-                        destinationObject: String,
-                        composeRequest: StorageComposeRequest,
-                        queryParameters: [String: String]? = nil) throws -> Future<GoogleStorageObject> {
+    public func compose(destinationBucket: String, destinationObject: String, composeRequest: StorageComposeRequest, queryParameters: [String: String]?) throws -> Future<GoogleStorageObject> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
@@ -45,12 +88,7 @@ public class GoogleStorageObjectAPI: StorageObjectAPI {
     }
     
     /// Copies a source object to a destination object. Optionally overrides metadata.
-    public func copy(destinationBucket: String,
-                     destinationObject: String,
-                     sourceBucket: String,
-                     sourceObject: String,
-                     object: GoogleStorageObject,
-                     queryParameters: [String: String]? = nil) throws -> Future<GoogleStorageObject> {
+    public func copy(destinationBucket: String, destinationObject: String, sourceBucket: String, sourceObject: String, object: GoogleStorageObject, queryParameters: [String: String]?) throws -> Future<GoogleStorageObject> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
@@ -62,9 +100,7 @@ public class GoogleStorageObjectAPI: StorageObjectAPI {
     }
     
     /// Deletes an object and its metadata. Deletions are permanent if versioning is not enabled for the bucket, or if the generation parameter is used.
-    public func delete(bucket: String,
-                       objectName: String,
-                       queryParameters: [String: String]? = nil) throws -> Future<EmptyResponse> {
+    public func delete(bucket: String, objectName: String, queryParameters: [String: String]?) throws -> Future<EmptyResponse> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
@@ -74,7 +110,7 @@ public class GoogleStorageObjectAPI: StorageObjectAPI {
     }
     
     /// Retrieves an object's metadata.
-    public func get(bucket: String, objectName: String, queryParameters: [String: String]? = nil) throws -> Future<GoogleStorageObject> {
+    public func get(bucket: String, objectName: String, queryParameters: [String: String]?) throws -> Future<GoogleStorageObject> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
@@ -84,7 +120,7 @@ public class GoogleStorageObjectAPI: StorageObjectAPI {
     }
 
     /// Retrieves an object's contents.
-    public func getMedia(bucket: String, objectName: String, queryParameters: [String: String]? = nil) throws -> Future<Data> {
+    public func getMedia(bucket: String, objectName: String, queryParameters: [String: String]?) throws -> Future<Data> {
         var queryParams = ["alt": "media"].queryParameters
 
         if let queryParameters = queryParameters {
@@ -95,11 +131,7 @@ public class GoogleStorageObjectAPI: StorageObjectAPI {
     }
     
     /// Stores a new object and metadata. Upload the media only, without any metadata.
-    public func createSimpleUpload(bucket: String,
-                                   data: Data,
-                                   name: String,
-                                   mediaType: MediaType,
-                                   queryParameters: [String: String]? = nil) throws -> Future<GoogleStorageObject> {
+    public func createSimpleUpload(bucket: String, data: Data, name: String, mediaType: MediaType, queryParameters: [String: String]?) throws -> Future<GoogleStorageObject> {
         var queryParams = ""
         if var queryParameters = queryParameters {
             queryParameters["name"] = name
@@ -118,8 +150,7 @@ public class GoogleStorageObjectAPI: StorageObjectAPI {
     }
     
     /// Retrieves a list of objects matching the criteria.
-    public func list(bucket: String,
-                     queryParameters: [String: String]? = nil) throws -> EventLoopFuture<StorageObjectList> {
+    public func list(bucket: String, queryParameters: [String: String]?) throws -> EventLoopFuture<StorageObjectList> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
@@ -129,10 +160,7 @@ public class GoogleStorageObjectAPI: StorageObjectAPI {
     }
     
     /// Updates a data blob's associated metadata. This method supports patch semantics
-    public func patch(bucket: String,
-                      objectName: String,
-                      object: GoogleStorageObject? = nil,
-                      queryParameters: [String: String]? = nil) throws -> Future<GoogleStorageObject> {
+    public func patch(bucket: String, objectName: String, object: GoogleStorageObject?, queryParameters: [String: String]?) throws -> Future<GoogleStorageObject> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
@@ -148,12 +176,7 @@ public class GoogleStorageObjectAPI: StorageObjectAPI {
     }
     
     /// Rewrites a source object to a destination object. Optionally overrides metadata.
-    public func rewrite(destinationBucket: String,
-                        destinationObject: String,
-                        sourceBucket: String,
-                        sourceObject: String,
-                        object: GoogleStorageObject? = nil,
-                        queryParameters: [String: String]? = nil) throws -> Future<StorageRewriteObject> {
+    public func rewrite(destinationBucket: String, destinationObject: String, sourceBucket: String, sourceObject: String, object: GoogleStorageObject?, queryParameters: [String: String]?) throws -> Future<StorageRewriteObject> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
@@ -169,10 +192,7 @@ public class GoogleStorageObjectAPI: StorageObjectAPI {
     }
     
     /// Updates an object's metadata.
-    public func update(bucket: String,
-                       objectName: String,
-                       object: GoogleStorageObject,
-                       queryParameters: [String: String]? = nil) throws -> Future<GoogleStorageObject> {
+    public func update(bucket: String, objectName: String, object: GoogleStorageObject, queryParameters: [String: String]?) throws -> Future<GoogleStorageObject> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
@@ -184,9 +204,7 @@ public class GoogleStorageObjectAPI: StorageObjectAPI {
     }
     
     /// Watch for changes on all objects in a bucket.
-    public func watchAll(bucket: String,
-                         notificationChannel: StorageNotificationChannel,
-                         queryParameters: [String: String]? = nil) throws -> Future<StorageNotificationChannel> {
+    public func watchAll(bucket: String, notificationChannel: StorageNotificationChannel, queryParameters: [String: String]?) throws -> Future<StorageNotificationChannel> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters

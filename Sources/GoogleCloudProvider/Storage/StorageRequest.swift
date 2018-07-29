@@ -16,7 +16,7 @@ extension HTTPHeaders {
 }
 
 
-public class GoogleCloudStorageRequest {
+public final class GoogleCloudStorageRequest {
     let refreshableToken: OAuthRefreshable
     let project: String
 

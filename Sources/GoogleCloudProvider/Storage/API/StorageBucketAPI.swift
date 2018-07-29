@@ -19,49 +19,20 @@ public protocol StorageBucketAPI {
     func update(bucket: String, acl: [BucketAccessControls], queryParameters: [String: String]?, billing: Billing?, cors: [Cors]?, defaultObjectAcl: [ObjectAccessControls]?, encryption: Encryption?, labels: [String: String]?, lifecycle: Lifecycle?, logging: Logging?, storageClass: StorageClass?, versioning: Versioning?, website: Website?) throws -> Future<GoogleStorageBucket>
 }
 
-public class GoogleStorageBucketAPI: StorageBucketAPI {
-    let endpoint = "https://www.googleapis.com/storage/v1/b"
-    let request: GoogleCloudStorageRequest
+extension StorageBucketAPI {
+    public func delete(bucket: String, queryParameters: [String: String]? = nil) throws -> Future<EmptyResponse> {
+        return try delete(bucket: bucket, queryParameters: queryParameters)
+    }
     
-    init(request: GoogleCloudStorageRequest) {
-        self.request = request
+    public func get(bucket: String, queryParameters: [String: String]? = nil) throws -> Future<GoogleStorageBucket> {
+        return try get(bucket: bucket, queryParameters: queryParameters)
     }
-
-    /// Permanently deletes an empty bucket.
-    public func delete(bucket: String,
-                       queryParameters: [String: String]? = nil) throws -> Future<EmptyResponse> {
-        var queryParams = ""
-        if let queryParameters = queryParameters {
-            queryParams = queryParameters.queryParameters
-        }
-        
-        return try request.send(method: .DELETE, path: "\(endpoint)/\(bucket)", query: queryParams)
+    
+    public func getIAMPolicy(bucket: String, queryParameters: [String: String]? = nil) throws -> Future<IAMPolicy> {
+        return try getIAMPolicy(bucket: bucket, queryParameters: queryParameters)
     }
-
-    /// Returns metadata for the specified bucket.
-    public func get(bucket: String,
-                    queryParameters: [String: String]? = nil) throws -> Future<GoogleStorageBucket> {
-        var queryParams = ""
-        if let queryParameters = queryParameters {
-            queryParams = queryParameters.queryParameters
-        }
-        
-        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)", query: queryParams)
-    }
-
-    /// Returns an IAM policy for the specified bucket.
-    public func getIAMPolicy(bucket: String,
-                             queryParameters: [String: String]? = nil) throws -> Future<IAMPolicy> {
-        var queryParams = ""
-        if let queryParameters = queryParameters {
-            queryParams = queryParameters.queryParameters
-        }
-        
-        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/iam", query: queryParams)
-    }
-
-    /// Creates a new bucket.
-    public func create( queryParameters: [String : String]? = nil,
+    
+    public func create( queryParameters: [String: String]? = nil,
                         name: String,
                         acl: [BucketAccessControls]? = nil,
                         billing: Billing? = nil,
@@ -75,6 +46,142 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
                         storageClass: StorageClass? = nil,
                         versioning: Versioning? = nil,
                         website: Website? = nil) throws -> Future<GoogleStorageBucket> {
+        return try create(queryParameters: queryParameters,
+                          name: name,
+                          acl: acl,
+                          billing: billing,
+                          cors: cors,
+                          defaultObjectAcl: defaultObjectAcl,
+                          encryption: encryption,
+                          labels: labels,
+                          lifecycle: lifecycle,
+                          location: location,
+                          logging: logging,
+                          storageClass: storageClass,
+                          versioning: versioning,
+                          website: website)
+    }
+    
+    public func list(queryParameters: [String: String]? = nil) throws -> Future<GoogleStorageBucketList> {
+        return try list(queryParameters: queryParameters)
+    }
+    
+    public func patch(bucket: String,
+                      queryParameters: [String: String]? = nil,
+                      acl: [BucketAccessControls]? = nil,
+                      billing: Billing? = nil,
+                      cors: [Cors]? = nil,
+                      defaultObjectAcl: [ObjectAccessControls]? = nil,
+                      encryption: Encryption? = nil,
+                      labels: [String: String]? = nil,
+                      lifecycle: Lifecycle? = nil,
+                      logging: Logging? = nil,
+                      versioning: Versioning? = nil,
+                      website: Website? = nil) throws -> Future<GoogleStorageBucket> {
+        return try patch(bucket: bucket,
+                         queryParameters: queryParameters,
+                         acl: acl,
+                         billing: billing,
+                         cors: cors,
+                         defaultObjectAcl: defaultObjectAcl,
+                         encryption: encryption,
+                         labels: labels,
+                         lifecycle: lifecycle,
+                         logging: logging,
+                         versioning: versioning,
+                         website: website)
+    }
+    
+    public func setIAMPolicy(bucket: String, iamPolicy: IAMPolicy, queryParameters: [String: String]? = nil) throws -> Future<IAMPolicy> {
+        return try setIAMPolicy(bucket: bucket, iamPolicy: iamPolicy, queryParameters: queryParameters)
+    }
+    
+    public func testIAMPermissions(bucket: String, permissions: [String], queryParameters: [String: String]? = nil) throws -> Future<Permission> {
+        return try testIAMPermissions(bucket: bucket, permissions: permissions, queryParameters: queryParameters)
+    }
+    
+    public func update(bucket: String,
+                       acl: [BucketAccessControls],
+                       queryParameters: [String: String]? = nil,
+                       billing: Billing? = nil,
+                       cors: [Cors]? = nil,
+                       defaultObjectAcl: [ObjectAccessControls]? = nil,
+                       encryption: Encryption? = nil,
+                       labels: [String: String]? = nil,
+                       lifecycle: Lifecycle? = nil,
+                       logging: Logging? = nil,
+                       storageClass: StorageClass? = nil,
+                       versioning: Versioning? = nil,
+                       website: Website? = nil) throws -> Future<GoogleStorageBucket> {
+        return try update(bucket: bucket,
+                          acl: acl,
+                          queryParameters: queryParameters,
+                          billing: billing,
+                          cors: cors,
+                          defaultObjectAcl: defaultObjectAcl,
+                          encryption: encryption,
+                          labels: labels,
+                          lifecycle: lifecycle,
+                          logging: logging,
+                          storageClass: storageClass,
+                          versioning: versioning,
+                          website: website)
+    }
+}
+
+public final class GoogleStorageBucketAPI: StorageBucketAPI {
+    let endpoint = "https://www.googleapis.com/storage/v1/b"
+    let request: GoogleCloudStorageRequest
+    
+    init(request: GoogleCloudStorageRequest) {
+        self.request = request
+    }
+
+    /// Permanently deletes an empty bucket.
+    public func delete(bucket: String, queryParameters: [String: String]?) throws -> Future<EmptyResponse> {
+        var queryParams = ""
+        if let queryParameters = queryParameters {
+            queryParams = queryParameters.queryParameters
+        }
+        
+        return try request.send(method: .DELETE, path: "\(endpoint)/\(bucket)", query: queryParams)
+    }
+
+    /// Returns metadata for the specified bucket.
+    public func get(bucket: String, queryParameters: [String: String]?) throws -> Future<GoogleStorageBucket> {
+        var queryParams = ""
+        if let queryParameters = queryParameters {
+            queryParams = queryParameters.queryParameters
+        }
+        
+        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)", query: queryParams)
+    }
+
+    /// Returns an IAM policy for the specified bucket.
+    public func getIAMPolicy(bucket: String, queryParameters: [String: String]?) throws -> Future<IAMPolicy> {
+        var queryParams = ""
+        if let queryParameters = queryParameters {
+            queryParams = queryParameters.queryParameters
+        }
+        
+        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/iam", query: queryParams)
+    }
+
+    /// Creates a new bucket.
+    public func create(queryParameters: [String: String]?,
+                       name: String,
+                       acl: [BucketAccessControls]?,
+                       billing: Billing?,
+                       cors: [Cors]?,
+                       defaultObjectAcl: [ObjectAccessControls]?,
+                       encryption: Encryption?,
+                       labels: [String: String]?,
+                       lifecycle: Lifecycle?,
+                       location: String?,
+                       logging: Logging?,
+                       storageClass: StorageClass?,
+                       versioning: Versioning?,
+                       website: Website?) throws -> Future<GoogleStorageBucket> {
         var body: [String: Any] = ["name": name]
         var query = ""
         
@@ -140,7 +247,7 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
     }
 
     /// Retrieves a list of buckets for a given project.
-    public func list(queryParameters: [String: String]? = nil) throws -> Future<GoogleStorageBucketList> {
+    public func list(queryParameters: [String: String]?) throws -> Future<GoogleStorageBucketList> {
         var query = ""
         
         if var queryParameters = queryParameters {
@@ -156,17 +263,17 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
 
     /// Updates a bucket. Changes to the bucket will be readable immediately after writing, but configuration changes may take time to propagate.
     public func patch(bucket: String,
-                      queryParameters: [String: String]? = nil,
-                      acl: [BucketAccessControls]? = nil,
-                      billing: Billing? = nil,
-                      cors: [Cors]? = nil,
-                      defaultObjectAcl: [ObjectAccessControls]? = nil,
-                      encryption: Encryption? = nil,
-                      labels: [String : String]? = nil,
-                      lifecycle: Lifecycle? = nil,
-                      logging: Logging? = nil,
-                      versioning: Versioning? = nil,
-                      website: Website? = nil) throws -> Future<GoogleStorageBucket> {
+                      queryParameters: [String: String]?,
+                      acl: [BucketAccessControls]?,
+                      billing: Billing?,
+                      cors: [Cors]?,
+                      defaultObjectAcl: [ObjectAccessControls]?,
+                      encryption: Encryption?,
+                      labels: [String: String]?,
+                      lifecycle: Lifecycle?,
+                      logging: Logging?,
+                      versioning: Versioning?,
+                      website: Website?) throws -> Future<GoogleStorageBucket> {
         var body: [String: Any] = [:]
         var query = ""
         
@@ -220,9 +327,7 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
     }
 
     /// Updates an IAM policy for the specified bucket.
-    public func setIAMPolicy(bucket: String,
-                             iamPolicy: IAMPolicy,
-                             queryParameters: [String: String]? = nil) throws -> Future<IAMPolicy> {
+    public func setIAMPolicy(bucket: String, iamPolicy: IAMPolicy, queryParameters: [String: String]?) throws -> Future<IAMPolicy> {
         var query = ""
         
         if let queryParameters = queryParameters {
@@ -235,9 +340,7 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
     }
 
     /// Tests a set of permissions on the given bucket to see which, if any, are held by the caller.
-    public func testIAMPermissions(bucket: String,
-                                   permissions: [String],
-                                   queryParameters: [String: String]? = nil) throws -> Future<Permission> {
+    public func testIAMPermissions(bucket: String, permissions: [String], queryParameters: [String: String]?) throws -> Future<Permission> {
         var query = ""
         
         if let queryParameters = queryParameters {
@@ -258,17 +361,17 @@ public class GoogleStorageBucketAPI: StorageBucketAPI {
     /// Updates a bucket. Changes to the bucket will be readable immediately after writing, but configuration changes may take time to propagate. This method sets the complete metadata of a bucket. If you want to change some of a bucket's metadata while leaving other parts unaffected, use the PATCH function instead.
     public func update(bucket: String,
                        acl: [BucketAccessControls],
-                       queryParameters: [String : String]? = nil,
-                       billing: Billing? = nil,
-                       cors: [Cors]? = nil,
-                       defaultObjectAcl: [ObjectAccessControls]? = nil,
-                       encryption: Encryption? = nil,
-                       labels: [String: String]? = nil,
-                       lifecycle: Lifecycle? = nil,
-                       logging: Logging? = nil,
-                       storageClass: StorageClass? = nil,
-                       versioning: Versioning? = nil,
-                       website: Website? = nil) throws -> Future<GoogleStorageBucket> {
+                       queryParameters: [String: String]?,
+                       billing: Billing?,
+                       cors: [Cors]?,
+                       defaultObjectAcl: [ObjectAccessControls]?,
+                       encryption: Encryption?,
+                       labels: [String: String]?,
+                       lifecycle: Lifecycle?,
+                       logging: Logging?,
+                       storageClass: StorageClass?,
+                       versioning: Versioning?,
+                       website: Website?) throws -> Future<GoogleStorageBucket> {
         var body: [String: Any] = [:]
         var query = ""
         

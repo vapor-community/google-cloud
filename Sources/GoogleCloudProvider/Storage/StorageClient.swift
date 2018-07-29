@@ -12,14 +12,14 @@ enum GoogleCloudStorageClientError: Error {
     case unknownError
 }
 
-public struct GoogleCloudStorageClient: ServiceType {
-    public var bucketAccessControl: GoogleBucketAccessControlAPI
-    public var buckets: GoogleStorageBucketAPI
-    public var channels: GoogleChannelsAPI
-    public var defaultObjectAccessControl: GoogleDefaultObjectACLAPI
-    public var objectAccessControl: GoogleObjectAccessControlsAPI
-    public var notifications: GoogleStorageNotificationsAPI
-    public var object: GoogleStorageObjectAPI
+public final class GoogleCloudStorageClient: ServiceType {
+    public var bucketAccessControl: BucketAccessControlAPI
+    public var buckets: StorageBucketAPI
+    public var channels: ChannelsAPI
+    public var defaultObjectAccessControl: DefaultObjectACLAPI
+    public var objectAccessControl: ObjectAccessControlsAPI
+    public var notifications: StorageNotificationsAPI
+    public var object: StorageObjectAPI
     
     init(providerconfig: GoogleCloudProviderConfig, client: Client) throws {
         let env = ProcessInfo.processInfo.environment

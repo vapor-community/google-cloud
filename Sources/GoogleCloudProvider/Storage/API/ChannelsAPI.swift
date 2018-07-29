@@ -11,7 +11,13 @@ public protocol ChannelsAPI {
     func stop(channelId: String, resourceId: String, queryParameters: [String: String]?) throws -> Future<EmptyResponse>
 }
 
-public class GoogleChannelsAPI: ChannelsAPI {
+extension ChannelsAPI {
+    public func stop(channelId: String, resourceId: String, queryParameters: [String: String]? = nil) throws -> Future<EmptyResponse> {
+        return try stop(channelId: channelId, resourceId: resourceId, queryParameters: queryParameters)
+    }
+}
+
+public final class GoogleChannelsAPI: ChannelsAPI {
     let endpoint = "https://www.googleapis.com/storage/v1/channels"
     let request: GoogleCloudStorageRequest
     
@@ -20,9 +26,7 @@ public class GoogleChannelsAPI: ChannelsAPI {
     }
     
     /// Stop receiving object change notifications through this channel.
-    public func stop(channelId: String,
-                     resourceId: String,
-                     queryParameters: [String: String]? = nil) throws -> Future<EmptyResponse> {
+    public func stop(channelId: String, resourceId: String, queryParameters: [String: String]?) throws -> Future<EmptyResponse> {
         var queryParams = ""
         if let queryParameters = queryParameters {
             queryParams = queryParameters.queryParameters
