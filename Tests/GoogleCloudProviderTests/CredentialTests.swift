@@ -8,7 +8,7 @@
 import Foundation
 import XCTest
 
-@testable import GoogleCloudProvider
+@testable import GoogleCloud
 
 final class CredentialTests: XCTestCase {
     var checkoutPath: String {
@@ -21,7 +21,7 @@ final class CredentialTests: XCTestCase {
     }
 
     func testLoadApplicationDefaultCredentials() throws {
-        let credentialFile = checkoutPath + "/Tests/GoogleCloudProviderTests/Fixtures/ADC.json"
+        let credentialFile = checkoutPath + "/Tests/GoogleCloudTests/Fixtures/ADC.json"
 
         XCTAssertNoThrow(try GoogleApplicationDefaultCredentials(contentsOfFile: credentialFile))
 
@@ -32,7 +32,7 @@ final class CredentialTests: XCTestCase {
     }
 
     func testLoadServiceAccountCredentials() throws {
-        let credentialFile = checkoutPath + "/Tests/GoogleCloudProviderTests/Fixtures/ServiceAccount.json"
+        let credentialFile = checkoutPath + "/Tests/GoogleCloudTests/Fixtures/ServiceAccount.json"
 
         XCTAssertNoThrow(try GoogleServiceAccountCredentials(contentsOfFile: credentialFile))
 

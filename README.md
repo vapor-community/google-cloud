@@ -1,4 +1,4 @@
-# GoogleCloudProvider
+# GoogleCloud
 
 ![Swift](http://img.shields.io/badge/swift-4.1-brightgreen.svg)
 ![Vapor](http://img.shields.io/badge/vapor-3.0-brightgreen.svg)
@@ -42,12 +42,12 @@ In your `Package.swift` file, add the following
 And In `Configure.swift` or wherever you setup your configuration in Vapor
 
 ```swift
- let cloudConfig = GoogleCloudProviderConfig(project: "myprojectid-12345", credentialFile: "path to your service account json")
+ let cloudConfig = GoogleCloudConfig(project: "myprojectid-12345", credentialFile: "path to your service account json")
  services.register(cloudConfig)
- try services.register(GoogleCloudProvider())
+ try services.register(GoogleCloud())
 ```
 
-Optionally, you can register an empty `GoogleCloudProviderConfig()` and configure the following environment variables:
+Optionally, you can register an empty `GoogleCloudConfig()` and configure the following environment variables:
 
 ```shell
 export PROJECT_ID=myprojectid-12345
@@ -55,4 +55,4 @@ export GOOGLE_APPLICATION_CREDENTIALS=/path/to/your/service-account.json
 ```
 
 ### Currently the following API's are implemented and you can follow the setup guides for each specific API to integrate with your Vapor project.
-* [x] Cloud Storage [Setup guide](https://github.com/Andrewangeta/GoogleCloudProvider/tree/master/Sources/GoogleCloudProvider/Storage/README.md)
+* [x] Cloud Storage [Setup guide](https://github.com/Andrewangeta/GoogleCloud/tree/master/Sources/GoogleCloud/Storage/README.md)

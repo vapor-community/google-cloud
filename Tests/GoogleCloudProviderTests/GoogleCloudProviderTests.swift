@@ -1,7 +1,7 @@
 import XCTest
-@testable import GoogleCloudProvider
+@testable import GoogleCloud
 
-final class GoogleCloudProviderTests: XCTestCase {
+final class GoogleCloudTests: XCTestCase {
     func testExample() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct
