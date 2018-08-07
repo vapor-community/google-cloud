@@ -12,7 +12,17 @@ enum GoogleCloudStorageClientError: Error {
     case unknownError
 }
 
-public final class GoogleCloudStorageClient: ServiceType {
+public protocol StorageClient: ServiceType {
+    var bucketAccessControl: BucketAccessControlAPI { get set }
+    var buckets: StorageBucketAPI { get set }
+    var channels: ChannelsAPI { get set }
+    var defaultObjectAccessControl: DefaultObjectACLAPI { get set }
+    var objectAccessControl: ObjectAccessControlsAPI { get set }
+    var notifications: StorageNotificationsAPI { get set }
+    var object: StorageObjectAPI { get set }
+}
+
+public final class GoogleCloudStorageClient: StorageClient {
     public var bucketAccessControl: BucketAccessControlAPI
     public var buckets: StorageBucketAPI
     public var channels: ChannelsAPI
@@ -20,7 +30,7 @@ public final class GoogleCloudStorageClient: ServiceType {
     public var objectAccessControl: ObjectAccessControlsAPI
     public var notifications: StorageNotificationsAPI
     public var object: StorageObjectAPI
-    
+
     init(providerconfig: GoogleCloudProviderConfig, client: Client) throws {
         let env = ProcessInfo.processInfo.environment
 
@@ -43,7 +53,7 @@ public final class GoogleCloudStorageClient: ServiceType {
         }
 
         let storageRequest = GoogleCloudStorageRequest(httpClient: client, oauth: refreshableToken, project: projectId)
-        
+
         bucketAccessControl = GoogleBucketAccessControlAPI(request: storageRequest)
         buckets = GoogleStorageBucketAPI(request: storageRequest)
         channels = GoogleChannelsAPI(request: storageRequest)
@@ -52,11 +62,13 @@ public final class GoogleCloudStorageClient: ServiceType {
         notifications = GoogleStorageNotificationsAPI(request: storageRequest)
         object = GoogleStorageObjectAPI(request: storageRequest)
     }
-    
+
+    public static var serviceSupports: [Any.Type] { return [StorageClient.self] }
+
     public static func makeService(for worker: Container) throws -> GoogleCloudStorageClient {
         let client = try worker.make(Client.self)
         let providerConfig = try worker.make(GoogleCloudProviderConfig.self)
-        
+
         return try GoogleCloudStorageClient(providerconfig: providerConfig, client: client)
     }
 }
