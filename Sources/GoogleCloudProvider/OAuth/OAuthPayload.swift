@@ -14,7 +14,7 @@ public struct OAuthPayload: JWTPayload {
     var iat: IssuedAtClaim
     var exp: ExpirationClaim
     
-    public func verify() throws {
-        try exp.verify()
+    public func verify(using signer: JWTSigner) throws {
+        try exp.verifyNotExpired()
     }
 }
