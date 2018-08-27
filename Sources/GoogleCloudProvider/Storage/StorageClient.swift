@@ -48,7 +48,7 @@ public final class GoogleCloudStorageClient: StorageClient {
         // Set the projectId to use for this client. In order of priority:
         // - Environment Variable (PROJECT_ID)
         // - GoogleCloudProviderConfig's .project (optionally configured)
-        guard let projectId = env["PROJECT_ID"] ?? providerconfig.project else {
+        guard let projectId = env["PROJECT_ID"] ?? providerconfig.project ?? (refreshableToken as? OAuthServiceAccount)?.credentials.projectId else {
             throw GoogleCloudStorageClientError.projectIdMissing
         }
 
