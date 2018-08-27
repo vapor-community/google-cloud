@@ -37,7 +37,7 @@ func upload(_ req: Request) throws -> Future<GoogleStorageObject> {
 
     return try cloudStorage.object.createSimpleUpload(bucket: "vapor-cloud-storage-demo",
                                                       data: Data(imagedata),
-                                                      name: "hello.jpeg",
+                                                      name: "hello",
                                                       mediaType: .jpeg)
 }
 ```

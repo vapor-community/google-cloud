@@ -42,6 +42,8 @@ In your `Package.swift` file, add the following
 And In `Configure.swift` or wherever you setup your configuration in Vapor
 
 ```swift
+ import GoogleCloud
+ 
  let cloudConfig = GoogleCloudProviderConfig(project: "myprojectid-12345", credentialFile: "path to your service account json")
  services.register(cloudConfig)
  try services.register(GoogleCloudProvider())
