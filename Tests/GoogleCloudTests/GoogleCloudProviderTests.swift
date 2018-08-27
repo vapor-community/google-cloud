@@ -1,5 +1,5 @@
 import XCTest
-@testable import GoogleCloudProvider
+@testable import GoogleCloud
 
 final class GoogleCloudProviderTests: XCTestCase {
     func testExample() {
