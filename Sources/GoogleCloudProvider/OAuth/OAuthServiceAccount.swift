@@ -52,7 +52,7 @@ public class OAuthServiceAccount: OAuthRefreshable {
 
         let pk = try RSAKey.private(pem: credentials.privateKey)
         let signer = JWTSigner.rs256(key: pk)
-        var jwt = JWT<OAuthPayload>(payload: payload)
+        let jwt = JWT<OAuthPayload>(payload: payload)
         let jwtData = try jwt.sign(using: signer)
         return String(data: jwtData, encoding: .utf8)!
     }
