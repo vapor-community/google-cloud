@@ -10,7 +10,7 @@ import XCTest
 
 import Vapor
 
-@testable import GoogleCloudProvider
+@testable import GoogleCloud
 
 final class StorageTests: XCTestCase {
     var GCSProject: String?
