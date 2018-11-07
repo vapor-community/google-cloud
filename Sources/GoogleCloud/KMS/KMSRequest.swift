@@ -1,8 +1,8 @@
 //
-//  StorageRequest.swift
+//  KMSRequest.swift
 //  GoogleCloudProvider
 //
-//  Created by Andrew Edwards on 5/19/18.
+//  Created by Andrei Popa on 11/07/18.
 //
 
 import Vapor
@@ -10,14 +10,15 @@ import Vapor
 
 
 public final class GoogleCloudKMSRequest {
+    
     let refreshableToken: OAuthRefreshable
     let project: String
     let location: String
-
+    
     let httpClient: Client
     let responseDecoder: JSONDecoder
     let dateFormatter: DateFormatter
-
+    
     var currentToken: OAuthAccessToken?
     var tokenCreatedTime: Date?
     
@@ -27,28 +28,31 @@ public final class GoogleCloudKMSRequest {
         self.httpClient = httpClient
         self.project = project
         self.location = location
+        
+        // decoder
         self.responseDecoder = JSONDecoder()
         self.dateFormatter = DateFormatter()
-
         self.dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
         self.responseDecoder.dateDecodingStrategy = .formatted(self.dateFormatter)
     }
     
     
-    
-    func send<GCM: GoogleCloudModel>(method: HTTPMethod,
-                                     headers: HTTPHeaders = [:],
-                                     path: String,
-                                     query: String? = nil,
-                                     body: HTTPBody = HTTPBody()) throws -> Future<GCM> {
+    /// perform request and return Codable
+    func send<Model: Codable>(method: HTTPMethod,
+                              headers: HTTPHeaders = [:],
+                              path: String,
+                              query: String? = nil,
+                              body: HTTPBody = HTTPBody(),
+                              model: Model.Type) throws -> Future<Model> {
         return try withToken({ token in
             return try self._send(method: method, headers: headers, path: path, query: query, body: body, accessToken: token.accessToken).flatMap({ response in
-                return try self.responseDecoder.decode(GCM.self, from: response.http, maxSize: 65_536, on: response)
+                return try self.responseDecoder.decode(Model.self, from: response.http, maxSize: 65_536, on: response)
             })
         })
     }
-
     
+    
+    /// perform request and return Data from Body
     func send(method: HTTPMethod = .GET,
               headers: HTTPHeaders = [:],
               path: String,
@@ -56,14 +60,16 @@ public final class GoogleCloudKMSRequest {
               body: HTTPBody = HTTPBody()) throws -> Future<Data> {
         
         return try withToken({ token in
-            return try self._send(method: method, headers: headers, path: path, query: query, body: body, accessToken: token.accessToken).flatMap({ response in
-                return response.http.body.consumeData(on: response)
-            })
+            return try self._send(method: method, headers: headers, path: path, query: query, body: body, accessToken: token.accessToken)
+        })
+        // return data from body
+        .flatMap({ response in
+            return response.http.body.consumeData(on: response)
         })
     }
-
     
-
+    
+    
     private func _send(method: HTTPMethod,
                        headers: HTTPHeaders,
                        path: String,
@@ -83,19 +89,19 @@ public final class GoogleCloudKMSRequest {
             }
             return path
         }
-
-        // perform HTTP request
-        return httpClient.send(method, headers: finalHeaders, to: to, beforeSend: { $0.http.body = body }).flatMap({ response in
-            guard response.http.status == .ok else {
-                print(response)
-                return try self.responseDecoder.decode(CloudStorageError.self, from: response.http, maxSize: 65_536, on: self.httpClient.container).map { error in
-                    throw error
-                    }.catchMap { error -> Response in
-                        throw GoogleCloudKMSError.unknownError
+        
+        // performs HTTP request
+        return httpClient.send(method, headers: finalHeaders, to: to, beforeSend: { $0.http.body = body })
+            .flatMap({ response in
+                guard response.http.status == .ok else {
+                    // print(response)
+                    return try self.responseDecoder
+                        .decode(KMSError.self, from: response.http, maxSize: 65_536, on: self.httpClient.container)
+                        // we are on the error chain, trigger an error
+                        .map { throw CloudKMSError.other(message: $0.error.message) }
                 }
-            }
-            return response.future(response)
-        })
+                return response.future(response)
+            })
     }
     
     
