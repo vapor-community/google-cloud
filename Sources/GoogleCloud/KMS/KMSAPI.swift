@@ -1,8 +1,8 @@
 //
-//  ObjectACLAPI.swift
+//  KMSAPI.swift
 //  GoogleCloudProvider
 //
-//  Created by Andrew Edwards on 5/20/18.
+//  Created by Andrei Popa on 11/07/18.
 //
 
 import Vapor
@@ -23,15 +23,20 @@ public final class GoogleKMSAPI {
     
     
     /// decrypts ciphertext
-    public func decrypt(keyRing: String, keyName: String, ciphertext: String) throws -> Future<Data> {
+    public func decrypt(keyRing: String, keyName: String, ciphertext: String) throws -> Future<String> {
+        
+        struct KMSDecryptResponse: Codable {
+            let plaintext: String
+        }
         
         let googleKMSURI = "\(endpoint)/keyRings/\(keyRing)/cryptoKeys/\(keyName):decrypt"
         
         let body = HTTPBody(string: """
-        { "message": "\(ciphertext)"}
-        """)
+            { "ciphertext": "\(ciphertext)"}
+            """)
         
-        return try request.send(method: .POST, path: googleKMSURI, body: body)
+        /// return only the plaintext
+        return try request.send(method: .POST, path: googleKMSURI, body: body, model: KMSDecryptResponse.self).map({ $0.plaintext })
     }
     
     
