@@ -57,4 +57,4 @@ export GOOGLE_APPLICATION_CREDENTIALS=/path/to/your/service-account.json
 ```
 
 ### Currently the following API's are implemented and you can follow the setup guides for each specific API to integrate with your Vapor project.
-* [x] Cloud Storage [Setup guide](https://github.com/Andrewangeta/GoogleCloudProvider/tree/master/Sources/GoogleCloudProvider/Storage/README.md)
+* [x] Cloud Storage [Setup guide](https://github.com/Andrewangeta/GoogleCloudProvider/tree/master/Sources/GoogleCloud/Storage/README.md)
