@@ -31,7 +31,7 @@ public final class GoogleCloudStorageClient: StorageClient {
     public var notifications: StorageNotificationsAPI
     public var object: StorageObjectAPI
 
-    init(providerconfig: GoogleCloudProviderConfig, client: Client) throws {
+    init(providerconfig: GoogleCloudProviderConfig, storageConfig: GoogleCloudStorageConfig, client: Client) throws {
         let env = ProcessInfo.processInfo.environment
 
         // Locate the credentials to use for this client. In order of priority:
@@ -43,12 +43,13 @@ public final class GoogleCloudStorageClient: StorageClient {
                                   "~/.config/gcloud/application_default_credentials.json"
 
         // A token implementing OAuthRefreshable. Loaded from credentials defined above.
-        let refreshableToken = try OAuthCredentialLoader.getRefreshableToken(credentialFilePath: preferredCredentialPath, withClient: client)
+        let refreshableToken = try OAuthCredentialLoader.getRefreshableToken(credentialFilePath: preferredCredentialPath,
+                                                                             withConfig: storageConfig, andClient: client)
 
         // Set the projectId to use for this client. In order of priority:
         // - Environment Variable (PROJECT_ID)
         // - GoogleCloudProviderConfig's .project (optionally configured)
-        guard let projectId = env["PROJECT_ID"] ?? providerconfig.project ?? (refreshableToken as? OAuthServiceAccount)?.credentials.projectId else {
+        guard let projectId = env["PROJECT_ID"] ?? (refreshableToken as? OAuthServiceAccount)?.credentials.projectId ?? storageConfig.project else {
             throw GoogleCloudStorageClientError.projectIdMissing
         }
 
@@ -68,7 +69,7 @@ public final class GoogleCloudStorageClient: StorageClient {
     public static func makeService(for worker: Container) throws -> GoogleCloudStorageClient {
         let client = try worker.make(Client.self)
         let providerConfig = try worker.make(GoogleCloudProviderConfig.self)
-
-        return try GoogleCloudStorageClient(providerconfig: providerConfig, client: client)
+        let storageConfig = try worker.make(GoogleCloudStorageConfig.self)
+        return try GoogleCloudStorageClient(providerconfig: providerConfig, storageConfig: storageConfig, client: client)
     }
 }

@@ -7,11 +7,21 @@
 
 import Vapor
 
-public struct GoogleCloudStorageConfig: Service {
-    public let scope: [String]
+public struct GoogleCloudStorageConfig: Service, GoogleCloudAPIConfig {
     
-    public init(scope: [String]) {
+    public let scope: [String]
+    public let serviceAccount: String
+    public let project: String?
+    
+    public init(scope: [String], serviceAccount: String, project: String?) {
         self.scope = scope
+        self.serviceAccount = serviceAccount
+        self.project = project
+    }
+    
+    /// Create a new `GoogleCloudStorageConfig` with full control scope and the default service account.
+    public static func `default`() -> GoogleCloudStorageConfig {
+        return GoogleCloudStorageConfig(scope: [StorageScope.fullControl], serviceAccount: "default", project: nil)
     }
 }
 
