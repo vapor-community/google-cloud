@@ -8,11 +8,9 @@
 import Vapor
 
 public struct GoogleCloudProviderConfig: Service {
-    let project: String?
     let serviceAccountCredentialPath: String?
 
-    public init(project: String?, credentialFile: String? = nil) {
-        self.project = project
+    public init(credentialFile: String? = nil) {
         self.serviceAccountCredentialPath = credentialFile
     }
 }
