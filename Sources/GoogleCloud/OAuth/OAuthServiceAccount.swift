@@ -39,7 +39,7 @@ public class OAuthServiceAccount: OAuthRefreshable {
                 if response.http.status == .ok {
                     return try JSONDecoder().decode(OAuthAccessToken.self, from: response.http, maxSize: 65_536, on: response)
                 }
-                throw Abort(.internalServerError)
+                throw Abort(response.http.status, reason: "An unexpected error occured when attempting to refresh GoogleOAuth token.")
             }
     }
 
