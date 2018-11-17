@@ -7,9 +7,29 @@
 
 import Vapor
 
-enum GoogleCloudStorageClientError: Error {
+public enum GoogleCloudStorageError: GoogleCloudError {
     case projectIdMissing
-    case unknownError
+    case unknownError(String)
+    
+    var localizedDescription: String {
+        switch self {
+        case .projectIdMissing:
+            return "Missing project id for GoogleCloudStorage API. Did you forget to set your project id?"
+        case .unknownError(let reason):
+            return "An unknown error occured: \(reason)"
+        }
+    }
+    
+    public var identifier: String {
+        switch self {
+        case .projectIdMissing:
+            return "missing-project-id"
+        case .unknownError(_):
+            return "unknown"
+        }
+    }
+    
+    public var reason: String { return localizedDescription }
 }
 
 public protocol StorageClient: ServiceType {
@@ -31,25 +51,21 @@ public final class GoogleCloudStorageClient: StorageClient {
     public var notifications: StorageNotificationsAPI
     public var object: StorageObjectAPI
 
-    init(providerconfig: GoogleCloudProviderConfig, client: Client) throws {
-        let env = ProcessInfo.processInfo.environment
-
-        // Locate the credentials to use for this client. In order of priority:
-        // - Environment Variable Specified Credentials (GOOGLE_APPLICATION_CREDENTIALS)
-        // - GoogleCloudProviderConfig's .serviceAccountCredentialPath (optionally configured)
-        // - Application Default Credentials, located in the constant
-        let preferredCredentialPath = env["GOOGLE_APPLICATION_CREDENTIALS"] ??
-                                  providerconfig.serviceAccountCredentialPath ??
-                                  "~/.config/gcloud/application_default_credentials.json"
-
-        // A token implementing OAuthRefreshable. Loaded from credentials defined above.
-        let refreshableToken = try OAuthCredentialLoader.getRefreshableToken(credentialFilePath: preferredCredentialPath, withClient: client)
+    init(providerconfig: GoogleCloudProviderConfig, storageConfig: GoogleCloudStorageConfig, client: Client) throws {
+        // A token implementing OAuthRefreshable. Loaded from credentials from the provider config.
+        let refreshableToken = try OAuthCredentialLoader.getRefreshableToken(credentialFilePath: providerconfig.serviceAccountCredentialPath,
+                                                                             withConfig: storageConfig,
+                                                                             andClient: client)
 
         // Set the projectId to use for this client. In order of priority:
         // - Environment Variable (PROJECT_ID)
+        // - Service Account's projectID
+        // - GoogleCloudStorageConfig's .project (optionally configured)
         // - GoogleCloudProviderConfig's .project (optionally configured)
-        guard let projectId = env["PROJECT_ID"] ?? providerconfig.project ?? (refreshableToken as? OAuthServiceAccount)?.credentials.projectId else {
-            throw GoogleCloudStorageClientError.projectIdMissing
+        guard let projectId = ProcessInfo.processInfo.environment["PROJECT_ID"] ??
+                                (refreshableToken as? OAuthServiceAccount)?.credentials.projectId ??
+                                storageConfig.project ?? providerconfig.project else {
+            throw GoogleCloudStorageError.projectIdMissing
         }
 
         let storageRequest = GoogleCloudStorageRequest(httpClient: client, oauth: refreshableToken, project: projectId)
@@ -68,7 +84,7 @@ public final class GoogleCloudStorageClient: StorageClient {
     public static func makeService(for worker: Container) throws -> GoogleCloudStorageClient {
         let client = try worker.make(Client.self)
         let providerConfig = try worker.make(GoogleCloudProviderConfig.self)
-
-        return try GoogleCloudStorageClient(providerconfig: providerConfig, client: client)
+        let storageConfig = try worker.make(GoogleCloudStorageConfig.self)
+        return try GoogleCloudStorageClient(providerconfig: providerConfig, storageConfig: storageConfig, client: client)
     }
 }

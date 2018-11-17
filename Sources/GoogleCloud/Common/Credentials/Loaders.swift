@@ -7,9 +7,24 @@
 
 import Foundation
 
-enum CredentialLoadError: Error {
-    case fileLoadError
-    case noValidFileError
+enum CredentialLoadError: GoogleCloudError {
+    
+    var localizedDescription: String {
+        switch self {
+        case .fileLoadError(let path):
+            return "Failed to load GoogleCloud credentials from the file path \(path)"
+        }
+    }
+    var identifier: String {
+        switch self {
+        case .fileLoadError(_):
+            return "file-load-error"
+        }
+    }
+    
+    var reason: String { return localizedDescription }
+    
+    case fileLoadError(String)
 }
 
 extension GoogleApplicationDefaultCredentials {
@@ -20,7 +35,7 @@ extension GoogleApplicationDefaultCredentials {
         if let contents = try String(contentsOfFile: filePath).data(using: .utf8) {
             self = try decoder.decode(GoogleApplicationDefaultCredentials.self, from: contents)
         } else {
-            throw CredentialLoadError.fileLoadError
+            throw CredentialLoadError.fileLoadError(path)
         }
     }
 }
@@ -33,7 +48,7 @@ extension GoogleServiceAccountCredentials {
         if let contents = try String(contentsOfFile: filePath).data(using: .utf8) {
             self = try decoder.decode(GoogleServiceAccountCredentials.self, from: contents)
         } else {
-            throw CredentialLoadError.fileLoadError
+            throw CredentialLoadError.fileLoadError(path)
         }
     }
 }
