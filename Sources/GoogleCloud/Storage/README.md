@@ -2,6 +2,29 @@
 
 ## Using the Storage API
 
+### Setting up StorageConfig
+
+To make the GoogleCloudProvider as flexible as possible to work with different API's and projects,
+you can configure each API with their own configuration if the default `GoogleCloudProviderConfig` doesn't satisfy your needs.
+
+For example the `GoogleCloudProviderConfig` can be configured with a `ProjectID`, but you might
+want to use this API with a different project. Additionally every API has their own scope and you might want to configure it.
+You must register a `GoogleCloudStorageConfig` in one of 2 ways.
+
+In `configure.swift`
+```swift
+let cloudStorageConfig = GoogleCloudStorageConfig(scope: [StorageScope.fullControl], serviceAccount: "default", project: "myproject-000000")
+services.register(cloudStorageConfig)
+// OR
+services.register(GoogleCloudStorageConfig.default())
+```
+The priority of which projectID to use is as follows:
+`$PROJECT_ID` environment variable
+Service Account projectID
+`GoogleCloudStorageConfig`'s `.project` (the config for this API)
+`GoogleCloudProviderConfig`'s `.project`
+and will throw an error if no projectID is set. 
+
 ### Creating a storage bucket
 
 ```swift
