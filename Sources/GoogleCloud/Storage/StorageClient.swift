@@ -7,9 +7,29 @@
 
 import Vapor
 
-enum GoogleCloudStorageClientError: Error {
+public enum GoogleCloudStorageError: GoogleCloudError {
     case projectIdMissing
-    case unknownError
+    case unknownError(String)
+    
+    var localizedDescription: String {
+        switch self {
+        case .projectIdMissing:
+            return "Missing project id for GoogleCloudStorage API. Did you forget to set your project id?"
+        case .unknownError(let reason):
+            return "An unknown error occured: \(reason)"
+        }
+    }
+    
+    public var identifier: String {
+        switch self {
+        case .projectIdMissing:
+            return "missing-project-id"
+        case .unknownError(_):
+            return "unknown"
+        }
+    }
+    
+    public var reason: String { return localizedDescription }
 }
 
 public protocol StorageClient: ServiceType {

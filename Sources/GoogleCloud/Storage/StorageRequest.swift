@@ -76,7 +76,7 @@ public final class GoogleCloudStorageRequest {
                 return try self.responseDecoder.decode(CloudStorageError.self, from: response.http, maxSize: 65_536, on: self.httpClient.container).map { error in
                     throw error
                     }.catchMap { error -> Response in
-                        throw GoogleCloudStorageClientError.unknownError
+                        throw GoogleCloudStorageError.unknownError(error.localizedDescription)
                 }
             }
             return response.future(response)
