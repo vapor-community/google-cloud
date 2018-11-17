@@ -8,10 +8,20 @@
 import Vapor
 
 public struct GoogleCloudProviderConfig: Service {
-    let serviceAccountCredentialPath: String?
+    let serviceAccountCredentialPath: String
+    let project: String?
 
-    public init(credentialFile: String? = nil) {
-        self.serviceAccountCredentialPath = credentialFile
+    public init(project: String? = nil, credentialFile: String? = nil) {
+        self.project = project
+        
+        let env = ProcessInfo.processInfo.environment
+        // Locate the credentials to use for this client. In order of priority:
+        // - Environment Variable Specified Credentials (GOOGLE_APPLICATION_CREDENTIALS)
+        // - CredentialFile (optionally configured)
+        // - Application Default Credentials, located in the constant
+        self.serviceAccountCredentialPath = env["GOOGLE_APPLICATION_CREDENTIALS"] ??
+            credentialFile ??
+        "~/.config/gcloud/application_default_credentials.json"
     }
 }
 
