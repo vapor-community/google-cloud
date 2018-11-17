@@ -36,7 +36,7 @@ API from your local workstation.
 In your `Package.swift` file, add the following
 
 ```swift
-.package(url: "https://github.com/vapor-community/google-cloud-provider.git", from: "0.0.1")
+.package(url: "https://github.com/vapor-community/google-cloud-provider.git", from: "0.1.0")
 ```
 
 And In `Configure.swift` or wherever you setup your configuration in Vapor
