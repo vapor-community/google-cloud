@@ -72,7 +72,7 @@ public final class GoogleCloudStorageRequest {
         headers.forEach { finalHeaders.replaceOrAdd(name: $0.name, value: $0.value) }
 
         return httpClient.send(method, headers: finalHeaders, to: "\(path)?\(query)", beforeSend: { $0.http.body = body }).flatMap({ response in
-            guard response.http.status == .ok else {
+            guard (200...299).contains(response.http.status.code) else {
                 return try self.responseDecoder.decode(CloudStorageError.self, from: response.http, maxSize: 65_536, on: self.httpClient.container).map { error in
                     throw error
                     }.catchMap { error -> Response in
