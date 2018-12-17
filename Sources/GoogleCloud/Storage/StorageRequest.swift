@@ -40,6 +40,10 @@ public final class GoogleCloudStorageRequest {
     func send<GCM: GoogleCloudModel>(method: HTTPMethod, headers: HTTPHeaders = [:], path: String, query: String, body: HTTPBody = HTTPBody()) throws -> Future<GCM> {
         return try withToken({ token in
             return try self._send(method: method, headers: headers, path: path, query: query, body: body, accessToken: token.accessToken).flatMap({ response in
+                if GCM.self is EmptyResponse.Type && response.http.body.data == Data() {
+                    response.http.body = HTTPBody(staticString: "{}")
+                }
+                
                 return try self.responseDecoder.decode(GCM.self, from: response.http, maxSize: 65_536, on: response)
             })
         })
@@ -72,7 +76,7 @@ public final class GoogleCloudStorageRequest {
         headers.forEach { finalHeaders.replaceOrAdd(name: $0.name, value: $0.value) }
 
         return httpClient.send(method, headers: finalHeaders, to: "\(path)?\(query)", beforeSend: { $0.http.body = body }).flatMap({ response in
-            guard response.http.status == .ok else {
+            guard (200...299).contains(response.http.status.code) else {
                 return try self.responseDecoder.decode(CloudStorageError.self, from: response.http, maxSize: 65_536, on: self.httpClient.container).map { error in
                     throw error
                     }.catchMap { error -> Response in
