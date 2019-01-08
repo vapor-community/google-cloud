@@ -56,5 +56,11 @@ export PROJECT_ID=myprojectid-12345
 export GOOGLE_APPLICATION_CREDENTIALS=/path/to/your/service-account.json
 ```
 
+Additionally, you can copy and paste the contents of your Service Account JSON file as the value for the  `GOOGLE_APPLICATION_CREDENTIALS` environment variable:
+
+```shell
+export GOOGLE_APPLICATION_CREDENTIALS=[Valid Pasted JSON]
+```
+
 ### Currently the following API's are implemented and you can follow the setup guides for each specific API to integrate with your Vapor project.
 * [x] Cloud Storage [Setup guide](https://github.com/Andrewangeta/GoogleCloudProvider/tree/master/Sources/GoogleCloud/Storage/README.md)
