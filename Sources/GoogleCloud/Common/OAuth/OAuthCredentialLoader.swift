@@ -24,7 +24,7 @@ public class OAuthCredentialLoader {
             return OAuthApplicationDefault(credentials: credentials, httpClient: client)
         }
         
-        if let credentials = try? GoogleApplicationDefaultCredentials(contentsOfFile: credentialFilePath) {
+        if let credentials = try? GoogleApplicationDefaultCredentials(json: credentialFilePath) {
             return OAuthApplicationDefault(credentials: credentials, httpClient: client)
         }
         
