@@ -17,14 +17,9 @@ public final class GoogleCloudProvider: Provider {
             let credentialsConfig = try container.make(GoogleCloudCredentialsConfiguration.self)
             let storageConfig = try container.make(GoogleCloudStorageConfiguration.self)
             let client = HTTPClient(eventLoopGroupProvider: .shared(container.eventLoop))
-            let c = try GoogleCloudStorageClient(configuration: credentialsConfig,
+            return try GoogleCloudStorageClient(configuration: credentialsConfig,
                                                 storageConfig: storageConfig,
                                                 client: client)
-            c.object.createSimpleUpload(bucket: <#T##String#>,
-                                        data: <#T##Data#>,
-                                        name: <#T##String#>,
-                                        contentType: <#T##String#>,
-                                        queryParameters: <#T##[String : String]?#>)
         }
     }
 }
