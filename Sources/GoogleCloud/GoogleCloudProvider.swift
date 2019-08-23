@@ -4,7 +4,7 @@
 //
 //  Created by Andrew Edwards on 4/17/18.
 //
-
+@_exported GoogleCloudKit
 import Vapor
 import GoogleCloudKit
 
