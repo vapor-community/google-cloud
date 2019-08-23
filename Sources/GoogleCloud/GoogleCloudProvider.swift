@@ -4,9 +4,8 @@
 //
 //  Created by Andrew Edwards on 4/17/18.
 //
-@_exported GoogleCloudKit
 import Vapor
-import GoogleCloudKit
+@_exported import GoogleCloudKit
 
 public final class GoogleCloudProvider: Provider {
     
