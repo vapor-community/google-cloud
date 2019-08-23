@@ -16,10 +16,9 @@ public final class GoogleCloudProvider: Provider {
         s.register(GoogleCloudStorageClient.self) { container in
             let credentialsConfig = try container.make(GoogleCloudCredentialsConfiguration.self)
             let storageConfig = try container.make(GoogleCloudStorageConfiguration.self)
-            let client = HTTPClient(eventLoopGroupProvider: .shared(container.eventLoop))
             return try GoogleCloudStorageClient(configuration: credentialsConfig,
                                                 storageConfig: storageConfig,
-                                                client: client)
+                                                eventLoop: container.eventLoop)
         }
     }
 }
