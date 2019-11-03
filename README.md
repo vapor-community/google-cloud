@@ -11,7 +11,7 @@
 In your `Package.swift` file, add the following
 
 ```swift
-.package(url: "https://github.com/vapor-community/google-cloud-provider.git", from: "1.0.0-alpha.1")
+.package(url: "https://github.com/vapor-community/google-cloud-provider.git", from: "1.0.0-beta")
 ```
 
 Register the credentials configuration (required) and the provider in  `Configure.swift`
@@ -20,39 +20,34 @@ Register the credentials configuration (required) and the provider in  `Configur
  import GoogleCloud
  
  // register the credentials configuration which is used by all APIs
- s.register(GoogleCloudCredentialsConfiguration.self) { _ in
+ app.register(GoogleCloudCredentialsConfiguration.self) { _ in
      return GoogleCloudCredentialsConfiguration(project: "myprojectid-12345",
                                                 credentialsFile: "~/path/to/service-account.json")
  }
  
  // Register an API specific configuration. CloudStorage in this example.
- s.register(GoogleCloudStorageConfiguration.self) { _ in 
+ app.register(GoogleCloudStorageConfiguration.self) { _ in 
     return GoogleCloudStorageConfiguration.defult()
  }
  
- s.provider(GoogleCloudProvider())
+ // Configure more API configurations that you want to use.
+ 
+ // Add the GoogleCloudProvider and choose the APIs you want to include
+ app.provider(GoogleCloudProvider(apis: [.storage, .pubsub, ...])
 ```
 
-Example usage
+Now we can access the `GoogleCloudClient` which has access to all the APIs we've configured.
+
 ```swift
-
-struct UploadRequest: Content {
-    var data: Data
-    var filename: String
-}
-
-func uploadImage(_ req: Request) throws {
-    let upload = try req.content.decode(UploadRequest.self)
-    
-    let storageClient = try container.make(GoogleCloudStorageClient.self)
-    storageClient.object.createSimpleUpload(bucket: "vapor-cloud-storage-demo",
-                                            data: upload.data,
-                                            name: upload.filename,
-                                            contentType: "image/jpeg").flatMap { uploadedObject in
-        print(uploadedObject.mediaLink) // prints the download link for the image.
+    let cloudClient = app.make(GoogleCloudClient.self)
+    // Use the Storage api to list the buckets.
+    cloudClient.storage.buckets.list().flatMap { buckets in
+        print(buckets.items.last.name) 
     }
-}
 ```
+
+### Supported APIs
+[x] [CloudStorage](/Sources/CloudStorage/README.md) 
 
 ### A More detailed guide can be found [here](https://github.com/vapor-community/GoogleCloudKit).
 
