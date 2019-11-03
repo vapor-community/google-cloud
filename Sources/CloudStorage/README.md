@@ -17,7 +17,7 @@ dependencies: [
     ]
 ```
 
-Now you can register the `CloudCredentialsConfiguraton` and the `CloudStorageConfiguration`.
+Now you can register the `GoogleCloudCredentialsConfiguraton` and the `GoogleCloudStorageConfiguration`.
 
 In `Configure.swift`
 
@@ -39,7 +39,7 @@ In `Configure.swift`
  app.provider(CloudStorageProvider())
 ```
 
-Now we can start using the CloudStorage API
+Now we can start using the CloudStorage API.
 We do that by making a `GoogleCloudStorageClient` object that's already configured
 from the `CloudStorageProvider` we setup above.
 
