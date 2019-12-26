@@ -27,6 +27,10 @@ let package = Package(
         
         .target(
             name: "CloudStorage",
-            dependencies: ["Vapor", "GoogleCloudStorage"]),
+            dependencies: ["Vapor", "GoogleCloudStorage", "GoogleCloud"]),
+        
+        .target(
+            name: "Run",
+            dependencies: ["Vapor", "CloudStorage"]),
     ]
 )
