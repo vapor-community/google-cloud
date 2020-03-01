@@ -156,7 +156,7 @@ public final class GoogleStorageObjectAPI: StorageObjectAPI {
             queryParams = queryParameters.queryParameters
         }
         
-        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/o)", query: queryParams)
+        return try request.send(method: .GET, path: "\(endpoint)/\(bucket)/o", query: queryParams)
     }
     
     /// Updates a data blob's associated metadata. This method supports patch semantics
@@ -172,7 +172,7 @@ public final class GoogleStorageObjectAPI: StorageObjectAPI {
             body = try JSONSerialization.data(withJSONObject: try object.toEncodedDictionary()).convert(to: String.self)
         }
         
-        return try request.send(method: .PATCH, path: "\(endpoint)/\(bucket)/o)", query: queryParams, body: body.convertToHTTPBody())
+        return try request.send(method: .PATCH, path: "\(endpoint)/\(bucket)/o", query: queryParams, body: body.convertToHTTPBody())
     }
     
     /// Rewrites a source object to a destination object. Optionally overrides metadata.
@@ -200,7 +200,7 @@ public final class GoogleStorageObjectAPI: StorageObjectAPI {
         
         let body = try JSONSerialization.data(withJSONObject: try object.toEncodedDictionary()).convertToHTTPBody()
         
-        return try request.send(method: .PUT, path: "\(endpoint)/\(bucket)/o)", query: queryParams, body: body)
+        return try request.send(method: .PUT, path: "\(endpoint)/\(bucket)/o", query: queryParams, body: body)
     }
     
     /// Watch for changes on all objects in a bucket.
@@ -212,6 +212,6 @@ public final class GoogleStorageObjectAPI: StorageObjectAPI {
         
         let body = try JSONSerialization.data(withJSONObject: try notificationChannel.toEncodedDictionary()).convertToHTTPBody()
         
-        return try request.send(method: .POST, path: "\(endpoint)/\(bucket)/o/watch)", query: queryParams, body: body)
+        return try request.send(method: .POST, path: "\(endpoint)/\(bucket)/o/watch", query: queryParams, body: body)
     }
 }
