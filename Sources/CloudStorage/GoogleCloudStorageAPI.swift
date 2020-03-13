@@ -6,9 +6,8 @@
 //
 
 import Vapor
-
-@_exported import GoogleCloud
 @_exported import Storage
+@_exported import GoogleCloud
 
 extension Application.GoogleCloudPlatform {
     private struct CloudStorageAPIKey: StorageKey {
