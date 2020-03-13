@@ -8,12 +8,13 @@ In your `Package.swift` file, make sure you have the following dependencies and 
 ```swift
 dependencies: [
         //...
-        .package(url: "https://github.com/vapor-community/google-cloud-provider.git", from: "1.0.0-beta"),
+        .package(url: "https://github.com/vapor-community/google-cloud.git", from: "1.0.0-rc"),
     ],
     targets: [
-        .target(name: "MyAppName", dependencies: [  "Vapor",
-                                                    "CloudStorage",
-                                                  ]),
+        .target(name: "MyAppName", dependencies: [
+            //...
+            .product(name: "CloudStorage", package: "google-cloud"),
+        ]),
     ]
 ```
 
@@ -33,9 +34,8 @@ Next we setup the CloudStorage API configuration (specific to this API).
 app.googleCloud.storage.configuration = .default()
 ```
 
-Now we can start using the CloudStorage API
-There's a handy extension on `Request` that you can use to get access to a cloud storage client
-`req.gcs`
+Now we can start using the GoogleCloudStorage API
+There's a handy extension on `Request` that you can use to get access to a cloud storage client  via a property named `gcs`. 
 
 ```swift
 struct UploadRequest: Content {

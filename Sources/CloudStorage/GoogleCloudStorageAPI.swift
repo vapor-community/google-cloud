@@ -97,8 +97,18 @@ extension Application.GoogleCloudPlatform {
 }
 
 extension Request {
+    private struct GoogleCloudStorageKey: StorageKey {
+        typealias Value = GoogleCloudStorageClient
+    }
+    
     /// A client used to interact with the `GoogleCloudStorage` API
     public var gcs: GoogleCloudStorageClient {
-        Application.GoogleCloudPlatform.GoogleCloudStorageAPI(application: self.application, eventLoop: self.eventLoop).client
+        if let existing = application.storage[GoogleCloudStorageKey.self] {
+            return existing.hopped(to: self.eventLoop)
+        } else {
+            let new = Application.GoogleCloudPlatform.GoogleCloudStorageAPI(application: self.application, eventLoop: self.eventLoop).client
+            pplication.storage[GoogleCloudStorageKey.self] = new
+            return new
+        }
     }
 }

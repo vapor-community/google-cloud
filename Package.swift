@@ -1,12 +1,11 @@
-// swift-tools-version:5.1
-// The swift-tools-version declares the minimum version of Swift required to build this package.
+// swift-tools-version:5.2
 
 import PackageDescription
 
 let package = Package(
-    name: "GoogleCloud",
+    name: "google-cloud",
     platforms: [
-       .macOS(.v10_14)
+       .macOS(.v10_15)
     ],
     products: [
         .library(
@@ -17,16 +16,22 @@ let package = Package(
             targets: ["CloudStorage"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/vapor/vapor.git", from: "4.0.0-beta"),
-        .package(url: "https://github.com/vapor-community/GoogleCloudKit.git", from: "1.0.0-alpha")
+        .package(url: "https://github.com/vapor/vapor.git", from: "4.0.0-rc"),
+        .package(url: "https://github.com/vapor-community/google-cloud-kit.git", .exact("1.0.0-alpha.9"))
     ],
     targets: [
         .target(
             name: "GoogleCloud",
-            dependencies: ["Vapor", "GoogleCloudKit"]),
+            dependencies: [
+                .product(name: "Vapor", package: "vapor"),
+                .product(name: "google-cloud-kit", package: "google-cloud-kit"),
+            ]),
         
         .target(
             name: "CloudStorage",
-            dependencies: ["Vapor", "GoogleCloudStorage", "GoogleCloud"]),
+            dependencies: [
+                .product(name: "Vapor", package: "vapor"),
+                .product(name: "google-cloud-storage", package: "google-cloud-kit"),
+        ]),
     ]
 )
