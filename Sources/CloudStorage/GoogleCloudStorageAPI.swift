@@ -107,7 +107,7 @@ extension Request {
             return existing.hopped(to: self.eventLoop)
         } else {
             let new = Application.GoogleCloudPlatform.GoogleCloudStorageAPI(application: self.application, eventLoop: self.eventLoop).client
-            pplication.storage[GoogleCloudStorageKey.self] = new
+            application.storage[GoogleCloudStorageKey.self] = new
             return new
         }
     }
