@@ -32,6 +32,7 @@ let package = Package(
             dependencies: [
                 .product(name: "Vapor", package: "vapor"),
                 .product(name: "GoogleCloudStorage", package: "google-cloud-kit"),
+                .target(name: "GoogleCloud")
         ]),
     ]
 )
