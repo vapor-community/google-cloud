@@ -17,21 +17,21 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/vapor/vapor.git", from: "4.0.0-rc"),
-        .package(url: "https://github.com/vapor-community/google-cloud-kit.git", .exact("1.0.0-alpha.9"))
+        .package(url: "https://github.com/vapor-community/google-cloud-kit.git", from: "1.0.0-alpha.11")
     ],
     targets: [
         .target(
             name: "GoogleCloud",
             dependencies: [
                 .product(name: "Vapor", package: "vapor"),
-                .product(name: "google-cloud-kit", package: "google-cloud-kit"),
+                .product(name: "GoogleCloudKit", package: "google-cloud-kit"),
             ]),
         
         .target(
             name: "CloudStorage",
             dependencies: [
                 .product(name: "Vapor", package: "vapor"),
-                .product(name: "google-cloud-storage", package: "google-cloud-kit"),
+                .product(name: "GoogleCloudStorage", package: "google-cloud-kit"),
         ]),
     ]
 )
