@@ -14,10 +14,13 @@ let package = Package(
         .library(
             name: "CloudStorage",
             targets: ["CloudStorage"]),
+        .library(
+            name: "CloudDatastore",
+            targets: ["CloudDatastore"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/vapor/vapor.git", from: "4.0.0-rc"),
-        .package(url: "https://github.com/vapor-community/google-cloud-kit.git", from: "1.0.0-alpha.11")
+        .package(url: "https://github.com/vapor/vapor.git", from: "4.0.0"),
+        .package(url: "https://github.com/vapor-community/google-cloud-kit.git", from: "1.0.0-rc")
     ],
     targets: [
         .target(
@@ -32,6 +35,13 @@ let package = Package(
             dependencies: [
                 .product(name: "Vapor", package: "vapor"),
                 .product(name: "GoogleCloudStorage", package: "google-cloud-kit"),
+                .target(name: "GoogleCloud")
+        ]),
+        .target(
+            name: "CloudDatastore",
+            dependencies: [
+                .product(name: "Vapor", package: "vapor"),
+                .product(name: "GoogleCloudDatastore", package: "google-cloud-kit"),
                 .target(name: "GoogleCloud")
         ]),
     ]
