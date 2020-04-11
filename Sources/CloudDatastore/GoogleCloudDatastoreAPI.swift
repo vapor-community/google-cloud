@@ -22,6 +22,10 @@ extension Application.GoogleCloudPlatform {
         typealias Value = HTTPClient
     }
     
+    private struct CloudDatastoreBaseKey: StorageKey {
+        typealias Value = String
+    }
+    
     public var datastore: GoogleCloudDatastoreAPI {
         get {
             if let existing = self.application.storage[CloudDatastoreAPIKey.self] {
@@ -46,7 +50,8 @@ extension Application.GoogleCloudPlatform {
                 let new = try GoogleCloudDatastoreClient(credentials: self.application.googleCloud.credentials,
                                                          config: self.configuration,
                                                          httpClient: self.http,
-                                                         eventLoop: self.eventLoop)
+                                                         eventLoop: self.eventLoop,
+                                                         base: self.base)
                 return new
             } catch {
                 fatalError("\(error.localizedDescription)")
@@ -67,6 +72,24 @@ extension Application.GoogleCloudPlatform {
                     application.storage[CloudDatastoreConfigurationKey.self] = newValue
                 } else {
                     fatalError("Attempting to override credentials configuration after being set is not allowed.")
+                }
+            }
+        }
+        
+        public var base: String {
+            get {
+                if let base = application.storage[CloudDatastoreBaseKey.self] {
+                    return base
+                } else {
+                    return "https://datastore.googleapis.com"
+                }
+            }
+            
+            set {
+                if application.storage[CloudDatastoreBaseKey.self] == nil {
+                    application.storage[CloudDatastoreBaseKey.self] = newValue
+                } else {
+                    fatalError("Attempting to override configuration after being set is not allowed.")
                 }
             }
         }
