@@ -1,7 +1,7 @@
 # GoogleCloudSecretManagerAPI
 
 ## Getting Started
-If you only need to use the [Google Cloud Secret Manager API](https://cloud.google.com/storage/), then this guide will help you get started.
+If you only need to use the [Google Cloud Secret Manager API](https://cloud.google.com/secret-manager), then this guide will help you get started.
 
 In your `Package.swift` file, make sure you have the following dependencies and targets
 
