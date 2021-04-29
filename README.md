@@ -18,8 +18,11 @@ In your `Package.swift` file, add the following
 You can check each supported API's README for a getting started guide. 
 
 ### Supported APIs
-[x] [CloudStorage](/Sources/CloudStorage/README.md) 
+[x] [CloudStorage](/Sources/CloudStorage/README.md)
+
 [x] [CloudDatastore](/Sources/CloudDatastore/README.md) 
+
+[x] [CloudSecretManager](/Sources/CloudSecretManager/README.md)
 
 ### A More detailed guide can be found [here](https://github.com/vapor-community/google-cloud-kit).
 
