@@ -24,5 +24,7 @@ You can check each supported API's README for a getting started guide.
 
 [x] [CloudSecretManager](/Sources/CloudSecretManager/README.md)
 
+[x] [CloudTranslation](/Sources/CloudTranslation/README.md)
+
 ### A More detailed guide can be found [here](https://github.com/vapor-community/google-cloud-kit).
 
