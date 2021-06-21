@@ -22,7 +22,7 @@ extension Application.GoogleCloudPlatform {
         typealias Value = HTTPClient
     }
     
-    private var pubsub: GoogleCloudPubSubAPI {
+    public var pubsub: GoogleCloudPubSubAPI {
         get {
             if let existing = self.application.storage[CloudPubSubAPIKey.self] {
                 return existing
