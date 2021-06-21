@@ -14,7 +14,7 @@ extension Application.GoogleCloudPlatform {
         typealias Value = GoogleCloudPubSubAPI
     }
     
-    private struct CloudSPubSubConfigurationKey: StorageKey {
+    private struct CloudPubSubConfigurationKey: StorageKey {
         typealias Value = GoogleCloudPubSubConfiguration
     }
     
@@ -37,17 +37,17 @@ extension Application.GoogleCloudPlatform {
         }
         
         /// The configuration for using `GoogleCloudPubSub` APIs.
-        public var configuration: GoogleCloudStorageConfiguration {
+        public var configuration: GoogleCloudPubSubConfiguration {
             get {
-                if let configuration = application.storage[CloudSPubSubConfigurationKey.self] {
+                if let configuration = application.storage[CloudPubSubConfigurationKey.self] {
                    return configuration
                 } else {
                     fatalError("Cloud PubSub configuration has not been set. Use app.googleCloud.pubsub.configuration = ...")
                 }
             }
             set {
-                if application.storage[CloudSPubSubConfigurationKey.self] == nil {
-                    application.storage[CloudSPubSubConfigurationKey.self] = newValue
+                if application.storage[CloudPubSubConfigurationKey.self] == nil {
+                    application.storage[CloudPubSubConfigurationKey.self] = newValue
                 } else {
                     fatalError("Attempting to override credentials configuration after being set is not allowed.")
                 }

@@ -23,6 +23,9 @@ let package = Package(
         .library(
             name: "CloudTranslation",
             targets: ["CloudTranslation"]),
+        .library(
+            name: "CloudPubSub",
+            targets: ["CloudPubSub"]),
     ],
     dependencies: [
         .package(url: "https://github.com/vapor/vapor.git", from: "4.0.0"),
@@ -62,6 +65,13 @@ let package = Package(
             dependencies: [
                 .product(name: "Vapor", package: "vapor"),
                 .product(name: "GoogleCloudTranslation", package: "google-cloud-kit"),
+                .target(name: "GoogleCloud")
+        ]),
+        .target(
+            name: "CloudPubSub",
+            dependencies: [
+                .product(name: "Vapor", package: "vapor"),
+                .product(name: "GoogleCloudPubSub", package: "google-cloud-kit"),
                 .target(name: "GoogleCloud")
         ]),
     ]
