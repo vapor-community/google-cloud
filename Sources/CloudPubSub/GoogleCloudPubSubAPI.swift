@@ -22,6 +22,21 @@ extension Application.GoogleCloudPlatform {
         typealias Value = HTTPClient
     }
     
+    private var pubsub: GoogleCloudPubSubAPI {
+        get {
+            if let existing = self.application.storage[CloudPubSubAPIKey.self] {
+                return existing
+            } else {
+                return .init(application: self.application,
+                             eventLoop: self.application.eventLoopGroup.next())
+            }
+        }
+        
+        nonmutating set {
+            self.application.storage[CloudPubSubAPIKey.self] = newValue
+        }
+    }
+    
     public struct GoogleCloudPubSubAPI {
         public let application: Application
         public let eventLoop: EventLoop
