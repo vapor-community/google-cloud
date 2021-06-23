@@ -98,7 +98,7 @@ extension Request {
         typealias Value = GoogleCloudPubSubClient
     }
     
-    /// A client used to interact with the `GoogleCloudTranslation` API
+    /// A client used to interact with the `GoogleCloudPubSub` API
     public var gcPubSub: GoogleCloudPubSubClient {
         if let existing = application.storage[GoogleCloudPubSubKey.self] {
             return existing.hopped(to: self.eventLoop)
