@@ -26,5 +26,7 @@ You can check each supported API's README for a getting started guide.
 
 [x] [CloudTranslation](/Sources/CloudTranslation/README.md)
 
+[x] [CloudPubSub](/Sources/CloudPubSub/README.md)
+
 ### A More detailed guide can be found [here](https://github.com/vapor-community/google-cloud-kit).
 
