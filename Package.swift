@@ -29,7 +29,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/vapor/vapor.git", from: "4.0.0"),
-        .package(url: "https://github.com/vapor-community/google-cloud-kit.git", .exact("1.0.0-rc.7")),
+        .package(url: "https://github.com/vapor-community/google-cloud-kit.git", .exact("1.0.0-rc.9")),
     ],
     targets: [
         .target(
