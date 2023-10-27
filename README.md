@@ -11,7 +11,7 @@
 In your `Package.swift` file, add the following
 
 ```swift
-.package(url: "https://github.com/vapor-community/google-cloud.git", from: "1.0.0")
+.package(url: "https://github.com/vapor-community/google-cloud.git", from: "1.4.1")
 ```
 
 ## Usage 
